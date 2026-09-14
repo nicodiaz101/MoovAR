@@ -1,0 +1,28 @@
+{
+  "lines": [
+    { "id": "roca", "name": "Línea Roca", "shortName": "Roca", "networkType": "TREN", "iconResName": "ic_line_roca", "colorHex": "#0055A5", "sortOrder": 1 },
+    { "id": "sarmiento", "name": "Línea Sarmiento", "shortName": "Sarmiento", "networkType": "TREN", "iconResName": "ic_line_sarmiento", "colorHex": "#00A8E3", "sortOrder": 2 },
+    { "id": "mitre", "name": "Línea Mitre", "shortName": "Mitre", "networkType": "TREN", "iconResName": "ic_line_mitre", "colorHex": "#008A27", "sortOrder": 3 },
+    { "id": "san_martin", "name": "Línea San Martín", "shortName": "San Martín", "networkType": "TREN", "iconResName": "ic_line_san_martin", "colorHex": "#E3001B", "sortOrder": 4 },
+    { "id": "belgrano_sur", "name": "Línea Belgrano Sur", "shortName": "Belgrano Sur", "networkType": "TREN", "iconResName": "ic_line_belgrano_sur", "colorHex": "#00A9E0", "sortOrder": 5 },
+    { "id": "belgrano_norte", "name": "Línea Belgrano Norte", "shortName": "Belgrano Norte", "networkType": "TREN", "iconResName": "ic_line_belgrano_norte", "colorHex": "#E3001B", "sortOrder": 6 },
+    { "id": "tren_costa", "name": "Tren de la Costa", "shortName": "Tren de la Costa", "networkType": "TREN", "iconResName": "ic_line_tren_costa", "colorHex": "#008A27", "sortOrder": 7 },
+    { "id": "linea_a", "name": "Línea A", "shortName": "A", "networkType": "SUBTE", "iconResName": "ic_subte_a", "colorHex": "#18B4E9", "sortOrder": 8 },
+    { "id": "linea_b", "name": "Línea B", "shortName": "B", "networkType": "SUBTE", "iconResName": "ic_subte_b", "colorHex": "#E30613", "sortOrder": 9 },
+    { "id": "linea_c", "name": "Línea C", "shortName": "C", "networkType": "SUBTE", "iconResName": "ic_subte_c", "colorHex": "#006C9A", "sortOrder": 10 },
+    { "id": "linea_d", "name": "Línea D", "shortName": "D", "networkType": "SUBTE", "iconResName": "ic_subte_d", "colorHex": "#00845B", "sortOrder": 11 },
+    { "id": "linea_e", "name": "Línea E", "shortName": "E", "networkType": "SUBTE", "iconResName": "ic_subte_e", "colorHex": "#702A8C", "sortOrder": 12 },
+    { "id": "linea_h", "name": "Línea H", "shortName": "H", "networkType": "SUBTE", "iconResName": "ic_subte_h", "colorHex": "#FFCC00", "sortOrder": 13 }
+  ],
+  "branches": [
+    { "id": "roca_ezeiza", "lineId": "roca", "name": "Plaza Constitución - Ezeiza", "originTerminus": "Plaza Constitución", "destinationTerminus": "Ezeiza" },
+    { "id": "linea_a_main", "lineId": "linea_a", "name": "Plaza de Mayo - San Pedrito", "originTerminus": "Plaza de Mayo", "destinationTerminus": "San Pedrito", "subteLineColor": "#18B4E9" }
+  ],
+  "stations": [
+    { "id": "stn_constitucion", "branchId": "roca_ezeiza", "lineId": "roca", "name": "Plaza Constitución", "networkType": "TREN", "sequenceInBranch": 1, "isTerminus": true, "latitude": -34.628, "longitude": -58.381 },
+    { "id": "stn_yri", "branchId": "roca_ezeiza", "lineId": "roca", "name": "Yrigoyen", "networkType": "TREN", "sequenceInBranch": 2, "isTerminus": false, "latitude": -34.646, "longitude": -58.376 },
+    { "id": "stn_ezeiza", "branchId": "roca_ezeiza", "lineId": "roca", "name": "Ezeiza", "networkType": "TREN", "sequenceInBranch": 15, "isTerminus": true, "latitude": -34.851, "longitude": -58.524 },
+    { "id": "stn_pza_mayo", "branchId": "linea_a_main", "lineId": "linea_a", "name": "Plaza de Mayo", "networkType": "SUBTE", "gtfsStopId": "A_PM", "sequenceInBranch": 1, "isTerminus": true },
+    { "id": "stn_peru", "branchId": "linea_a_main", "lineId": "linea_a", "name": "Perú", "networkType": "SUBTE", "gtfsStopId": "A_PE", "sequenceInBranch": 2, "isTerminus": false }
+  ]
+}

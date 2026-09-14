@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
+
 android {
     namespace = "com.transportar.android.core.database"
     compileSdk = 36
@@ -15,6 +16,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:domain"))
