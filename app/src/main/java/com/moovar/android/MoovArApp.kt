@@ -1,4 +1,4 @@
-package com.transportar.android
+package com.moovar.android
 
 import android.app.Application
 import androidx.compose.foundation.layout.padding
@@ -12,14 +12,13 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class TransportArApp : Application()
+class MoovArApp : Application()
 
 @Composable
-fun TransportArAppContent() {
+fun MoovArAppContent() {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
-            // BottomNavigationBar placeholder
             Text("Bottom Navigation Placeholder")
         }
     ) { paddingValues ->
@@ -29,7 +28,7 @@ fun TransportArAppContent() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable("home") {
-                Text("Home Screen Placeholder")
+                Text("MoovAR Home Screen Placeholder")
             }
         }
     }

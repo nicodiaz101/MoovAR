@@ -1,16 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
 
 android {
-    namespace = "com.transportar.android"
+    namespace = "com.moovar.android"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.transportar.android"
+        applicationId = "com.moovar.android"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
@@ -40,9 +41,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
     }
     packaging {
         resources {

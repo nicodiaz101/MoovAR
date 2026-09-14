@@ -1,4 +1,4 @@
-package com.transportar.android.core.database.entity
+package com.moovar.android.core.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

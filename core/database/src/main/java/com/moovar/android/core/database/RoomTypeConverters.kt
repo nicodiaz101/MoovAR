@@ -1,9 +1,9 @@
-package com.transportar.android.core.database
+package com.moovar.android.core.database
 
 import androidx.room.TypeConverter
-import com.transportar.android.core.database.entity.AlertSeverity
-import com.transportar.android.core.database.entity.LineStatus
-import com.transportar.android.core.database.entity.NetworkType
+import com.moovar.android.core.database.entity.AlertSeverity
+import com.moovar.android.core.database.entity.LineStatus
+import com.moovar.android.core.database.entity.NetworkType
 
 class RoomTypeConverters {
     @TypeConverter fun fromNetworkType(v: NetworkType): String = v.name

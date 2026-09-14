@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.transportar.android.core.database"
+    namespace = "com.moovar.android.core.database"
     compileSdk = 36
     defaultConfig {
         minSdk = 26

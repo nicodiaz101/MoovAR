@@ -1,4 +1,4 @@
-package com.transportar.android.core.database
+package com.moovar.android.core.database
 
 import android.content.Context
 import androidx.room.Room
@@ -26,7 +26,7 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "transportar_database"
+            "moovar_database"
         )
         .addCallback(object : RoomDatabase.Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {

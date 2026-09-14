@@ -1,9 +1,9 @@
-package com.transportar.android.core.database.dao
+package com.moovar.android.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.transportar.android.core.database.entity.LineEntity
+import com.moovar.android.core.database.entity.LineEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -1,22 +1,22 @@
-package com.transportar.android.core.database
+package com.moovar.android.core.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.transportar.android.core.database.dao.AlertDao
-import com.transportar.android.core.database.dao.BranchDao
-import com.transportar.android.core.database.dao.FavoriteRouteDao
-import com.transportar.android.core.database.dao.LineDao
-import com.transportar.android.core.database.dao.RecentStationDao
-import com.transportar.android.core.database.dao.StationDao
-import com.transportar.android.core.database.entity.AlertEntity
-import com.transportar.android.core.database.entity.BranchEntity
-import com.transportar.android.core.database.entity.FavoriteRouteEntity
-import com.transportar.android.core.database.entity.LineEntity
-import com.transportar.android.core.database.entity.RecentStationEntity
-import com.transportar.android.core.database.entity.StationEntity
+import com.moovar.android.core.database.dao.AlertDao
+import com.moovar.android.core.database.dao.BranchDao
+import com.moovar.android.core.database.dao.FavoriteRouteDao
+import com.moovar.android.core.database.dao.LineDao
+import com.moovar.android.core.database.dao.RecentStationDao
+import com.moovar.android.core.database.dao.StationDao
+import com.moovar.android.core.database.entity.AlertEntity
+import com.moovar.android.core.database.entity.BranchEntity
+import com.moovar.android.core.database.entity.FavoriteRouteEntity
+import com.moovar.android.core.database.entity.LineEntity
+import com.moovar.android.core.database.entity.RecentStationEntity
+import com.moovar.android.core.database.entity.StationEntity
 
 @Database(
     entities = [

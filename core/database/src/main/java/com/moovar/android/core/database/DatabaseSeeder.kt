@@ -1,12 +1,12 @@
-package com.transportar.android.core.database
+package com.moovar.android.core.database
 
 import android.content.Context
 import android.util.Log
-import com.transportar.android.core.database.entity.BranchEntity
-import com.transportar.android.core.database.entity.LineEntity
-import com.transportar.android.core.database.entity.LineStatus
-import com.transportar.android.core.database.entity.NetworkType
-import com.transportar.android.core.database.entity.StationEntity
+import com.moovar.android.core.database.entity.BranchEntity
+import com.moovar.android.core.database.entity.LineEntity
+import com.moovar.android.core.database.entity.LineStatus
+import com.moovar.android.core.database.entity.NetworkType
+import com.moovar.android.core.database.entity.StationEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable

@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 android {
-    namespace = "com.transportar.android.core.common"
+    namespace = "com.moovar.android.core.common"
     compileSdk = 36
     defaultConfig {
         minSdk = 26

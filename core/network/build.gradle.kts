@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.ksp)
 }
 android {
-    namespace = "com.transportar.android.core.network"
+    namespace = "com.moovar.android.core.network"
     compileSdk = 36
     defaultConfig {
         minSdk = 26

@@ -1,10 +1,10 @@
-package com.transportar.android.core.database.dao
+package com.moovar.android.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.transportar.android.core.database.entity.FavoriteRouteEntity
+import com.moovar.android.core.database.entity.FavoriteRouteEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
