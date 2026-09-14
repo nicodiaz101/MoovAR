@@ -58,7 +58,7 @@ CONFIGURACIÓN OBLIGATORIA:
 - Kotlin DSL (*.kts) para todos los build files
 - Version Catalog en libs.versions.toml (ver lista adjunta)
 - KSP como procesador de anotaciones (no KAPT)
-- compileSdk = 36, minSdk = 26, targetSdk = 36
+- compileSdk = 36, minSdk = 30, targetSdk = 36
 - Hilt habilitado en :app y todos los :feature:*
 - Compose BOM alineado en todos los módulos que usen UI
 - buildFeatures { compose = true } solo en módulos de feature y :app

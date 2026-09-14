@@ -3,7 +3,7 @@
 > **Stack:** Kotlin · Jetpack Compose · Room · Retrofit/OkHttp · Protobuf · Osmdroid  
 > **Arquitectura:** Clean Architecture + MVVM + StateFlow  
 > **Principios:** Zero Telemetría · Zero Permisos GPS · Offline-First  
-> **Target:** Android 8.0+ (API 26) → compileSdk 36
+> **Target:** Android 11.0+ (API 30) → compileSdk 36
 
 ---
 
@@ -31,7 +31,7 @@ después de tener los modelos de dominio definidos, para que el mapeo
 
 - [ ] Crear proyecto Android con **Android Studio Hedgehog+** (AGP 8.x).
 - [ ] Migrar a **Kotlin DSL** (`build.gradle.kts`) y **Version Catalogs** (`libs.versions.toml`).
-- [ ] Configurar `compileSdk = 36`, `minSdk = 26`, `targetSdk = 36`.
+- [x] Configurar `compileSdk = 36`, `minSdk = 30`, `targetSdk = 36`.
 - [ ] Habilitar **buildFeatures { compose = true }** y fijar `kotlinCompilerExtensionVersion`.
 - [ ] Configurar **KSP** (Kotlin Symbol Processing) como procesador de anotaciones (reemplaza KAPT).
 
