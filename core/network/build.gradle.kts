@@ -18,13 +18,17 @@ android {
     kotlinOptions {
         jvmTarget = "21"
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:domain"))
 
     implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.converter.kotlinx)
+    implementation(libs.security.crypto)
     implementation(libs.okhttp.core)
     implementation(libs.okhttp.logging)
 

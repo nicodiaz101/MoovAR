@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
 }
 dependencies {
-    implementation(libs.coroutines.android)
+    implementation(project(":core:common"))
+    implementation(libs.coroutines.core)
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_21

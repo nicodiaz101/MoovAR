@@ -42,7 +42,7 @@ class DatabaseSeeder(
             lineDao.upsertAll(lines)
             branchDao.upsertAll(branches)
             stationDao.upsertAll(stations)
-            Log.d("DatabaseSeeder", "Seeded \${lines.size} lines, \${branches.size} branches, and \${stations.size} stations")
+            Log.d("DatabaseSeeder", "Seeded ${lines.size} lines, ${branches.size} branches, and ${stations.size} stations")
         } catch (e: Exception) {
             Log.e("DatabaseSeeder", "Error seeding data", e)
         }

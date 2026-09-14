@@ -67,7 +67,8 @@ hilt-navigation    = { group = "androidx.hilt", name = "hilt-navigation-compose"
 
 # Retrofit / OkHttp
 retrofit                = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+retrofit-converter-kotlinx = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
+security-crypto         = { group = "androidx.security", name = "security-crypto-ktx", version = "1.1.0-alpha06" }
 okhttp-core             = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging          = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
@@ -82,6 +83,7 @@ osmdroid = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "o
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 
 # Coroutines
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 
 # Serialization
