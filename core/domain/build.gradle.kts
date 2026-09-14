@@ -5,9 +5,9 @@ dependencies {
     implementation(libs.coroutines.android)
 }
 java {
-    sourceCompatibility = JavaVersion.toVersion(25)
-    targetCompatibility = JavaVersion.toVersion(25)
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 kotlin {
-    jvmToolchain(25)
+    jvmToolchain(21)
 }
