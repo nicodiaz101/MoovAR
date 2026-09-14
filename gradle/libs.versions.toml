@@ -1,7 +1,7 @@
 [versions]
 kotlin                 = "2.1.0"
 ksp                    = "2.1.0-1.0.29"
-agp                    = "8.9.3"
+agp                    = "8.13.2"
 compose-bom            = "2025.06.00"
 lifecycle              = "2.9.0"
 room                   = "2.7.1"
