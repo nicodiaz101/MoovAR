@@ -65,3 +65,21 @@ data class ServiceAlert(
     val description: String,
     val severity: AlertSeverity
 )
+
+data class FavoriteRoute(
+    val id: Long = 0,
+    val originStationId: String,
+    val originStationName: String,
+    val destinationStationId: String,
+    val destinationStationName: String,
+    val lineId: String,
+    val lineName: String,
+    val createdAt: Long
+)
+
+enum class DepartureMode { NOW, SCHEDULED }
+
+sealed class StationSelectorData {
+    data class Recent(val stations: List<Station>) : StationSelectorData()
+    data class Results(val stations: List<Station>) : StationSelectorData()
+}
