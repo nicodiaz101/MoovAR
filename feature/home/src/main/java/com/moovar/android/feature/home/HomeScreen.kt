@@ -9,8 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -21,6 +21,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moovar.android.core.domain.model.NetworkType
@@ -36,11 +37,13 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     
-    val hour = LocalTime.now().hour
-    val greeting = when (hour) {
-        in 6..12 -> "¡Buenos días!"
-        in 13..19 -> "¡Buenas tardes!"
-        else -> "¡Buenas noches!"
+    val greeting = remember {
+        val hour = LocalTime.now().hour
+        when (hour) {
+            in 6..12 -> "¡Buenos días!"
+            in 13..19 -> "¡Buenas tardes!"
+            else -> "¡Buenas noches!"
+        }
     }
 
     Scaffold(
@@ -72,7 +75,9 @@ fun HomeScreen(
             }
         }
     ) { padding ->
-        val sortedLines = uiState.lines.sortedBy { if (it.networkType == NetworkType.SUBTE) 1 else 0 }
+        val sortedLines = remember(uiState.lines) {
+            uiState.lines.sortedBy { if (it.networkType == NetworkType.SUBTE) 1 else 0 }
+        }
         
         LazyColumn(
             modifier = Modifier
@@ -85,7 +90,7 @@ fun HomeScreen(
                     onLineClick = navigateToDepartures,
                     onStatusClick = navigateToAlerts
                 )
-                Divider()
+                HorizontalDivider()
             }
         }
     }

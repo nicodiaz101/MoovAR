@@ -47,7 +47,8 @@ data class Departure(
     val serviceType: String?,
     val status: String,
     val vehicleCoordinates: Coordinates?,
-    val networkType: NetworkType
+    val networkType: NetworkType,
+    val isTerminus: Boolean = false
 )
 
 data class JourneyStop(

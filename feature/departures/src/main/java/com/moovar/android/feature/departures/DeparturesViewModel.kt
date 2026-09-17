@@ -12,6 +12,7 @@ import com.moovar.android.core.domain.model.Line
 import com.moovar.android.core.domain.model.Station
 import com.moovar.android.core.domain.usecase.GetAlertsUseCase
 import com.moovar.android.core.domain.usecase.GetBranchesByLineUseCase
+import com.moovar.android.core.domain.usecase.GetLinesStatusUseCase
 import com.moovar.android.core.domain.usecase.GetNextDeparturesUseCase
 import com.moovar.android.core.domain.usecase.ToggleFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,6 +51,7 @@ sealed class DeparturesUiEvent {
 
 @HiltViewModel
 class DeparturesViewModel @Inject constructor(
+    private val getLinesStatusUseCase: GetLinesStatusUseCase,
     private val getBranchesByLineUseCase: GetBranchesByLineUseCase,
     private val getNextDeparturesUseCase: GetNextDeparturesUseCase,
     private val getAlertsUseCase: GetAlertsUseCase,
@@ -66,8 +68,23 @@ class DeparturesViewModel @Inject constructor(
     val events: SharedFlow<DeparturesUiEvent> = _events.asSharedFlow()
 
     init {
+        loadLine()
         loadBranches()
         checkAlerts()
+    }
+
+    private fun loadLine() {
+        viewModelScope.launch(Dispatchers.Default) {
+            getLinesStatusUseCase()
+                .catch { /* ignore */ }
+                .collect { result ->
+                    if (result is Result.Success) {
+                        result.data.find { it.id == lineId }?.let { line ->
+                            _uiState.update { it.copy(line = line) }
+                        }
+                    }
+                }
+        }
     }
 
     private fun loadBranches() {
@@ -86,8 +103,8 @@ class DeparturesViewModel @Inject constructor(
             getAlertsUseCase(lineId)
                 .catch { /* ignore */ }
                 .collect { result ->
-                    if (result is Result.Success && result.data.isNotEmpty()) {
-                        _uiState.update { it.copy(hasActiveAlerts = true) }
+                    _uiState.update { 
+                        it.copy(hasActiveAlerts = result is Result.Success && result.data.isNotEmpty()) 
                     }
                 }
         }

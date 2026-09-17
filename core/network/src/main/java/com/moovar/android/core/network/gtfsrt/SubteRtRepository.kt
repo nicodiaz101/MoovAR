@@ -4,6 +4,7 @@ import com.google.transit.realtime.GtfsRealtime.FeedMessage
 import com.moovar.android.core.common.Result
 import com.moovar.android.core.domain.model.SubteArrival
 import com.moovar.android.core.domain.model.VehicleLocation
+import com.moovar.android.core.domain.repository.SubteRealtimeRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,8 +12,8 @@ import javax.inject.Inject
 
 class SubteRtRepository @Inject constructor(
     private val dataSource: GtfsRtDataSource
-) {
-    fun observeSubteData(): Flow<Result<Pair<Map<String, List<SubteArrival>>, List<VehicleLocation>>>> = flow {
+) : SubteRealtimeRepository {
+    override fun observeSubteData(): Flow<Result<Pair<Map<String, List<SubteArrival>>, List<VehicleLocation>>>> = flow {
         while (true) {
             try {
                 val feed = dataSource.fetchFeed()

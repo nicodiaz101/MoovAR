@@ -17,13 +17,4 @@ object GtfsRtModule {
     @Singleton
     @GtfsRtEndpointUrl
     fun provideGtfsRtEndpointUrl(): String = "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/sbase/subtes-estado/estado.pb"
-
-    @Provides
-    @Singleton
-    fun provideGtfsRtDataSource(
-        okHttpClient: OkHttpClient,
-        @GtfsRtEndpointUrl endpointUrl: String
-    ): GtfsRtDataSource {
-        return GtfsRtDataSource(okHttpClient, endpointUrl)
-    }
 }

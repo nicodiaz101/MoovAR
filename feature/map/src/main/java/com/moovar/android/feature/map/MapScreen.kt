@@ -12,10 +12,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -29,6 +36,23 @@ fun MapScreen(
     viewModel: MapViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var mapViewRef by remember { mutableStateOf<MapView?>(null) }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> mapViewRef?.onResume()
+                Lifecycle.Event.ON_PAUSE -> mapViewRef?.onPause()
+                else -> {}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            mapViewRef?.onDetach()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -52,9 +76,11 @@ fun MapScreen(
                     setMultiTouchControls(true)
                     setTileSource(TileSourceFactory.MAPNIK)
                     controller.setZoom(14.0)
+                    mapViewRef = this
                 }
             },
             update = { mapView ->
+                mapViewRef = mapView
                 uiState.coordinates?.let { coords ->
                     val geoPoint = GeoPoint(coords.latitude, coords.longitude)
                     mapView.controller.setCenter(geoPoint)

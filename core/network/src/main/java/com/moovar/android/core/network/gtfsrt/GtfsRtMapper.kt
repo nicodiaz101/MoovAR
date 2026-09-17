@@ -17,6 +17,7 @@ object GtfsRtMapper {
                         tripId = tripId,
                         arrivalDelay = update.arrival.delay,
                         arrivalTime = update.arrival.time,
+                        departureDelay = update.departure.delay,
                         scheduleRelationship = update.scheduleRelationship.name
                     )
                 }

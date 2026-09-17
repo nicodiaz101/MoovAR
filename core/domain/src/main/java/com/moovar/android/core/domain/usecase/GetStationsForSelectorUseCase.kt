@@ -16,11 +16,8 @@ class GetStationsForSelectorUseCase @Inject constructor(
                 StationSelectorData.Recent(recent)
             }
             query.isEmpty() && branchId != null -> {
-                val stations = stationRepository.getBranchesByLine(branchId) // Actually wait, getBranchesByLine returns branches. 
-                // Ah! SPECS says: ELSE IF query.isEmpty() AND selectedBranchId != null: -> Mostrar todas las estaciones del ramal (StationDao.getByBranch())
-                // Let's use searchStations("", branchId) because it handles the branch filter
-                val stationsResult = stationRepository.searchStations("", branchId)
-                StationSelectorData.Results(stationsResult)
+                val stations = stationRepository.searchStations("", branchId)
+                StationSelectorData.Results(stations)
             }
             else -> {
                 val stations = stationRepository.searchStations(query.trim(), branchId)

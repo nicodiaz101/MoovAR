@@ -10,6 +10,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
@@ -33,15 +34,17 @@ class StationSelectorViewModel @Inject constructor(
     val uiState: StateFlow<StationSelectorUiState> = _uiState.asStateFlow()
 
     private val searchQueryFlow = MutableStateFlow("")
+    private val selectedBranchIdFlow = MutableStateFlow<String?>(null)
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            searchQueryFlow
-                .debounce(300L)
+            combine(
+                searchQueryFlow.debounce(300L),
+                selectedBranchIdFlow
+            ) { query, branchId -> query to branchId }
                 .distinctUntilChanged()
-                .collect { query ->
+                .collect { (query, branchId) ->
                     try {
-                        val branchId = _uiState.value.selectedBranchId
                         val data = getStationsForSelectorUseCase(query, branchId)
                         _uiState.update { it.copy(stationData = data, isLoading = false) }
                     } catch (e: Exception) {
@@ -58,6 +61,6 @@ class StationSelectorViewModel @Inject constructor(
     
     fun onBranchChipSelected(branchId: String?) {
         _uiState.update { it.copy(selectedBranchId = branchId, isLoading = true) }
-        searchQueryFlow.value = _uiState.value.searchQuery
+        selectedBranchIdFlow.value = branchId
     }
 }
