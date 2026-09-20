@@ -38,7 +38,11 @@ class JourneyViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val serviceId: String = checkNotNull(savedStateHandle["serviceId"])
+    private val serviceId: String = try {
+        java.net.URLDecoder.decode(checkNotNull(savedStateHandle["serviceId"]), "UTF-8")
+    } catch (_: Exception) {
+        savedStateHandle["serviceId"] ?: ""
+    }
 
     private val _uiState = MutableStateFlow(JourneyUiState())
     val uiState: StateFlow<JourneyUiState> = _uiState.asStateFlow()

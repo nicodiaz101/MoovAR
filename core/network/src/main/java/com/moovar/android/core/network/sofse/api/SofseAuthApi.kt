@@ -3,15 +3,21 @@ package com.moovar.android.core.network.sofse.api
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
+import retrofit2.http.Body
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface SofseAuthApi {
-    @FormUrlEncoded
-    @POST("auth/token")
-    fun getToken(@Field("hash") hash: String): Call<TokenResponse>
+    @Headers("Content-Type: application/json")
+    @POST("auth/authorize")
+    fun authorize(@Body request: SofseAuthRequest): Call<TokenResponse>
 }
+
+@Serializable
+data class SofseAuthRequest(
+    @SerialName("username") val username: String,
+    @SerialName("password") val password: String
+)
 
 @Serializable
 data class TokenResponse(

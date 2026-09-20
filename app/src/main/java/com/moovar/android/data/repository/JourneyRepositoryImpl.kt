@@ -11,6 +11,7 @@ import com.moovar.android.core.domain.repository.JourneyRepository
 import com.moovar.android.core.network.sofse.api.SofseApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.net.URLDecoder
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -33,9 +34,15 @@ class JourneyRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getJourneyDetails(serviceId: String): Result<JourneyDetails> = withContext(Dispatchers.IO) {
+        val decodedServiceId = try {
+            URLDecoder.decode(serviceId, "UTF-8")
+        } catch (_: Exception) {
+            serviceId
+        }
+
         // 1. Check if serviceId is an encoded local service: "srv___branchId___targetDest___originStationId___minutes___time___platform___serviceType___status___isCancelled"
-        if (serviceId.startsWith("srv___")) {
-            val parts = serviceId.split("___")
+        if (decodedServiceId.startsWith("srv___")) {
+            val parts = decodedServiceId.split("___")
             if (parts.size >= 9) {
                 val branchId = parts[1]
                 val targetDest = parts[2]
@@ -65,16 +72,17 @@ class JourneyRepositoryImpl @Inject constructor(
                     val originIdx = stations.indexOfFirst {
                         it.id == originStationId || it.name.equals(originStationId, ignoreCase = true)
                     }
-                    val safeOriginIdx = if (originIdx >= 0) originIdx else stations.size / 2
+                    val safeOriginIdx = if (originIdx >= 0) originIdx else 0
 
-                    // Determine current train position index
+                    // Determine current train position index defensively
                     val currentTrainIndex = when {
                         isCancelled -> safeOriginIdx
+                        safeOriginIdx == 0 -> 0 // Terminus origin: train is at platform 0
                         minutesAway <= 0 -> safeOriginIdx
                         minutesAway in 1..4 -> maxOf(0, safeOriginIdx - 1)
                         minutesAway in 5..9 -> maxOf(0, safeOriginIdx - 2)
                         else -> maxOf(0, safeOriginIdx - 3)
-                    }
+                    }.coerceIn(0, stations.lastIndex)
 
                     val isSubte = line?.networkType == com.moovar.android.core.database.entity.NetworkType.SUBTE
                     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -116,7 +124,7 @@ class JourneyRepositoryImpl @Inject constructor(
 
         // 2. Try remote SOFSE API if not an encoded ID or fallback
         try {
-            val dto = sofseApiService.getRecorrido(serviceId)
+            val dto = sofseApiService.getRecorrido(decodedServiceId)
             val stops = dto.stops.map { stop ->
                 JourneyStop(
                     stationName = stop.name,

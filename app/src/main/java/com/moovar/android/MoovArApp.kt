@@ -153,7 +153,10 @@ fun MoovArAppContent() {
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToSelector = { isOrigin -> navController.navigate("stationSelector/$lineId/$isOrigin") },
                         onNavigateToAlerts = { alertLineId -> navController.navigate("alerts/$alertLineId") },
-                        onNavigateToJourney = { serviceId -> navController.navigate("journey/$serviceId") },
+                        onNavigateToJourney = { serviceId ->
+                            val safeId = java.net.URLEncoder.encode(serviceId, "UTF-8")
+                            navController.navigate("journey/$safeId")
+                        },
                         selectedOriginId = selectedOriginId,
                         selectedOriginName = selectedOriginName,
                         selectedDestId = selectedDestId,
@@ -200,7 +203,10 @@ fun MoovArAppContent() {
                     )
                 }
 
-                composable("journey/{serviceId}") {
+                composable(
+                    route = "journey/{serviceId}",
+                    arguments = listOf(navArgument("serviceId") { type = NavType.StringType })
+                ) {
                     JourneyScreen(
                         onNavigateBack = { navController.popBackStack() }
                     )

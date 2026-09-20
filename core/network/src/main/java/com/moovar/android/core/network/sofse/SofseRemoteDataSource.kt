@@ -76,7 +76,7 @@ class SofseRemoteDataSource @Inject constructor(
     }
     
     suspend fun getBranches(lineId: String): Result<List<Branch>> = safeApiCall {
-        apiService.getRamales(lineId).map { dto ->
+        apiService.getRamalesLegacy(lineId).map { dto ->
             Branch(
                 id = dto.id,
                 lineId = lineId,
@@ -88,7 +88,7 @@ class SofseRemoteDataSource @Inject constructor(
     }
 
     suspend fun getStations(branchId: String): Result<List<Station>> = safeApiCall {
-        apiService.getEstaciones(branchId).map { dto ->
+        apiService.getEstacionesLegacy(branchId).map { dto ->
             Station(
                 id = dto.id,
                 name = dto.name,

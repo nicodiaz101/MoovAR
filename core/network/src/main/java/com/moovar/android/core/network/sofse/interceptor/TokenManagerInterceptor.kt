@@ -1,12 +1,14 @@
 package com.moovar.android.core.network.sofse.interceptor
 
+import android.util.Log
+import com.moovar.android.core.network.sofse.SofseCredentialsGenerator
 import com.moovar.android.core.network.sofse.TokenStorage
 import com.moovar.android.core.network.sofse.api.SofseAuthApi
+import com.moovar.android.core.network.sofse.api.SofseAuthRequest
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
-import java.security.MessageDigest
 import javax.inject.Inject
 
 class TokenManagerInterceptor @Inject constructor(
@@ -14,45 +16,75 @@ class TokenManagerInterceptor @Inject constructor(
     private val authApi: SofseAuthApi
 ) : Interceptor {
 
+    companion object {
+        private const val TAG = "TokenManagerInterceptor"
+    }
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val token = tokenStorage.getToken()
+
+        // 1. Ensure token is present before first request
+        var token = tokenStorage.getToken()
+        if (token.isNullOrBlank()) {
+            token = synchronized(this) {
+                tokenStorage.getToken() ?: try {
+                    val newToken = refreshToken()
+                    tokenStorage.saveToken(newToken)
+                    newToken
+                } catch (e: Exception) {
+                    Log.w(TAG, "Initial token fetch failed: ${e.message}")
+                    null
+                }
+            }
+        }
+
         val authenticatedRequest = originalRequest.withToken(token)
         val response = chain.proceed(authenticatedRequest)
 
-        return if (response.code == 401) {
+        // 2. If unauthorized or forbidden, refresh token and retry once
+        return if (response.code == 401 || response.code == 403) {
             response.close()
-            
+
             val newToken = synchronized(this) {
-                // Check if another thread already refreshed the token
                 val currentToken = tokenStorage.getToken()
-                if (currentToken != null && currentToken != token) {
+                if (!currentToken.isNullOrBlank() && currentToken != token) {
                     currentToken
                 } else {
-                    val refreshed = refreshToken()
-                    tokenStorage.saveToken(refreshed)
-                    refreshed
+                    try {
+                        val refreshed = refreshToken()
+                        tokenStorage.saveToken(refreshed)
+                        refreshed
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Token refresh failed: ${e.message}")
+                        null
+                    }
                 }
             }
-            
-            chain.proceed(originalRequest.withToken(newToken))
+
+            if (!newToken.isNullOrBlank()) {
+                chain.proceed(originalRequest.withToken(newToken))
+            } else {
+                response
+            }
         } else {
             response
         }
     }
 
     private fun refreshToken(): String {
-        val versionString = "V3rS10n\$SOFSE"
-        val md5Hash = MessageDigest.getInstance("MD5")
-            .digest(versionString.toByteArray())
-            .joinToString("") { "%02x".format(it) }
-
-        val tokenResponse = authApi.getToken(md5Hash).execute()
-        return tokenResponse.body()?.token
-            ?: throw IOException("No se pudo obtener el token de SOFSE")
+        val (username, password) = SofseCredentialsGenerator.generateCredentials()
+        val call = authApi.authorize(SofseAuthRequest(username = username, password = password))
+        val response = call.execute()
+        if (!response.isSuccessful || response.body()?.token == null) {
+            throw IOException("Fallo autorización SOFSE: code ${response.code()}")
+        }
+        return response.body()!!.token
     }
 
+    /**
+     * SOFSE v1 API expects the JWT token directly in the Authorization header (without 'Bearer ' prefix).
+     */
     private fun Request.withToken(token: String?): Request =
-        if (token != null) newBuilder().header("Authorization", "Bearer $token").build()
+        if (!token.isNullOrBlank()) newBuilder().header("Authorization", token).build()
         else this
 }

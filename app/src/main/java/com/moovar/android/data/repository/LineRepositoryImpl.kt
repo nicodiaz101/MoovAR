@@ -1,5 +1,6 @@
 package com.moovar.android.data.repository
 
+import android.util.Log
 import com.moovar.android.core.common.Result
 import com.moovar.android.core.database.DatabaseSeeder
 import com.moovar.android.core.database.dao.BranchDao
@@ -26,6 +27,18 @@ class LineRepositoryImpl @Inject constructor(
     private val sofseApiService: SofseApiService,
     private val databaseSeeder: DatabaseSeeder
 ) : LineRepository {
+
+    companion object {
+        private const val TAG = "LineRepositoryImpl"
+        private val GERENCIA_TO_LINE = mapOf(
+            11 to "roca",
+            1 to "sarmiento",
+            5 to "mitre",
+            31 to "san_martin",
+            21 to "belgrano_sur",
+            41 to "tren_de_la_costa"
+        )
+    }
 
     override fun observeLines(): Flow<Result<List<Line>>> = flow {
         emit(Result.Loading)
@@ -59,28 +72,109 @@ class LineRepositoryImpl @Inject constructor(
 
     override suspend fun refreshLines() = withContext(Dispatchers.IO) {
         try {
-            val remoteStatus = sofseApiService.getLineas()
-            val existing = lineDao.observeAll()
-            // Update statuses in database if needed
-            val updated = remoteStatus.map { dto ->
-                LineEntity(
-                    id = dto.id,
-                    name = dto.name,
-                    shortName = dto.name,
-                    networkType = com.moovar.android.core.database.entity.NetworkType.TREN,
-                    iconResName = "ic_line_${dto.id}",
-                    colorHex = dto.colorHex ?: "#0055A5",
-                    status = parseStatus(dto.status),
-                    statusMessage = dto.message,
-                    lastUpdatedAt = System.currentTimeMillis(),
-                    sortOrder = 1
-                )
+            val gerencias = try {
+                sofseApiService.getGerencias()
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to get SOFSE gerencias: ${e.message}")
+                emptyList()
             }
-            if (updated.isNotEmpty()) {
-                lineDao.upsertAll(updated)
+
+            val gerenciaMap = gerencias.associateBy { it.id }
+
+            // Get existing line entities to preserve names, colors, and order
+            val existing = lineDao.getAll()
+            if (existing.isEmpty()) return@withContext
+
+            val updated = existing.map { entity ->
+                when (entity.id) {
+                    "mitre" -> {
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = "Normal - Alertas por cancelaciones en ramal Ballester a Zárate",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    "roca" -> {
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = "Normal - Tramo Cañuelas a Lobos interrumpido por obras",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    "sarmiento" -> {
+                        val g = gerenciaMap[1]
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = g?.estado?.mensaje ?: "Servicio normal",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    "san_martin" -> {
+                        val g = gerenciaMap[31]
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = g?.estado?.mensaje ?: "Servicio normal",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    "belgrano_sur" -> {
+                        val g = gerenciaMap[21]
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = g?.estado?.mensaje ?: "Servicio normal",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    "tren_de_la_costa" -> {
+                        val g = gerenciaMap[41]
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = g?.estado?.mensaje ?: "Servicio normal",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    "linea_b" -> {
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = "Normal (Estación Medrano cerrada por obras)",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    "linea_c" -> {
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = "Normal (Estación Lavalle cerrada por obras)",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    "linea_d" -> {
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = "Normal (Estación Tribunales cerrada por obras)",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    "linea_e" -> {
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = "Normal (Entre Ríos y Urquiza cerradas por obras)",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    "linea_a", "linea_h" -> {
+                        entity.copy(
+                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
+                            statusMessage = "Servicio normal",
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    }
+                    else -> entity
+                }
             }
-        } catch (_: Exception) {
-            // Keep offline cached data on network error
+
+            lineDao.upsertAll(updated)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error refreshing lines: ${e.message}", e)
         }
     }
 
@@ -90,13 +184,5 @@ class LineRepositoryImpl @Inject constructor(
         com.moovar.android.core.database.entity.LineStatus.CANCELADO -> LineStatus.CANCELADO
         com.moovar.android.core.database.entity.LineStatus.SIN_SERVICIO -> LineStatus.SIN_SERVICIO
         com.moovar.android.core.database.entity.LineStatus.DESCONOCIDO -> LineStatus.DESCONOCIDO
-    }
-
-    private fun parseStatus(status: String): com.moovar.android.core.database.entity.LineStatus = when (status.uppercase()) {
-        "NORMAL" -> com.moovar.android.core.database.entity.LineStatus.NORMAL
-        "DEMORADO" -> com.moovar.android.core.database.entity.LineStatus.DEMORADO
-        "CANCELADO" -> com.moovar.android.core.database.entity.LineStatus.CANCELADO
-        "SIN_SERVICIO" -> com.moovar.android.core.database.entity.LineStatus.SIN_SERVICIO
-        else -> com.moovar.android.core.database.entity.LineStatus.NORMAL
     }
 }
