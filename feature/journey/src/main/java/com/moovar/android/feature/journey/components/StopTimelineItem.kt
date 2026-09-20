@@ -50,8 +50,9 @@ fun StopTimelineItem(
         Spacer(modifier = Modifier.width(12.dp))
         Text(text = stop.stationName, modifier = Modifier.weight(1f))
         
-        if (stop.stopState != StopState.PAST && stop.scheduledTime != null) {
-            Text(text = stop.scheduledTime, style = MaterialTheme.typography.bodyMedium)
+        val scheduledTime = stop.scheduledTime
+        if (stop.stopState != StopState.PAST && scheduledTime != null) {
+            Text(text = scheduledTime, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }

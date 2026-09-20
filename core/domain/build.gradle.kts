@@ -4,6 +4,7 @@ plugins {
 dependencies {
     implementation(project(":core:common"))
     implementation(libs.coroutines.core)
+    implementation("javax.inject:javax.inject:1")
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_21

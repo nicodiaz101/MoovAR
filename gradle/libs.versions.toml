@@ -2,10 +2,10 @@
 kotlin                 = "2.1.0"
 ksp                    = "2.1.0-1.0.29"
 agp                    = "8.13.2"
-compose-bom            = "2025.06.00"
+compose-bom            = "2026.04.01"
 lifecycle              = "2.9.0"
 room                   = "2.7.1"
-hilt                   = "2.53"
+hilt                   = "2.57.1"
 retrofit               = "2.11.0"
 okhttp                 = "4.12.0"
 protobuf               = "4.29.3"
@@ -44,6 +44,7 @@ compose-ui-tooling         = { group = "androidx.compose.ui", name = "ui-tooling
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-ui-test-manifest   = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 compose-ui-test-junit4     = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 
 # Lifecycle / ViewModel / Activity
 core-ktx                    = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -74,7 +75,7 @@ okhttp-logging          = { group = "com.squareup.okhttp3", name = "logging-inte
 
 # Protobuf / GTFS
 protobuf-kotlin  = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
-gtfs-realtime    = { group = "com.google.transit", name = "gtfs-realtime-bindings", version.ref = "gtfs-realtime" }
+gtfs-realtime    = { group = "org.mobilitydata", name = "gtfs-realtime-bindings", version.ref = "gtfs-realtime" }
 
 # Osmdroid (sin Google Maps)
 osmdroid = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroid" }

@@ -16,11 +16,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
     buildFeatures {
         buildConfig = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
     }
 }
 
@@ -31,7 +34,10 @@ protobuf {
     generateProtoTasks {
         all().forEach { task ->
             task.builtins {
-                id("kotlin") {
+                create("java") {
+                    option("lite")
+                }
+                create("kotlin") {
                     option("lite")
                 }
             }
@@ -55,5 +61,4 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     
     implementation(libs.protobuf.kotlin)
-    implementation(libs.gtfs.realtime)
 }
