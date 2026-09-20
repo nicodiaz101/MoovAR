@@ -10,6 +10,9 @@ interface BranchDao {
     @Query("SELECT * FROM branches WHERE lineId = :lineId")
     suspend fun getByLine(lineId: String): List<BranchEntity>
 
+    @Query("SELECT * FROM branches WHERE id = :id LIMIT 1")
+    suspend fun getById(id: String): BranchEntity?
+
     @Upsert
     suspend fun upsertAll(branches: List<BranchEntity>)
 }

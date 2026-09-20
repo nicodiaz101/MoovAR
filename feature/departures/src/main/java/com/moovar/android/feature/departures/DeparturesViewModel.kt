@@ -165,11 +165,20 @@ class DeparturesViewModel @Inject constructor(
         triggerSearchIfReady()
     }
 
+    fun onClearOrigin() {
+        _uiState.update { it.copy(originStation = null, departures = emptyList()) }
+    }
+
+    fun onClearDestination() {
+        _uiState.update { it.copy(destinationStation = null) }
+        triggerSearchIfReady()
+    }
+
     private fun triggerSearchIfReady() {
         val origin = _uiState.value.originStation
         val destination = _uiState.value.destinationStation
         
-        if (origin != null && destination != null) {
+        if (origin != null) {
             _uiState.update { it.copy(isLoadingDepartures = true, error = null) }
             viewModelScope.launch(Dispatchers.Default) {
                 try {
@@ -190,6 +199,8 @@ class DeparturesViewModel @Inject constructor(
                     _uiState.update { it.copy(error = e.message, isLoadingDepartures = false) }
                 }
             }
+        } else {
+            _uiState.update { it.copy(departures = emptyList()) }
         }
     }
 

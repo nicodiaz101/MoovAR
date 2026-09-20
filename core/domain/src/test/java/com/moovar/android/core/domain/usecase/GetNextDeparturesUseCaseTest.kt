@@ -63,7 +63,7 @@ class GetNextDeparturesUseCaseTest {
     private class FakeDepartureRepository : DepartureRepository {
         override suspend fun getDepartures(
             originId: String,
-            destinationId: String,
+            destinationId: String?,
             departureTime: LocalDateTime
         ): Result<List<Departure>> = Result.Success(emptyList())
     }

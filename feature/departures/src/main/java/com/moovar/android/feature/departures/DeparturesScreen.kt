@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -104,7 +105,7 @@ fun DeparturesScreen(
                     label = "Origen",
                     isDestination = false,
                     onClick = { onNavigateToSelector(true) },
-                    onClearClick = { /* TODO */ }
+                    onClearClick = viewModel::onClearOrigin
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 StationInputField(
@@ -112,7 +113,7 @@ fun DeparturesScreen(
                     label = "Destino",
                     isDestination = true,
                     onClick = { onNavigateToSelector(false) },
-                    onClearClick = { /* TODO */ },
+                    onClearClick = viewModel::onClearDestination,
                     onSwapClick = viewModel::onSwapStations
                 )
             }
@@ -127,13 +128,64 @@ fun DeparturesScreen(
                 Text("Programar")
             }
 
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(uiState.departures) { departure ->
-                    DepartureTicketCard(
-                        departure = departure,
-                        onCardClick = { viewModel.onTicketClicked(departure) },
-                        onMapClick = { viewModel.onMapButtonClicked(departure) }
-                    )
+            when {
+                uiState.isLoadingDepartures -> {
+                    androidx.compose.foundation.layout.Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        androidx.compose.material3.CircularProgressIndicator()
+                    }
+                }
+                uiState.originStation == null -> {
+                    androidx.compose.foundation.layout.Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Selecciona una estación de origen para consultar las próximas salidas.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                    }
+                }
+                uiState.departures.isEmpty() -> {
+                    androidx.compose.foundation.layout.Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "No se encontraron servicios próximos en este momento.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                    }
+                }
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 16.dp)
+                    ) {
+                        items(uiState.departures) { departure ->
+                            DepartureTicketCard(
+                                departure = departure,
+                                onCardClick = { viewModel.onTicketClicked(departure) },
+                                onMapClick = { viewModel.onMapButtonClicked(departure) }
+                            )
+                        }
+                    }
                 }
             }
         }

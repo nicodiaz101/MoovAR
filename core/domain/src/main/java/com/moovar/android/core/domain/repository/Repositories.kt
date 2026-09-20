@@ -21,7 +21,7 @@ interface LineRepository {
 interface DepartureRepository {
     suspend fun getDepartures(
         originId: String,
-        destinationId: String,
+        destinationId: String? = null,
         departureTime: LocalDateTime = LocalDateTime.now()
     ): Result<List<Departure>>
 }

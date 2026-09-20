@@ -14,6 +14,9 @@ interface LineDao {
     @Query("SELECT COUNT(*) FROM lines")
     suspend fun count(): Int
 
+    @Query("SELECT * FROM lines WHERE id = :id LIMIT 1")
+    suspend fun getById(id: String): LineEntity?
+
     @Upsert
     suspend fun upsertAll(lines: List<LineEntity>)
 }

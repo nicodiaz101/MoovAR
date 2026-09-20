@@ -14,12 +14,14 @@ class GetNextDeparturesUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         origin: Station,
-        destination: Station,
+        destination: Station? = null,
         departureTime: LocalDateTime = LocalDateTime.now()
     ): Result<List<Departure>> {
         recentStationRepository.saveRecentStation(origin)
-        recentStationRepository.saveRecentStation(destination)
+        if (destination != null) {
+            recentStationRepository.saveRecentStation(destination)
+        }
 
-        return departureRepository.getDepartures(origin.id, destination.id, departureTime)
+        return departureRepository.getDepartures(origin.id, destination?.id, departureTime)
     }
 }
