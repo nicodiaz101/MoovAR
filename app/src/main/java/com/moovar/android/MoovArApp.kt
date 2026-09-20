@@ -14,8 +14,24 @@ import com.moovar.android.feature.alerts.AlertsScreen
 import com.moovar.android.feature.journey.JourneyScreen
 import com.moovar.android.feature.map.MapScreen
 
+import com.moovar.android.core.database.DatabaseSeeder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
 @HiltAndroidApp
-class MoovArApp : Application()
+class MoovArApp : Application() {
+    @Inject
+    lateinit var databaseSeeder: DatabaseSeeder
+
+    override fun onCreate() {
+        super.onCreate()
+        CoroutineScope(Dispatchers.IO).launch {
+            databaseSeeder.seedInitialData()
+        }
+    }
+}
 
 @Composable
 fun MoovArAppContent() {
