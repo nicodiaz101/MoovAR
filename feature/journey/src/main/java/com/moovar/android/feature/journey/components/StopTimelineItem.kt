@@ -1,18 +1,24 @@
 package com.moovar.android.feature.journey.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Train
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.DirectionsTransit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +27,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.moovar.android.core.domain.model.JourneyStop
 import com.moovar.android.core.domain.model.StopState
@@ -32,41 +39,102 @@ fun StopTimelineItem(
     isLast: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val alpha = if (stop.stopState == StopState.PAST) 0.4f else 1f
-    val nodeColor = when (stop.stopState) {
-        StopState.CURRENT -> MaterialTheme.colorScheme.primary
-        StopState.FUTURE -> MaterialTheme.colorScheme.outline
-        StopState.PAST -> MaterialTheme.colorScheme.outlineVariant
-    }
+    val isCurrent = stop.stopState == StopState.CURRENT
+    val isPast = stop.stopState == StopState.PAST
+    val alpha = if (isPast) 0.5f else 1f
 
     Row(
         modifier = modifier
             .fillMaxWidth()
             .alpha(alpha)
-            .padding(vertical = 4.dp, horizontal = 16.dp),
+            .padding(vertical = if (isCurrent) 8.dp else 4.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        TimelineNode(isFirst = isFirst, isLast = isLast, color = nodeColor, stopState = stop.stopState)
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(text = stop.stationName, modifier = Modifier.weight(1f))
+        TimelineNode(isFirst = isFirst, isLast = isLast, stopState = stop.stopState)
+        Spacer(modifier = Modifier.width(14.dp))
         
+        Column(modifier = Modifier.weight(1f)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = stop.stationName,
+                    style = if (isCurrent) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyLarge,
+                    fontWeight = if (isCurrent) FontWeight.Bold else if (isPast) FontWeight.Normal else FontWeight.Medium,
+                    color = if (isCurrent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                )
+                if (stop.isTerminus) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        color = MaterialTheme.colorScheme.secondaryContainer
+                    ) {
+                        Text(
+                            text = "Terminal",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                        )
+                    }
+                }
+            }
+            if (isCurrent) {
+                Spacer(modifier = Modifier.height(2.dp))
+                Surface(
+                    shape = RoundedCornerShape(6.dp),
+                    color = MaterialTheme.colorScheme.primaryContainer
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DirectionsTransit,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.size(12.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "TREN EN TIEMPO REAL AQUÍ",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                }
+            }
+        }
+
         val scheduledTime = stop.scheduledTime
-        if (stop.stopState != StopState.PAST && scheduledTime != null) {
-            Text(text = scheduledTime, style = MaterialTheme.typography.bodyMedium)
+        if (!isPast && scheduledTime != null) {
+            Surface(
+                shape = RoundedCornerShape(6.dp),
+                color = if (isCurrent) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                Text(
+                    text = scheduledTime,
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal,
+                    color = if (isCurrent) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+            }
         }
     }
 }
 
 @Composable
-fun TimelineNode(isFirst: Boolean, isLast: Boolean, color: Color, stopState: StopState) {
-    Box(modifier = Modifier.size(24.dp), contentAlignment = Alignment.Center) {
-        Canvas(modifier = Modifier.size(24.dp)) {
-            val strokeWidth = 2.dp.toPx()
+fun TimelineNode(isFirst: Boolean, isLast: Boolean, stopState: StopState) {
+    val nodeSize = if (stopState == StopState.CURRENT) 32.dp else 24.dp
+    val primaryColor = MaterialTheme.colorScheme.primary
+
+    Box(modifier = Modifier.size(32.dp), contentAlignment = Alignment.Center) {
+        Canvas(modifier = Modifier.size(32.dp)) {
+            val strokeWidth = 3.dp.toPx()
             val centerX = size.width / 2
-            
+
             if (!isFirst) {
                 drawLine(
-                    color = Color.Gray,
+                    color = Color.LightGray,
                     start = Offset(centerX, 0f),
                     end = Offset(centerX, size.height / 2),
                     strokeWidth = strokeWidth
@@ -74,7 +142,7 @@ fun TimelineNode(isFirst: Boolean, isLast: Boolean, color: Color, stopState: Sto
             }
             if (!isLast) {
                 drawLine(
-                    color = Color.Gray,
+                    color = Color.LightGray,
                     start = Offset(centerX, size.height / 2),
                     end = Offset(centerX, size.height),
                     strokeWidth = strokeWidth
@@ -83,36 +151,45 @@ fun TimelineNode(isFirst: Boolean, isLast: Boolean, color: Color, stopState: Sto
 
             if (stopState == StopState.FUTURE) {
                 drawCircle(
-                    color = color,
-                    radius = 6.dp.toPx(),
+                    color = Color.Gray,
+                    radius = 5.dp.toPx(),
                     style = Stroke(width = strokeWidth)
-                )
-            } else {
-                drawCircle(
-                    color = color,
-                    radius = 6.dp.toPx()
                 )
             }
         }
 
         when (stopState) {
             StopState.PAST -> {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(12.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .size(16.dp)
+                        .background(Color.Gray.copy(alpha = 0.6f), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(10.dp)
+                    )
+                }
             }
             StopState.CURRENT -> {
-                Icon(
-                    imageVector = Icons.Default.Train,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(14.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)
+                        .background(primaryColor, CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.DirectionsTransit,
+                        contentDescription = "Tren aquí",
+                        tint = Color.White,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
             }
-            else -> {}
+            StopState.FUTURE -> {}
         }
     }
 }

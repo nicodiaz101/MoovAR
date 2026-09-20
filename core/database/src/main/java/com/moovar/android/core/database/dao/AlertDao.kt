@@ -14,6 +14,9 @@ interface AlertDao {
     @Query("DELETE FROM alerts WHERE cachedAt < :expiryTime")
     suspend fun deleteExpired(expiryTime: Long)
 
+    @Query("DELETE FROM alerts")
+    suspend fun deleteAll()
+
     @Upsert
     suspend fun upsertAll(alerts: List<AlertEntity>)
 }

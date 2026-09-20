@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moovar.android.core.common.Result
 import com.moovar.android.core.domain.model.JourneyStop
-import com.moovar.android.core.domain.usecase.GetJourneyStopsUseCase
+import com.moovar.android.core.domain.usecase.GetJourneyDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,8 @@ data class JourneyHeader(
     val serviceType: String,
     val platform: String?,
     val departureTime: String,
-    val currentStatus: String
+    val currentStatus: String,
+    val destination: String = ""
 )
 
 data class JourneyUiState(
@@ -33,7 +34,7 @@ data class JourneyUiState(
 
 @HiltViewModel
 class JourneyViewModel @Inject constructor(
-    private val getJourneyStopsUseCase: GetJourneyStopsUseCase,
+    private val getJourneyDetailsUseCase: GetJourneyDetailsUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -43,12 +44,32 @@ class JourneyViewModel @Inject constructor(
     val uiState: StateFlow<JourneyUiState> = _uiState.asStateFlow()
 
     init {
+        loadJourney()
+    }
+
+    fun loadJourney() {
         viewModelScope.launch(Dispatchers.Default) {
+            _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                val result = getJourneyStopsUseCase(serviceId)
+                val result = getJourneyDetailsUseCase(serviceId)
                 _uiState.update { state ->
                     when (result) {
-                        is Result.Success -> state.copy(stops = result.data, isLoading = false, error = null)
+                        is Result.Success -> {
+                            val details = result.data
+                            state.copy(
+                                serviceHeader = JourneyHeader(
+                                    branchName = details.branchName,
+                                    serviceType = details.serviceType,
+                                    platform = details.platform,
+                                    departureTime = details.departureTime,
+                                    currentStatus = details.currentStatus,
+                                    destination = details.destination
+                                ),
+                                stops = details.stops,
+                                isLoading = false,
+                                error = null
+                            )
+                        }
                         is Result.Error -> state.copy(error = result.message, isLoading = false)
                         is Result.Loading -> state.copy(isLoading = true)
                     }

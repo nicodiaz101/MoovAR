@@ -48,7 +48,19 @@ data class Departure(
     val status: String,
     val vehicleCoordinates: Coordinates?,
     val networkType: NetworkType,
-    val isTerminus: Boolean = false
+    val isTerminus: Boolean = false,
+    val direction: String = "",
+    val isCancelled: Boolean = false
+)
+
+data class JourneyDetails(
+    val branchName: String,
+    val serviceType: String,
+    val destination: String,
+    val platform: String?,
+    val departureTime: String,
+    val currentStatus: String,
+    val stops: List<JourneyStop>
 )
 
 data class JourneyStop(

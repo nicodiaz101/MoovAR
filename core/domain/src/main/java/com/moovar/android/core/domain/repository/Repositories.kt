@@ -28,6 +28,7 @@ interface DepartureRepository {
 
 interface JourneyRepository {
     suspend fun getJourney(serviceId: String): Result<List<JourneyStop>>
+    suspend fun getJourneyDetails(serviceId: String): Result<com.moovar.android.core.domain.model.JourneyDetails>
 }
 
 interface AlertRepository {

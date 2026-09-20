@@ -20,7 +20,7 @@
       "colorHex": "#00A8E3",
       "sortOrder": 2,
       "status": "NORMAL",
-      "statusMessage": "Servicio normal"
+      "statusMessage": "Servicio normal en ramal Once - Moreno"
     },
     {
       "id": "mitre",
@@ -31,7 +31,7 @@
       "colorHex": "#008A27",
       "sortOrder": 3,
       "status": "NORMAL",
-      "statusMessage": "Servicio normal"
+      "statusMessage": "Servicio normal en eléctricos (obras en diesel Capilla)"
     },
     {
       "id": "san_martin",
@@ -64,7 +64,7 @@
       "colorHex": "#E3001B",
       "sortOrder": 6,
       "status": "NORMAL",
-      "statusMessage": "Servicio normal"
+      "statusMessage": "Concesión Ferrovías (sin GPS en app oficial)"
     },
     {
       "id": "urquiza",
@@ -75,7 +75,7 @@
       "colorHex": "#E30613",
       "sortOrder": 7,
       "status": "NORMAL",
-      "statusMessage": "Servicio normal"
+      "statusMessage": "Concesión Metrovías (sin GPS en app oficial)"
     },
     {
       "id": "tren_costa",
@@ -108,7 +108,7 @@
       "colorHex": "#E30613",
       "sortOrder": 10,
       "status": "NORMAL",
-      "statusMessage": "Servicio normal"
+      "statusMessage": "Servicio normal (Estación Medrano cerrada por obras)"
     },
     {
       "id": "linea_c",
@@ -119,7 +119,7 @@
       "colorHex": "#006C9A",
       "sortOrder": 11,
       "status": "NORMAL",
-      "statusMessage": "Servicio normal"
+      "statusMessage": "Servicio normal (Estación Lavalle cerrada por obras)"
     },
     {
       "id": "linea_d",
@@ -130,7 +130,7 @@
       "colorHex": "#00845B",
       "sortOrder": 12,
       "status": "NORMAL",
-      "statusMessage": "Servicio normal"
+      "statusMessage": "Servicio normal (Estación Tribunales cerrada por obras)"
     },
     {
       "id": "linea_e",
@@ -141,7 +141,7 @@
       "colorHex": "#702A8C",
       "sortOrder": 13,
       "status": "NORMAL",
-      "statusMessage": "Servicio normal"
+      "statusMessage": "Servicio normal (Estaciones Entre Ríos y Urquiza cerradas)"
     },
     {
       "id": "linea_h",
@@ -254,7 +254,7 @@
     {
       "id": "roca_canuelas_lobos",
       "lineId": "roca",
-      "name": "Ezeiza - Cañuelas - Lobos",
+      "name": "Ezeiza - Cañuelas - Lobos (Diésel)",
       "originTerminus": "Ezeiza",
       "destinationTerminus": "Lobos"
     },
@@ -268,14 +268,14 @@
     {
       "id": "sarmiento_merlo_lobos",
       "lineId": "sarmiento",
-      "name": "Merlo - Lobos",
+      "name": "Merlo - Lobos (Diésel)",
       "originTerminus": "Merlo",
       "destinationTerminus": "Lobos"
     },
     {
       "id": "sarmiento_moreno_mercedes",
       "lineId": "sarmiento",
-      "name": "Moreno - Mercedes",
+      "name": "Moreno - Mercedes (Diésel)",
       "originTerminus": "Moreno",
       "destinationTerminus": "Mercedes"
     },
@@ -301,6 +301,20 @@
       "destinationTerminus": "Bartolomé Mitre"
     },
     {
+      "id": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "Victoria - Capilla del Señor (Diésel)",
+      "originTerminus": "Victoria",
+      "destinationTerminus": "Capilla del Señor"
+    },
+    {
+      "id": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Villa Ballester - Zárate (Diésel)",
+      "originTerminus": "Villa Ballester",
+      "destinationTerminus": "Zárate"
+    },
+    {
       "id": "san_martin_main",
       "lineId": "san_martin",
       "name": "Retiro - Pilar - Cabred",
@@ -311,14 +325,14 @@
       "id": "belgrano_sur_catan",
       "lineId": "belgrano_sur",
       "name": "Dr. Sáenz - G. Catán",
-      "originTerminus": "Dr. Sáenz",
+      "originTerminus": "Dr. Antonio Sáenz",
       "destinationTerminus": "González Catán"
     },
     {
       "id": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
       "name": "Dr. Sáenz - Marinos del Crucero Gral. Belgrano",
-      "originTerminus": "Dr. Sáenz",
+      "originTerminus": "Dr. Antonio Sáenz",
       "destinationTerminus": "Marinos del Crucero Gral. Belgrano"
     },
     {
@@ -331,7 +345,7 @@
     {
       "id": "urquiza_main",
       "lineId": "urquiza",
-      "name": "Fco. Lacroze - General Lemos",
+      "name": "F. Lacroze - Gral. Lemos",
       "originTerminus": "Federico Lacroze",
       "destinationTerminus": "General Lemos"
     },
@@ -895,7 +909,7 @@
       "longitude": -58.4116
     },
     {
-      "id": "stn_linea_d_main_ag_ero",
+      "id": "stn_linea_d_main_aguero",
       "branchId": "linea_d_main",
       "lineId": "linea_d",
       "name": "Agüero",
@@ -1654,7 +1668,7 @@
       "longitude": -58.4466
     },
     {
-      "id": "stn_roca_ezeiza_el_jag_el",
+      "id": "stn_roca_ezeiza_el_jaguel",
       "branchId": "roca_ezeiza",
       "lineId": "roca",
       "name": "El Jagüel",
@@ -3172,6 +3186,259 @@
       "longitude": -58.4216
     },
     {
+      "id": "stn_mitre_capilla_victoria",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "Victoria",
+      "networkType": "TREN",
+      "sequenceInBranch": 1,
+      "isTerminus": true,
+      "latitude": -34.608700000000006,
+      "longitude": -58.3866
+    },
+    {
+      "id": "stn_mitre_capilla_schweitzer",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "Schweitzer",
+      "networkType": "TREN",
+      "sequenceInBranch": 2,
+      "isTerminus": false,
+      "latitude": -34.6137,
+      "longitude": -58.3916
+    },
+    {
+      "id": "stn_mitre_capilla_bancalari_r",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "Bancalari R",
+      "networkType": "TREN",
+      "sequenceInBranch": 3,
+      "isTerminus": false,
+      "latitude": -34.618700000000004,
+      "longitude": -58.3966
+    },
+    {
+      "id": "stn_mitre_capilla_general_pacheco",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "General Pacheco",
+      "networkType": "TREN",
+      "sequenceInBranch": 4,
+      "isTerminus": false,
+      "latitude": -34.62370000000001,
+      "longitude": -58.4016
+    },
+    {
+      "id": "stn_mitre_capilla_el_talar",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "El Talar",
+      "networkType": "TREN",
+      "sequenceInBranch": 5,
+      "isTerminus": false,
+      "latitude": -34.6287,
+      "longitude": -58.4066
+    },
+    {
+      "id": "stn_mitre_capilla_lopez_camelo",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "López Camelo",
+      "networkType": "TREN",
+      "sequenceInBranch": 6,
+      "isTerminus": false,
+      "latitude": -34.633700000000005,
+      "longitude": -58.4116
+    },
+    {
+      "id": "stn_mitre_capilla_garin",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "Garín",
+      "networkType": "TREN",
+      "sequenceInBranch": 7,
+      "isTerminus": false,
+      "latitude": -34.6387,
+      "longitude": -58.416599999999995
+    },
+    {
+      "id": "stn_mitre_capilla_maquinista_savio",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "Maquinista Savio",
+      "networkType": "TREN",
+      "sequenceInBranch": 8,
+      "isTerminus": false,
+      "latitude": -34.6437,
+      "longitude": -58.4216
+    },
+    {
+      "id": "stn_mitre_capilla_matheu",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "Matheu",
+      "networkType": "TREN",
+      "sequenceInBranch": 9,
+      "isTerminus": false,
+      "latitude": -34.648700000000005,
+      "longitude": -58.4266
+    },
+    {
+      "id": "stn_mitre_capilla_zelaya",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "Zelaya",
+      "networkType": "TREN",
+      "sequenceInBranch": 10,
+      "isTerminus": false,
+      "latitude": -34.6537,
+      "longitude": -58.431599999999996
+    },
+    {
+      "id": "stn_mitre_capilla_los_cardales",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "Los Cardales",
+      "networkType": "TREN",
+      "sequenceInBranch": 11,
+      "isTerminus": false,
+      "latitude": -34.6587,
+      "longitude": -58.4366
+    },
+    {
+      "id": "stn_mitre_capilla_capilla_del_senor",
+      "branchId": "mitre_capilla",
+      "lineId": "mitre",
+      "name": "Capilla del Señor",
+      "networkType": "TREN",
+      "sequenceInBranch": 12,
+      "isTerminus": true,
+      "latitude": -34.663700000000006,
+      "longitude": -58.4416
+    },
+    {
+      "id": "stn_mitre_zarate_villa_ballester",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Villa Ballester",
+      "networkType": "TREN",
+      "sequenceInBranch": 1,
+      "isTerminus": true,
+      "latitude": -34.608700000000006,
+      "longitude": -58.3866
+    },
+    {
+      "id": "stn_mitre_zarate_bancalari",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Bancalari",
+      "networkType": "TREN",
+      "sequenceInBranch": 2,
+      "isTerminus": false,
+      "latitude": -34.6137,
+      "longitude": -58.3916
+    },
+    {
+      "id": "stn_mitre_zarate_general_pacheco",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "General Pacheco",
+      "networkType": "TREN",
+      "sequenceInBranch": 3,
+      "isTerminus": false,
+      "latitude": -34.618700000000004,
+      "longitude": -58.3966
+    },
+    {
+      "id": "stn_mitre_zarate_benavidez",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Benavídez",
+      "networkType": "TREN",
+      "sequenceInBranch": 4,
+      "isTerminus": false,
+      "latitude": -34.62370000000001,
+      "longitude": -58.4016
+    },
+    {
+      "id": "stn_mitre_zarate_ing_maschwitz",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Ing. Maschwitz",
+      "networkType": "TREN",
+      "sequenceInBranch": 5,
+      "isTerminus": false,
+      "latitude": -34.6287,
+      "longitude": -58.4066
+    },
+    {
+      "id": "stn_mitre_zarate_escobar",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Escobar",
+      "networkType": "TREN",
+      "sequenceInBranch": 6,
+      "isTerminus": false,
+      "latitude": -34.633700000000005,
+      "longitude": -58.4116
+    },
+    {
+      "id": "stn_mitre_zarate_rio_lujan",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Río Luján",
+      "networkType": "TREN",
+      "sequenceInBranch": 7,
+      "isTerminus": false,
+      "latitude": -34.6387,
+      "longitude": -58.416599999999995
+    },
+    {
+      "id": "stn_mitre_zarate_otamendi",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Otamendi",
+      "networkType": "TREN",
+      "sequenceInBranch": 8,
+      "isTerminus": false,
+      "latitude": -34.6437,
+      "longitude": -58.4216
+    },
+    {
+      "id": "stn_mitre_zarate_campana",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Campana",
+      "networkType": "TREN",
+      "sequenceInBranch": 9,
+      "isTerminus": false,
+      "latitude": -34.648700000000005,
+      "longitude": -58.4266
+    },
+    {
+      "id": "stn_mitre_zarate_kilometro_83",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Kilómetro 83",
+      "networkType": "TREN",
+      "sequenceInBranch": 10,
+      "isTerminus": false,
+      "latitude": -34.6537,
+      "longitude": -58.431599999999996
+    },
+    {
+      "id": "stn_mitre_zarate_zarate",
+      "branchId": "mitre_zarate",
+      "lineId": "mitre",
+      "name": "Zárate",
+      "networkType": "TREN",
+      "sequenceInBranch": 11,
+      "isTerminus": true,
+      "latitude": -34.6587,
+      "longitude": -58.4366
+    },
+    {
       "id": "stn_san_martin_main_retiro_san_martin",
       "branchId": "san_martin_main",
       "lineId": "san_martin",
@@ -3414,10 +3681,10 @@
       "longitude": -58.4916
     },
     {
-      "id": "stn_belgrano_sur_catan_dr_saenz",
+      "id": "stn_belgrano_sur_catan_dr_antonio_saenz",
       "branchId": "belgrano_sur_catan",
       "lineId": "belgrano_sur",
-      "name": "Dr. Sáenz",
+      "name": "Dr. Antonio Sáenz",
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
@@ -3436,15 +3703,26 @@
       "longitude": -58.3916
     },
     {
-      "id": "stn_belgrano_sur_catan_presidente_illia",
+      "id": "stn_belgrano_sur_catan_presidente_illia_belgrano_sur",
       "branchId": "belgrano_sur_catan",
       "lineId": "belgrano_sur",
-      "name": "Presidente Illia",
+      "name": "Presidente Illia (Belgrano Sur)",
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
       "latitude": -34.618700000000004,
       "longitude": -58.3966
+    },
+    {
+      "id": "stn_belgrano_sur_catan_lugano",
+      "branchId": "belgrano_sur_catan",
+      "lineId": "belgrano_sur",
+      "name": "Lugano",
+      "networkType": "TREN",
+      "sequenceInBranch": 4,
+      "isTerminus": false,
+      "latitude": -34.62370000000001,
+      "longitude": -58.4016
     },
     {
       "id": "stn_belgrano_sur_catan_villa_madero",
@@ -3452,10 +3730,10 @@
       "lineId": "belgrano_sur",
       "name": "Villa Madero",
       "networkType": "TREN",
-      "sequenceInBranch": 4,
+      "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.6287,
+      "longitude": -58.4066
     },
     {
       "id": "stn_belgrano_sur_catan_marinos_del_fournier",
@@ -3463,10 +3741,10 @@
       "lineId": "belgrano_sur",
       "name": "Marinos del Fournier",
       "networkType": "TREN",
-      "sequenceInBranch": 5,
+      "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.633700000000005,
+      "longitude": -58.4116
     },
     {
       "id": "stn_belgrano_sur_catan_tapiales",
@@ -3474,21 +3752,21 @@
       "lineId": "belgrano_sur",
       "name": "Tapiales",
       "networkType": "TREN",
-      "sequenceInBranch": 6,
-      "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
-    },
-    {
-      "id": "stn_belgrano_sur_catan_ingeniero_castello",
-      "branchId": "belgrano_sur_catan",
-      "lineId": "belgrano_sur",
-      "name": "Ingeniero Castello",
-      "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
       "latitude": -34.6387,
       "longitude": -58.416599999999995
+    },
+    {
+      "id": "stn_belgrano_sur_catan_ing_castello",
+      "branchId": "belgrano_sur_catan",
+      "lineId": "belgrano_sur",
+      "name": "Ing. Castello",
+      "networkType": "TREN",
+      "sequenceInBranch": 8,
+      "isTerminus": false,
+      "latitude": -34.6437,
+      "longitude": -58.4216
     },
     {
       "id": "stn_belgrano_sur_catan_querandi",
@@ -3496,10 +3774,10 @@
       "lineId": "belgrano_sur",
       "name": "Querandí",
       "networkType": "TREN",
-      "sequenceInBranch": 8,
+      "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.648700000000005,
+      "longitude": -58.4266
     },
     {
       "id": "stn_belgrano_sur_catan_laferrere",
@@ -3507,10 +3785,10 @@
       "lineId": "belgrano_sur",
       "name": "Laferrere",
       "networkType": "TREN",
-      "sequenceInBranch": 9,
+      "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.6537,
+      "longitude": -58.431599999999996
     },
     {
       "id": "stn_belgrano_sur_catan_maria_eva_duarte",
@@ -3518,27 +3796,16 @@
       "lineId": "belgrano_sur",
       "name": "María Eva Duarte",
       "networkType": "TREN",
-      "sequenceInBranch": 10,
-      "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
-    },
-    {
-      "id": "stn_belgrano_sur_catan_independencia_belgrano_sur",
-      "branchId": "belgrano_sur_catan",
-      "lineId": "belgrano_sur",
-      "name": "Independencia (Belgrano Sur)",
-      "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
       "latitude": -34.6587,
       "longitude": -58.4366
     },
     {
-      "id": "stn_belgrano_sur_catan_gonzalez_catan",
+      "id": "stn_belgrano_sur_catan_independencia",
       "branchId": "belgrano_sur_catan",
       "lineId": "belgrano_sur",
-      "name": "González Catán",
+      "name": "Independencia",
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
@@ -3546,32 +3813,21 @@
       "longitude": -58.4416
     },
     {
-      "id": "stn_belgrano_sur_catan_20_de_junio",
+      "id": "stn_belgrano_sur_catan_gonzalez_catan",
       "branchId": "belgrano_sur_catan",
       "lineId": "belgrano_sur",
-      "name": "20 de Junio",
+      "name": "González Catán",
       "networkType": "TREN",
       "sequenceInBranch": 13,
-      "isTerminus": false,
+      "isTerminus": true,
       "latitude": -34.6687,
       "longitude": -58.4466
     },
     {
-      "id": "stn_belgrano_sur_catan_marcos_paz_belgrano_sur",
-      "branchId": "belgrano_sur_catan",
-      "lineId": "belgrano_sur",
-      "name": "Marcos Paz (Belgrano Sur)",
-      "networkType": "TREN",
-      "sequenceInBranch": 14,
-      "isTerminus": true,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
-    },
-    {
-      "id": "stn_belgrano_sur_marinos_dr_saenz",
+      "id": "stn_belgrano_sur_marinos_dr_antonio_saenz",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
-      "name": "Dr. Sáenz",
+      "name": "Dr. Antonio Sáenz",
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
@@ -3579,10 +3835,10 @@
       "longitude": -58.3866
     },
     {
-      "id": "stn_belgrano_sur_marinos_tapiales",
+      "id": "stn_belgrano_sur_marinos_villa_soldati",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
-      "name": "Tapiales",
+      "name": "Villa Soldati",
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
@@ -3590,10 +3846,10 @@
       "longitude": -58.3916
     },
     {
-      "id": "stn_belgrano_sur_marinos_aldo_bonzi",
+      "id": "stn_belgrano_sur_marinos_presidente_illia_belgrano_sur",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
-      "name": "Aldo Bonzi",
+      "name": "Presidente Illia (Belgrano Sur)",
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
@@ -3601,10 +3857,10 @@
       "longitude": -58.3966
     },
     {
-      "id": "stn_belgrano_sur_marinos_mendeville",
+      "id": "stn_belgrano_sur_marinos_lugano",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
-      "name": "Mendeville",
+      "name": "Lugano",
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
@@ -3612,10 +3868,10 @@
       "longitude": -58.4016
     },
     {
-      "id": "stn_belgrano_sur_marinos_jose_ingenieros",
+      "id": "stn_belgrano_sur_marinos_villa_madero",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
-      "name": "José Ingenieros",
+      "name": "Villa Madero",
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
@@ -3623,10 +3879,10 @@
       "longitude": -58.4066
     },
     {
-      "id": "stn_belgrano_sur_marinos_justo_villegas",
+      "id": "stn_belgrano_sur_marinos_marinos_del_fournier",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
-      "name": "Justo Villegas",
+      "name": "Marinos del Fournier",
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
@@ -3634,10 +3890,10 @@
       "longitude": -58.4116
     },
     {
-      "id": "stn_belgrano_sur_marinos_isidro_casanova",
+      "id": "stn_belgrano_sur_marinos_tapiales",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
-      "name": "Isidro Casanova",
+      "name": "Tapiales",
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
@@ -3645,10 +3901,10 @@
       "longitude": -58.416599999999995
     },
     {
-      "id": "stn_belgrano_sur_marinos_rafael_castillo",
+      "id": "stn_belgrano_sur_marinos_aldo_bonzi",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
-      "name": "Rafael Castillo",
+      "name": "Aldo Bonzi",
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
@@ -3656,10 +3912,10 @@
       "longitude": -58.4216
     },
     {
-      "id": "stn_belgrano_sur_marinos_merlo_gomez",
+      "id": "stn_belgrano_sur_marinos_maria_sanchez_de_mendeville",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
-      "name": "Merlo Gómez",
+      "name": "María Sánchez de Mendeville",
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
@@ -3667,10 +3923,10 @@
       "longitude": -58.4266
     },
     {
-      "id": "stn_belgrano_sur_marinos_libertad",
+      "id": "stn_belgrano_sur_marinos_jose_ingenieros",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
-      "name": "Libertad",
+      "name": "José Ingenieros",
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
@@ -3678,21 +3934,76 @@
       "longitude": -58.431599999999996
     },
     {
+      "id": "stn_belgrano_sur_marinos_justo_villegas",
+      "branchId": "belgrano_sur_marinos",
+      "lineId": "belgrano_sur",
+      "name": "Justo Villegas",
+      "networkType": "TREN",
+      "sequenceInBranch": 11,
+      "isTerminus": false,
+      "latitude": -34.6587,
+      "longitude": -58.4366
+    },
+    {
+      "id": "stn_belgrano_sur_marinos_isidro_casanova",
+      "branchId": "belgrano_sur_marinos",
+      "lineId": "belgrano_sur",
+      "name": "Isidro Casanova",
+      "networkType": "TREN",
+      "sequenceInBranch": 12,
+      "isTerminus": false,
+      "latitude": -34.663700000000006,
+      "longitude": -58.4416
+    },
+    {
+      "id": "stn_belgrano_sur_marinos_rafael_castillo",
+      "branchId": "belgrano_sur_marinos",
+      "lineId": "belgrano_sur",
+      "name": "Rafael Castillo",
+      "networkType": "TREN",
+      "sequenceInBranch": 13,
+      "isTerminus": false,
+      "latitude": -34.6687,
+      "longitude": -58.4466
+    },
+    {
+      "id": "stn_belgrano_sur_marinos_merlo_gomez",
+      "branchId": "belgrano_sur_marinos",
+      "lineId": "belgrano_sur",
+      "name": "Merlo Gómez",
+      "networkType": "TREN",
+      "sequenceInBranch": 14,
+      "isTerminus": false,
+      "latitude": -34.673700000000004,
+      "longitude": -58.4516
+    },
+    {
+      "id": "stn_belgrano_sur_marinos_libertad",
+      "branchId": "belgrano_sur_marinos",
+      "lineId": "belgrano_sur",
+      "name": "Libertad",
+      "networkType": "TREN",
+      "sequenceInBranch": 15,
+      "isTerminus": false,
+      "latitude": -34.678700000000006,
+      "longitude": -58.4566
+    },
+    {
       "id": "stn_belgrano_sur_marinos_marinos_del_crucero_gral_belgrano",
       "branchId": "belgrano_sur_marinos",
       "lineId": "belgrano_sur",
       "name": "Marinos del Crucero Gral. Belgrano",
       "networkType": "TREN",
-      "sequenceInBranch": 11,
+      "sequenceInBranch": 16,
       "isTerminus": true,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.6837,
+      "longitude": -58.4616
     },
     {
-      "id": "stn_belgrano_norte_main_retiro_belgrano",
+      "id": "stn_belgrano_norte_main_retiro_belgrano_norte",
       "branchId": "belgrano_norte_main",
       "lineId": "belgrano_norte",
-      "name": "Retiro (Belgrano)",
+      "name": "Retiro (Belgrano Norte)",
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
@@ -3744,10 +4055,10 @@
       "longitude": -58.4066
     },
     {
-      "id": "stn_belgrano_norte_main_florida_belgrano",
+      "id": "stn_belgrano_norte_main_florida",
       "branchId": "belgrano_norte_main",
       "lineId": "belgrano_norte",
-      "name": "Florida (Belgrano)",
+      "name": "Florida",
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
@@ -3854,10 +4165,10 @@
       "longitude": -58.4566
     },
     {
-      "id": "stn_belgrano_norte_main_pablo_nogues",
+      "id": "stn_belgrano_norte_main_ing_pablo_nogues",
       "branchId": "belgrano_norte_main",
       "lineId": "belgrano_norte",
-      "name": "Pablo Nogués",
+      "name": "Ing. Pablo Nogués",
       "networkType": "TREN",
       "sequenceInBranch": 16,
       "isTerminus": false,
@@ -3920,21 +4231,32 @@
       "longitude": -58.486599999999996
     },
     {
+      "id": "stn_belgrano_norte_main_cecilia_grierson",
+      "branchId": "belgrano_norte_main",
+      "lineId": "belgrano_norte",
+      "name": "Cecilia Grierson",
+      "networkType": "TREN",
+      "sequenceInBranch": 22,
+      "isTerminus": false,
+      "latitude": -34.7137,
+      "longitude": -58.4916
+    },
+    {
       "id": "stn_belgrano_norte_main_villa_rosa",
       "branchId": "belgrano_norte_main",
       "lineId": "belgrano_norte",
       "name": "Villa Rosa",
       "networkType": "TREN",
-      "sequenceInBranch": 22,
+      "sequenceInBranch": 23,
       "isTerminus": true,
-      "latitude": -34.7137,
-      "longitude": -58.4916
+      "latitude": -34.718700000000005,
+      "longitude": -58.4966
     },
     {
-      "id": "stn_urquiza_main_federico_lacroze",
+      "id": "stn_urquiza_main_federico_lacroze_urquiza",
       "branchId": "urquiza_main",
       "lineId": "urquiza",
-      "name": "Federico Lacroze",
+      "name": "Federico Lacroze (Urquiza)",
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
@@ -3942,10 +4264,10 @@
       "longitude": -58.3866
     },
     {
-      "id": "stn_urquiza_main_artigas",
+      "id": "stn_urquiza_main_jose_artigas",
       "branchId": "urquiza_main",
       "lineId": "urquiza",
-      "name": "Artigas",
+      "name": "José Artigas",
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
@@ -3953,10 +4275,10 @@
       "longitude": -58.3916
     },
     {
-      "id": "stn_urquiza_main_arata",
+      "id": "stn_urquiza_main_pedro_n_arata",
       "branchId": "urquiza_main",
       "lineId": "urquiza",
-      "name": "Arata",
+      "name": "Pedro N. Arata",
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
@@ -3986,10 +4308,10 @@
       "longitude": -58.4066
     },
     {
-      "id": "stn_urquiza_main_devoto_urquiza",
+      "id": "stn_urquiza_main_devoto",
       "branchId": "urquiza_main",
       "lineId": "urquiza",
-      "name": "Devoto (Urquiza)",
+      "name": "Devoto",
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
@@ -3997,10 +4319,10 @@
       "longitude": -58.4116
     },
     {
-      "id": "stn_urquiza_main_coronel_lynch",
+      "id": "stn_urquiza_main_coronel_f_lynch",
       "branchId": "urquiza_main",
       "lineId": "urquiza",
-      "name": "Coronel Lynch",
+      "name": "Coronel F. Lynch",
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
@@ -4162,21 +4484,32 @@
       "longitude": -58.486599999999996
     },
     {
+      "id": "stn_urquiza_main_sargento_cabral",
+      "branchId": "urquiza_main",
+      "lineId": "urquiza",
+      "name": "Sargento Cabral",
+      "networkType": "TREN",
+      "sequenceInBranch": 22,
+      "isTerminus": false,
+      "latitude": -34.7137,
+      "longitude": -58.4916
+    },
+    {
       "id": "stn_urquiza_main_general_lemos",
       "branchId": "urquiza_main",
       "lineId": "urquiza",
       "name": "General Lemos",
       "networkType": "TREN",
-      "sequenceInBranch": 22,
+      "sequenceInBranch": 23,
       "isTerminus": true,
-      "latitude": -34.7137,
-      "longitude": -58.4916
+      "latitude": -34.718700000000005,
+      "longitude": -58.4966
     },
     {
-      "id": "stn_tren_costa_main_maipu",
+      "id": "stn_tren_costa_main_avenida_maipu",
       "branchId": "tren_costa_main",
       "lineId": "tren_costa",
-      "name": "Maipú",
+      "name": "Avenida Maipú",
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
@@ -4296,20 +4629,60 @@
   ],
   "alerts": [
     {
+      "id": "alert_subte_b_medrano",
+      "lineId": "linea_b",
+      "branchId": "linea_b_main",
+      "title": "Línea B: Estación Medrano cerrada por obras",
+      "description": "La estación Medrano se encuentra cerrada por trabajos del Plan de Renovación Integral. Las formaciones no se detienen en esta estación. El servicio funciona con normalidad entre Leandro N. Alem y Juan Manuel de Rosas.",
+      "severity": "INFO"
+    },
+    {
+      "id": "alert_subte_c_lavalle",
+      "lineId": "linea_c",
+      "branchId": "linea_c_main",
+      "title": "Línea C: Estación Lavalle en obra",
+      "description": "Estación Lavalle temporalmente fuera de servicio por obras de puesta en valor. Las formaciones no se detienen en dicha parada.",
+      "severity": "INFO"
+    },
+    {
+      "id": "alert_subte_d_tribunales",
+      "lineId": "linea_d",
+      "branchId": "linea_d_main",
+      "title": "Línea D: Estación Tribunales cerrada por obras",
+      "description": "La estación Tribunales - Teatro Colón permanece cerrada por obras de modernización integral. Las formaciones prestan servicio habitual entre Catedral y Congreso de Tucumán sin detenerse en Tribunales.",
+      "severity": "INFO"
+    },
+    {
+      "id": "alert_subte_e_obras",
+      "lineId": "linea_e",
+      "branchId": "linea_e_main",
+      "title": "Línea E: Estaciones Entre Ríos y Urquiza en obra",
+      "description": "Las estaciones Entre Ríos - Rodolfo Walsh y General Urquiza se encuentran cerradas por el Plan de Renovación Integral.",
+      "severity": "INFO"
+    },
+    {
       "id": "alert_roca_lobos",
       "lineId": "roca",
       "branchId": "roca_canuelas_lobos",
-      "title": "Interrupción en Cañuelas - Lobos",
-      "description": "El servicio entre Cañuelas y Lobos se encuentra interrumpido por obras de infraestructura en zona de vías. Los ramales eléctricos operan con normalidad.",
+      "title": "Roca Diésel: Interrupción en Cañuelas - Lobos",
+      "description": "El servicio diésel entre Cañuelas y Lobos se encuentra interrumpido con cancelaciones totales por obras de infraestructura en zona de vías. Los ramales eléctricos operan con normalidad.",
       "severity": "CRITICAL"
     },
     {
-      "id": "alert_subte_b_obras",
-      "lineId": "linea_b",
-      "branchId": "linea_b_main",
-      "title": "Línea B: Obras en estaciones",
-      "description": "Las estaciones Pasteur-AMIA y Pueyrredón continúan en obras de renovación integral. El servicio opera con normalidad entre cabeceras Alem y Rosas.",
-      "severity": "INFO"
+      "id": "alert_mitre_capilla",
+      "lineId": "mitre",
+      "branchId": "mitre_capilla",
+      "title": "Mitre Diésel: Victoria - Capilla del Señor interrumpido",
+      "description": "Servicio diésel Victoria - Capilla del Señor interrumpido entre Matheu y Capilla del Señor por renovación integral de vías. Circula con cancelaciones y diagrama especial entre Victoria y Matheu.",
+      "severity": "WARNING"
+    },
+    {
+      "id": "alert_sarmiento_lobos",
+      "lineId": "sarmiento",
+      "branchId": "sarmiento_merlo_lobos",
+      "title": "Sarmiento Diésel: Demoras y cancelaciones en Merlo - Lobos",
+      "description": "El ramal diésel Merlo - Lobos opera con diagrama especial y cancelaciones rotativas por desperfectos de material rodante. El servicio eléctrico Once - Moreno opera con normalidad.",
+      "severity": "WARNING"
     }
   ]
 }

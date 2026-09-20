@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -172,18 +175,54 @@ fun DeparturesScreen(
                     }
                 }
                 else -> {
+                    val groupedDepartures = androidx.compose.runtime.remember(uiState.departures) {
+                        uiState.departures.groupBy { it.direction }
+                    }
+
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
                         contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 16.dp)
                     ) {
-                        items(uiState.departures) { departure ->
-                            DepartureTicketCard(
-                                departure = departure,
-                                onCardClick = { viewModel.onTicketClicked(departure) },
-                                onMapClick = { viewModel.onMapButtonClicked(departure) }
-                            )
+                        groupedDepartures.forEach { (direction, departuresInGroup) ->
+                            if (direction.isNotEmpty()) {
+                                item(key = "header_$direction") {
+                                    androidx.compose.material3.Surface(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 16.dp, vertical = 6.dp),
+                                        shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
+                                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                imageVector = androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowForward,
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colorScheme.primary,
+                                                modifier = Modifier.size(16.dp)
+                                            )
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Text(
+                                                text = direction.uppercase(),
+                                                style = MaterialTheme.typography.labelLarge,
+                                                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            items(departuresInGroup, key = { it.serviceId }) { departure ->
+                                DepartureTicketCard(
+                                    departure = departure,
+                                    onCardClick = { viewModel.onTicketClicked(departure) },
+                                    onMapClick = { viewModel.onMapButtonClicked(departure) }
+                                )
+                            }
                         }
                     }
                 }

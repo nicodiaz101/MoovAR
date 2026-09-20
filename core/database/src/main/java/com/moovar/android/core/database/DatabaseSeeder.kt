@@ -39,6 +39,7 @@ class DatabaseSeeder(
             lineDao.upsertAll(lines)
             branchDao.upsertAll(branches)
             stationDao.upsertAll(stations)
+            alertDao.deleteAll()
             if (alerts.isNotEmpty()) {
                 alertDao.upsertAll(alerts)
             }
