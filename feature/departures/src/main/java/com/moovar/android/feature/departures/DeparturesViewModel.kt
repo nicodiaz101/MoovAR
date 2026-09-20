@@ -115,9 +115,39 @@ class DeparturesViewModel @Inject constructor(
         triggerSearchIfReady()
     }
 
+    fun onOriginSelected(id: String, name: String) {
+        val stn = Station(
+            id = id,
+            name = name,
+            branchId = "",
+            lineId = lineId,
+            networkType = uiState.value.line?.networkType ?: com.moovar.android.core.domain.model.NetworkType.TREN,
+            gtfsStopId = null,
+            sequenceInBranch = 0,
+            isTerminus = false,
+            coordinates = null
+        )
+        onOriginSelected(stn)
+    }
+
     fun onDestinationSelected(station: Station) {
         _uiState.update { it.copy(destinationStation = station) }
         triggerSearchIfReady()
+    }
+
+    fun onDestinationSelected(id: String, name: String) {
+        val stn = Station(
+            id = id,
+            name = name,
+            branchId = "",
+            lineId = lineId,
+            networkType = uiState.value.line?.networkType ?: com.moovar.android.core.domain.model.NetworkType.TREN,
+            gtfsStopId = null,
+            sequenceInBranch = 0,
+            isTerminus = false,
+            coordinates = null
+        )
+        onDestinationSelected(stn)
     }
 
     fun onBranchChipSelected(branch: Branch?) {

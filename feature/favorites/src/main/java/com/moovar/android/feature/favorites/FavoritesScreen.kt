@@ -1,5 +1,6 @@
-package com.moovar.android.feature.alerts
+package com.moovar.android.feature.favorites
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,14 +16,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -33,18 +32,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.moovar.android.core.domain.model.AlertSeverity
-import com.moovar.android.core.domain.model.ServiceAlert
+import com.moovar.android.core.domain.model.FavoriteRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlertsScreen(
-    onBackClick: (() -> Unit)? = null,
-    viewModel: AlertsViewModel = hiltViewModel()
+fun FavoritesScreen(
+    onNavigateToDepartures: (lineId: String, originId: String, originName: String, destId: String, destName: String) -> Unit = { _, _, _, _, _ -> },
+    viewModel: FavoritesViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -53,16 +50,9 @@ fun AlertsScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Alertas del Servicio",
+                        text = "Rutas Favoritas",
                         fontWeight = FontWeight.Bold
                     )
-                },
-                navigationIcon = {
-                    if (onBackClick != null) {
-                        IconButton(onClick = onBackClick) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atrás")
-                        }
-                    }
                 }
             )
         }
@@ -78,7 +68,7 @@ fun AlertsScreen(
                         CircularProgressIndicator()
                     }
                 }
-                uiState.allAlerts.isEmpty() -> {
+                uiState.favorites.isEmpty() -> {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -93,7 +83,7 @@ fun AlertsScreen(
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
-                                    imageVector = Icons.Default.CheckCircle,
+                                    imageVector = Icons.Default.Favorite,
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.size(36.dp)
@@ -102,13 +92,13 @@ fun AlertsScreen(
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "Servicio con normalidad",
+                            text = "Sin rutas guardadas",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "No se registran alertas ni interrupciones en las líneas seleccionadas.",
+                            text = "Cuando consultes horarios entre dos estaciones, pulsa el corazón para guardar la ruta aquí.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -119,9 +109,20 @@ fun AlertsScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp)
                     ) {
-                        items(uiState.allAlerts) { alert ->
-                            AlertCard(alert = alert)
-                            Spacer(modifier = Modifier.height(12.dp))
+                        items(uiState.favorites) { route ->
+                            FavoriteRouteCard(
+                                route = route,
+                                onClick = {
+                                    onNavigateToDepartures(
+                                        route.lineId,
+                                        route.originStationId,
+                                        route.originStationName,
+                                        route.destinationStationId,
+                                        route.destinationStationName
+                                    )
+                                }
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
                         }
                     }
                 }
@@ -131,33 +132,32 @@ fun AlertsScreen(
 }
 
 @Composable
-private fun AlertCard(alert: ServiceAlert) {
-    val (severityColor, icon) = when (alert.severity) {
-        AlertSeverity.CRITICAL -> Color(0xFFD32F2F) to Icons.Default.Warning
-        AlertSeverity.WARNING -> Color(0xFFF57C00) to Icons.Default.Warning
-        AlertSeverity.INFO -> Color(0xFF1976D2) to Icons.Default.Info
-    }
-
+private fun FavoriteRouteCard(
+    route: FavoriteRoute,
+    onClick: () -> Unit
+) {
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 1.dp
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
                 shape = RoundedCornerShape(10.dp),
-                color = severityColor.copy(alpha = 0.15f),
+                color = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier.size(40.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(
-                        imageVector = icon,
+                        imageVector = Icons.Default.Place,
                         contentDescription = null,
-                        tint = severityColor,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(22.dp)
                     )
                 }
@@ -166,17 +166,34 @@ private fun AlertCard(alert: ServiceAlert) {
             Spacer(modifier = Modifier.width(14.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = alert.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = alert.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = route.originStationName,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Icon(
+                        imageVector = Icons.Default.ArrowForward,
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = route.destinationStationName,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                if (route.lineName.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = route.lineName,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }

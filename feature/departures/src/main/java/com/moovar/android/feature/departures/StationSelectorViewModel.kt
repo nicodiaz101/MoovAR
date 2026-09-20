@@ -1,8 +1,11 @@
 package com.moovar.android.feature.departures
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.moovar.android.core.domain.model.Branch
 import com.moovar.android.core.domain.model.StationSelectorData
+import com.moovar.android.core.domain.usecase.GetBranchesByLineUseCase
 import com.moovar.android.core.domain.usecase.GetStationsForSelectorUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,16 +22,21 @@ import javax.inject.Inject
 
 data class StationSelectorUiState(
     val searchQuery: String = "",
+    val branches: List<Branch> = emptyList(),
     val selectedBranchId: String? = null,
-    val stationData: StationSelectorData = StationSelectorData.Recent(emptyList()),
+    val stationData: StationSelectorData = StationSelectorData.Results(emptyList()),
     val isLoading: Boolean = false
 )
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class StationSelectorViewModel @Inject constructor(
-    private val getStationsForSelectorUseCase: GetStationsForSelectorUseCase
+    private val getStationsForSelectorUseCase: GetStationsForSelectorUseCase,
+    private val getBranchesByLineUseCase: GetBranchesByLineUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val lineId: String? = savedStateHandle["lineId"]
 
     private val _uiState = MutableStateFlow(StationSelectorUiState())
     val uiState: StateFlow<StationSelectorUiState> = _uiState.asStateFlow()
@@ -38,8 +46,16 @@ class StationSelectorViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
+            val branches = if (!lineId.isNullOrEmpty()) {
+                getBranchesByLineUseCase(lineId)
+            } else emptyList()
+
+            val defaultBranchId = branches.firstOrNull()?.id
+            _uiState.update { it.copy(branches = branches, selectedBranchId = defaultBranchId) }
+            selectedBranchIdFlow.value = defaultBranchId
+
             combine(
-                searchQueryFlow.debounce(300L),
+                searchQueryFlow.debounce(150L),
                 selectedBranchIdFlow
             ) { query, branchId -> query to branchId }
                 .distinctUntilChanged()
@@ -58,7 +74,7 @@ class StationSelectorViewModel @Inject constructor(
         _uiState.update { it.copy(searchQuery = query, isLoading = true) }
         searchQueryFlow.value = query
     }
-    
+
     fun onBranchChipSelected(branchId: String?) {
         _uiState.update { it.copy(selectedBranchId = branchId, isLoading = true) }
         selectedBranchIdFlow.value = branchId

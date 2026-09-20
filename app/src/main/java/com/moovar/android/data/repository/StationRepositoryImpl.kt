@@ -18,8 +18,23 @@ class StationRepositoryImpl @Inject constructor(
     private val branchDao: BranchDao
 ) : StationRepository {
 
+    private fun String.unaccent(): String {
+        val temp = java.text.Normalizer.normalize(this, java.text.Normalizer.Form.NFD)
+        return Regex("\\p{InCombiningDiacriticalMarks}+").replace(temp, "")
+    }
+
     override suspend fun searchStations(query: String, branchId: String?): List<Station> = withContext(Dispatchers.IO) {
-        stationDao.search(query, branchId).map { entity ->
+        val allEntities = stationDao.getByBranchOptional(branchId)
+        val filtered = if (query.isBlank()) {
+            allEntities
+        } else {
+            val normalizedQuery = query.trim().unaccent()
+            allEntities.filter { entity ->
+                entity.name.unaccent().contains(normalizedQuery, ignoreCase = true)
+            }
+        }
+
+        filtered.map { entity ->
             val lat = entity.latitude
             val lon = entity.longitude
             Station(

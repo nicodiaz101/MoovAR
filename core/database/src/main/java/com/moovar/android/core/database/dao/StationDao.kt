@@ -18,6 +18,12 @@ interface StationDao {
     @Query("SELECT * FROM stations WHERE branchId = :branchId ORDER BY sequenceInBranch ASC")
     suspend fun getByBranch(branchId: String): List<StationEntity>
 
+    @Query("SELECT * FROM stations WHERE (:branchId IS NULL OR branchId = :branchId) ORDER BY sequenceInBranch ASC")
+    suspend fun getByBranchOptional(branchId: String?): List<StationEntity>
+
+    @Query("SELECT * FROM stations WHERE lineId = :lineId ORDER BY sequenceInBranch ASC")
+    suspend fun getByLine(lineId: String): List<StationEntity>
+
     @Query("SELECT * FROM stations WHERE id = :id LIMIT 1")
     suspend fun getById(id: String): StationEntity?
 

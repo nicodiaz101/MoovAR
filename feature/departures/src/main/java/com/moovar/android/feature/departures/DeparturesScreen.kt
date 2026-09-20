@@ -33,14 +33,44 @@ import com.moovar.android.feature.departures.components.DepartureTicketCard
 import com.moovar.android.feature.departures.components.FilterChipsRow
 import com.moovar.android.feature.departures.components.StationInputField
 
+import androidx.compose.runtime.LaunchedEffect
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeparturesScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSelector: (isOrigin: Boolean) -> Unit,
-    viewModel: DeparturesViewModel = hiltViewModel()
+    onNavigateToAlerts: (lineId: String) -> Unit = {},
+    onNavigateToJourney: (serviceId: String) -> Unit = {},
+    viewModel: DeparturesViewModel = hiltViewModel(),
+    selectedOriginId: String? = null,
+    selectedOriginName: String? = null,
+    selectedDestId: String? = null,
+    selectedDestName: String? = null
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(viewModel) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is DeparturesUiEvent.NavigateToAlerts -> onNavigateToAlerts(event.lineId)
+                is DeparturesUiEvent.NavigateToJourney -> onNavigateToJourney(event.serviceId)
+                is DeparturesUiEvent.NavigateToMap -> {}
+            }
+        }
+    }
+
+    LaunchedEffect(selectedOriginId, selectedOriginName) {
+        if (!selectedOriginId.isNullOrEmpty() && !selectedOriginName.isNullOrEmpty()) {
+            viewModel.onOriginSelected(selectedOriginId, selectedOriginName)
+        }
+    }
+
+    LaunchedEffect(selectedDestId, selectedDestName) {
+        if (!selectedDestId.isNullOrEmpty() && !selectedDestName.isNullOrEmpty()) {
+            viewModel.onDestinationSelected(selectedDestId, selectedDestName)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -96,12 +126,6 @@ fun DeparturesScreen(
                 RadioButton(selected = uiState.departureMode == DepartureMode.SCHEDULED, onClick = { /* TODO */ })
                 Text("Programar")
             }
-
-            FilterChipsRow(
-                branches = uiState.branches,
-                selectedBranch = uiState.selectedBranch,
-                onBranchSelected = viewModel::onBranchChipSelected
-            )
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(uiState.departures) { departure ->

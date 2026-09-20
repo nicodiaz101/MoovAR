@@ -13,7 +13,12 @@ class GetStationsForSelectorUseCase @Inject constructor(
         return when {
             query.isEmpty() && branchId == null -> {
                 val recent = recentStationRepository.getRecentStations()
-                StationSelectorData.Recent(recent)
+                if (recent.isNotEmpty()) {
+                    StationSelectorData.Recent(recent)
+                } else {
+                    val all = stationRepository.searchStations("", null)
+                    StationSelectorData.Results(all)
+                }
             }
             query.isEmpty() && branchId != null -> {
                 val stations = stationRepository.searchStations("", branchId)

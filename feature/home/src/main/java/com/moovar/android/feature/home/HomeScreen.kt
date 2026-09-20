@@ -1,28 +1,30 @@
 package com.moovar.android.feature.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.moovar.android.core.domain.model.NetworkType
 import com.moovar.android.feature.home.components.LineStatusItem
@@ -36,6 +38,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var selectedFilter by remember { mutableStateOf<NetworkType?>(null) }
     
     val greeting = remember {
         val hour = LocalTime.now().hour
@@ -49,48 +52,75 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = greeting) }
+                title = {
+                    Column {
+                        Text(
+                            text = greeting,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "Estado de líneas en tiempo real",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             )
-        },
-        bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { },
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
-                    label = { Text("Inicio") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { /* TODO: Nav to favorites */ },
-                    icon = { Icon(Icons.Default.Favorite, contentDescription = "Favoritos") },
-                    label = { Text("Favoritos") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navigateToAlerts(null) },
-                    icon = { Icon(Icons.Default.Notifications, contentDescription = "Alertas") },
-                    label = { Text("Alertas") }
-                )
-            }
         }
     ) { padding ->
-        val sortedLines = remember(uiState.lines) {
-            uiState.lines.sortedBy { if (it.networkType == NetworkType.SUBTE) 1 else 0 }
+        val filteredLines = remember(uiState.lines, selectedFilter) {
+            val base = if (selectedFilter != null) {
+                uiState.lines.filter { it.networkType == selectedFilter }
+            } else {
+                uiState.lines
+            }
+            base.sortedBy { if (it.networkType == NetworkType.SUBTE) 1 else 0 }
         }
         
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            items(sortedLines) { line ->
-                LineStatusItem(
-                    line = line,
-                    onLineClick = navigateToDepartures,
-                    onStatusClick = navigateToAlerts
-                )
-                HorizontalDivider()
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item {
+                    FilterChip(
+                        selected = selectedFilter == null,
+                        onClick = { selectedFilter = null },
+                        label = { Text("Todas las líneas") }
+                    )
+                }
+                item {
+                    FilterChip(
+                        selected = selectedFilter == NetworkType.TREN,
+                        onClick = { selectedFilter = NetworkType.TREN },
+                        label = { Text("Trenes") }
+                    )
+                }
+                item {
+                    FilterChip(
+                        selected = selectedFilter == NetworkType.SUBTE,
+                        onClick = { selectedFilter = NetworkType.SUBTE },
+                        label = { Text("Subtes") }
+                    )
+                }
+            }
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
+                items(filteredLines) { line ->
+                    LineStatusItem(
+                        line = line,
+                        onLineClick = navigateToDepartures,
+                        onStatusClick = navigateToAlerts
+                    )
+                }
             }
         }
     }
