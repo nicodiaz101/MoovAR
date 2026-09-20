@@ -61,4 +61,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     
     implementation(libs.protobuf.kotlin)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
 }

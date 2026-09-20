@@ -22,10 +22,9 @@ class DatabaseSeeder(
         val branchDao = db.branchDao()
         val stationDao = db.stationDao()
 
-        // Very basic idempotency check
-        // Check if there are branches, if yes, skip seeding
-        val existingBranches = branchDao.getByLine("roca")
-        if (existingBranches.isNotEmpty()) {
+        // Check if there are already lines seeded
+        if (lineDao.count() > 0) {
+            Log.d("DatabaseSeeder", "Database already seeded, skipping")
             return@withContext
         }
 

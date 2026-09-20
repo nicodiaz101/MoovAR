@@ -11,6 +11,9 @@ interface LineDao {
     @Query("SELECT * FROM lines ORDER BY sortOrder ASC")
     fun observeAll(): Flow<List<LineEntity>>
 
+    @Query("SELECT COUNT(*) FROM lines")
+    suspend fun count(): Int
+
     @Upsert
     suspend fun upsertAll(lines: List<LineEntity>)
 }
