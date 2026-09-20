@@ -8,7 +8,17 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlertDao {
-    @Query("SELECT * FROM alerts WHERE (:lineId IS NULL OR lineId = :lineId) ORDER BY publishedAt DESC")
+    @Query("""
+        SELECT * FROM alerts 
+        WHERE (:lineId IS NULL OR lineId = :lineId) 
+        ORDER BY 
+            CASE severity 
+                WHEN 'CRITICAL' THEN 1 
+                WHEN 'WARNING' THEN 2 
+                ELSE 3 
+            END ASC, 
+            publishedAt DESC
+    """)
     fun observeAlerts(lineId: String?): Flow<List<AlertEntity>>
 
     @Query("DELETE FROM alerts WHERE cachedAt < :expiryTime")

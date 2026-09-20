@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -36,11 +37,21 @@ class LineRepositoryImpl @Inject constructor(
             5 to "mitre",
             31 to "san_martin",
             21 to "belgrano_sur",
-            41 to "tren_de_la_costa"
+            41 to "tren_costa"
         )
     }
 
+    private val repositoryScope = kotlinx.coroutines.CoroutineScope(Dispatchers.IO + kotlinx.coroutines.SupervisorJob())
+
     override fun observeLines(): Flow<Result<List<Line>>> = flow {
+        repositoryScope.launch {
+            try {
+                refreshLines()
+            } catch (e: Exception) {
+                Log.w(TAG, "Background line refresh failed: ${e.message}")
+            }
+        }
+
         emit(Result.Loading)
         lineDao.observeAll().collect { entities ->
             if (entities.isEmpty()) {
@@ -125,11 +136,10 @@ class LineRepositoryImpl @Inject constructor(
                             lastUpdatedAt = System.currentTimeMillis()
                         )
                     }
-                    "tren_de_la_costa" -> {
-                        val g = gerenciaMap[41]
+                    "tren_costa" -> {
                         entity.copy(
-                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
-                            statusMessage = g?.estado?.mensaje ?: "Servicio normal",
+                            status = com.moovar.android.core.database.entity.LineStatus.SIN_SERVICIO,
+                            statusMessage = "Servicio interrumpido por problemas técnicos",
                             lastUpdatedAt = System.currentTimeMillis()
                         )
                     }

@@ -22,7 +22,8 @@ class JourneyRepositoryImpl @Inject constructor(
     private val sofseApiService: SofseApiService,
     private val stationDao: StationDao,
     private val branchDao: BranchDao,
-    private val lineDao: LineDao
+    private val lineDao: LineDao,
+    private val journeyDetailsCache: JourneyDetailsCache
 ) : JourneyRepository {
 
     override suspend fun getJourney(serviceId: String): Result<List<JourneyStop>> = withContext(Dispatchers.IO) {
@@ -40,7 +41,13 @@ class JourneyRepositoryImpl @Inject constructor(
             serviceId
         }
 
-        // 1. Check if serviceId is an encoded local service: "srv___branchId___targetDest___originStationId___minutes___time___platform___serviceType___status___isCancelled"
+        // 1. Check in-memory cache first (populated from real SOFSE API or pre-calculated Subte)
+        val cached = journeyDetailsCache.get(decodedServiceId) ?: journeyDetailsCache.get(serviceId)
+        if (cached != null) {
+            return@withContext Result.Success(cached)
+        }
+
+        // 2. Check if serviceId is an encoded local service: "srv___branchId___targetDest___originStationId___minutes___time___platform___serviceType___status___isCancelled"
         if (decodedServiceId.startsWith("srv___")) {
             val parts = decodedServiceId.split("___")
             if (parts.size >= 9) {
@@ -64,17 +71,18 @@ class JourneyRepositoryImpl @Inject constructor(
 
                 if (stations.isNotEmpty()) {
                     // Check if train is travelling towards branch.originTerminus -> if so, reverse the station order
-                    if (branch != null && targetDest.equals(branch.originTerminus, ignoreCase = true)) {
+                    val isHeadingOrigin = isHeadingTowardsOrigin(targetDest, branch?.originTerminus, branch?.destinationTerminus)
+                    if (isHeadingOrigin) {
                         stations = stations.reversed()
                     }
 
                     // Find origin station index in this sequence
                     val originIdx = stations.indexOfFirst {
-                        it.id == originStationId || it.name.equals(originStationId, ignoreCase = true)
+                        it.id == originStationId || it.name.equals(originStationId, ignoreCase = true) || it.name.contains(originStationId, ignoreCase = true)
                     }
                     val safeOriginIdx = if (originIdx >= 0) originIdx else 0
 
-                    // Determine current train position index defensively
+                    // Train is strictly at or before the origin station if minutesAway > 0
                     val currentTrainIndex = when {
                         isCancelled -> safeOriginIdx
                         safeOriginIdx == 0 -> 0 // Terminus origin: train is at platform 0
@@ -86,7 +94,11 @@ class JourneyRepositoryImpl @Inject constructor(
 
                     val isSubte = line?.networkType == com.moovar.android.core.database.entity.NetworkType.SUBTE
                     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-                    val baseTime = LocalTime.now()
+                    val baseOriginTime = try {
+                        LocalTime.parse(departureTimeStr, timeFormatter)
+                    } catch (_: Exception) {
+                        LocalTime.now().plusMinutes(minutesAway.toLong())
+                    }
 
                     val stops = stations.mapIndexed { index, stn ->
                         val stopState = when {
@@ -94,9 +106,9 @@ class JourneyRepositoryImpl @Inject constructor(
                             index == currentTrainIndex -> StopState.CURRENT
                             else -> StopState.FUTURE
                         }
-                        val diffFromCurrent = index - currentTrainIndex
-                        val minutesDelta = if (isSubte) diffFromCurrent * 3 else diffFromCurrent * 4
-                        val stopTime = baseTime.plusMinutes(minutesDelta.toLong()).format(timeFormatter)
+                        val diffFromOrigin = index - safeOriginIdx
+                        val minutesDelta = if (isSubte) diffFromOrigin * 3 else diffFromOrigin * 4
+                        val stopTime = baseOriginTime.plusMinutes(minutesDelta.toLong()).format(timeFormatter)
 
                         JourneyStop(
                             stationName = stn.name,
@@ -107,22 +119,22 @@ class JourneyRepositoryImpl @Inject constructor(
                     }
 
                     val branchDisplayName = branch?.name ?: line?.name ?: "Servicio"
-                    return@withContext Result.Success(
-                        JourneyDetails(
-                            branchName = branchDisplayName,
-                            serviceType = serviceType,
-                            destination = targetDest,
-                            platform = platform,
-                            departureTime = departureTimeStr,
-                            currentStatus = currentStatus,
-                            stops = stops
-                        )
+                    val details = JourneyDetails(
+                        branchName = branchDisplayName,
+                        serviceType = serviceType,
+                        destination = targetDest,
+                        platform = platform,
+                        departureTime = departureTimeStr,
+                        currentStatus = currentStatus,
+                        stops = stops
                     )
+                    journeyDetailsCache.put(decodedServiceId, details)
+                    return@withContext Result.Success(details)
                 }
             }
         }
 
-        // 2. Try remote SOFSE API if not an encoded ID or fallback
+        // 3. Try remote SOFSE API if not an encoded ID or fallback
         try {
             val dto = sofseApiService.getRecorrido(decodedServiceId)
             val stops = dto.stops.map { stop ->
@@ -137,19 +149,50 @@ class JourneyRepositoryImpl @Inject constructor(
                     isTerminus = stop.isTerminus
                 )
             }
-            Result.Success(
-                JourneyDetails(
-                    branchName = "Servicio Ferroviario",
-                    serviceType = "Común",
-                    destination = dto.stops.lastOrNull()?.name ?: "Terminal",
-                    platform = "1",
-                    departureTime = dto.stops.firstOrNull()?.scheduledTime ?: "A horario",
-                    currentStatus = "En viaje",
-                    stops = stops
-                )
+            val details = JourneyDetails(
+                branchName = "Servicio Ferroviario",
+                serviceType = "Común",
+                destination = dto.stops.lastOrNull()?.name ?: "Terminal",
+                platform = "1",
+                departureTime = dto.stops.firstOrNull()?.scheduledTime ?: "A horario",
+                currentStatus = "En viaje",
+                stops = stops
             )
+            journeyDetailsCache.put(decodedServiceId, details)
+            Result.Success(details)
         } catch (e: Exception) {
             Result.Error(e.message ?: "No se pudo obtener el recorrido del servicio")
         }
+    }
+
+    private fun isHeadingTowardsOrigin(
+        targetDest: String,
+        originTerminus: String?,
+        destinationTerminus: String?
+    ): Boolean {
+        if (originTerminus.isNullOrBlank()) return false
+        val normDest = normalizeTerminus(targetDest)
+        val normOrigin = normalizeTerminus(originTerminus)
+        val normDestTerminus = destinationTerminus?.let { normalizeTerminus(it) } ?: ""
+
+        if (normDestTerminus.isNotEmpty() && (normDest.contains(normDestTerminus) || normDestTerminus.contains(normDest))) {
+            return false
+        }
+        return normDest.contains(normOrigin) || normOrigin.contains(normDest)
+    }
+
+    private fun normalizeTerminus(name: String): String {
+        return name.lowercase()
+            .replace(Regex("\\(.*?\\)"), "")
+            .replace("á", "a")
+            .replace("é", "e")
+            .replace("í", "i")
+            .replace("ó", "o")
+            .replace("ú", "u")
+            .replace("plaza", "")
+            .replace("gral.", "")
+            .replace("general", "")
+            .replace("dr.", "")
+            .trim()
     }
 }

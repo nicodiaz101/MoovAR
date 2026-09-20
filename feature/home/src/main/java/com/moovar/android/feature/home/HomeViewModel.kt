@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moovar.android.core.common.Result
 import com.moovar.android.core.domain.model.Line
+import com.moovar.android.core.domain.repository.AlertRepository
+import com.moovar.android.core.domain.repository.LineRepository
 import com.moovar.android.core.domain.usecase.GetLinesStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,13 +25,26 @@ data class HomeUiState(
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getLinesStatusUseCase: GetLinesStatusUseCase
+    private val getLinesStatusUseCase: GetLinesStatusUseCase,
+    private val lineRepository: LineRepository,
+    private val alertRepository: AlertRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState(isLoading = true))
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                lineRepository.refreshLines()
+            } catch (_: Exception) {
+            }
+            try {
+                alertRepository.refreshAlerts()
+            } catch (_: Exception) {
+            }
+        }
+
         viewModelScope.launch {
             getLinesStatusUseCase()
                 .catch { e -> _uiState.update { it.copy(error = e.message, isLoading = false) } }

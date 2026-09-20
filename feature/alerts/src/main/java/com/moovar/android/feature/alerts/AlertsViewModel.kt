@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moovar.android.core.common.Result
 import com.moovar.android.core.domain.model.ServiceAlert
+import com.moovar.android.core.domain.repository.AlertRepository
 import com.moovar.android.core.domain.usecase.GetAlertsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,7 @@ data class AlertsUiState(
 @HiltViewModel
 class AlertsViewModel @Inject constructor(
     private val getAlertsUseCase: GetAlertsUseCase,
+    private val alertRepository: AlertRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -36,6 +38,13 @@ class AlertsViewModel @Inject constructor(
     val uiState: StateFlow<AlertsUiState> = _uiState.asStateFlow()
 
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                alertRepository.refreshAlerts()
+            } catch (_: Exception) {
+            }
+        }
+
         viewModelScope.launch(Dispatchers.Default) {
             getAlertsUseCase(lineId)
                 .catch { e -> _uiState.update { it.copy(error = e.message, isLoading = false) } }

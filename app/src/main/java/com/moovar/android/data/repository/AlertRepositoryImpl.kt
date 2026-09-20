@@ -11,6 +11,7 @@ import com.moovar.android.core.network.sofse.api.SofseApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,11 +32,21 @@ class AlertRepositoryImpl @Inject constructor(
             5 to "mitre",
             31 to "san_martin",
             21 to "belgrano_sur",
-            41 to "tren_de_la_costa"
+            41 to "tren_costa"
         )
     }
 
+    private val repositoryScope = kotlinx.coroutines.CoroutineScope(Dispatchers.IO + kotlinx.coroutines.SupervisorJob())
+
     override fun observeAlerts(lineId: String?): Flow<Result<List<ServiceAlert>>> {
+        repositoryScope.launch {
+            try {
+                refreshAlerts()
+            } catch (e: Exception) {
+                Log.w(TAG, "Background refresh alerts failed: ${e.message}")
+            }
+        }
+
         return alertDao.observeAlerts(lineId).map { entities ->
             val alerts = entities.map { entity ->
                 ServiceAlert(
@@ -73,14 +84,15 @@ class AlertRepositoryImpl @Inject constructor(
 
                 // Add line-level alerts
                 gerencia.alerta.forEach { alertaDto ->
+                    val cleanText = alertaDto.contenido.replace('\u00A0', ' ').trim()
                     entities.add(
                         AlertEntity(
                             id = "sofse_line_${alertaDto.id}",
                             lineId = lineId,
                             branchId = null,
                             title = "Línea ${gerencia.nombre}",
-                            description = alertaDto.contenido,
-                            severity = mapSofseSeverity(alertaDto.criticidadColorFondo),
+                            description = cleanText,
+                            severity = mapSofseSeverity(alertaDto.criticidadColorFondo, alertaDto.criticidadOrden),
                             publishedAt = now,
                             expiresAt = null,
                             cachedAt = now
@@ -93,14 +105,15 @@ class AlertRepositoryImpl @Inject constructor(
                     val ramales = sofseApiService.getRamales(idGerencia = gerencia.id)
                     for (ramal in ramales) {
                         ramal.alerta?.forEach { alertaDto ->
+                            val cleanText = alertaDto.contenido.replace('\u00A0', ' ').trim()
                             entities.add(
                                 AlertEntity(
                                     id = "sofse_ramal_${alertaDto.id}",
                                     lineId = lineId,
                                     branchId = "${lineId}_${ramal.id}",
                                     title = "Ramal ${ramal.nombre}",
-                                    description = alertaDto.contenido,
-                                    severity = mapSofseSeverity(alertaDto.criticidadColorFondo),
+                                    description = cleanText,
+                                    severity = mapSofseSeverity(alertaDto.criticidadColorFondo, alertaDto.criticidadOrden),
                                     publishedAt = now,
                                     expiresAt = null,
                                     cachedAt = now
@@ -176,10 +189,12 @@ class AlertRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun mapSofseSeverity(colorHex: String?): com.moovar.android.core.database.entity.AlertSeverity {
-        return when (colorHex?.lowercase()) {
-            "#d49532", "#f0ad4e", "#d9534f" -> com.moovar.android.core.database.entity.AlertSeverity.WARNING
-            "#c9302c", "#d9534f", "#a94442" -> com.moovar.android.core.database.entity.AlertSeverity.CRITICAL
+    private fun mapSofseSeverity(colorHex: String?, orden: Int?): com.moovar.android.core.database.entity.AlertSeverity {
+        return when {
+            orden == 1 -> com.moovar.android.core.database.entity.AlertSeverity.CRITICAL
+            orden in listOf(2, 3) -> com.moovar.android.core.database.entity.AlertSeverity.WARNING
+            colorHex?.lowercase() in listOf("#c9302c", "#a94442") -> com.moovar.android.core.database.entity.AlertSeverity.CRITICAL
+            colorHex?.lowercase() in listOf("#d49532", "#f0ad4e", "#d9534f", "#faebcc") -> com.moovar.android.core.database.entity.AlertSeverity.WARNING
             else -> com.moovar.android.core.database.entity.AlertSeverity.INFO
         }
     }

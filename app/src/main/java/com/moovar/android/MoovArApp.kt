@@ -31,6 +31,8 @@ import com.moovar.android.feature.home.HomeScreen
 import com.moovar.android.feature.home.theme.TransportArTheme
 import com.moovar.android.feature.journey.JourneyScreen
 import com.moovar.android.feature.map.MapScreen
+import com.moovar.android.core.domain.repository.AlertRepository
+import com.moovar.android.core.domain.repository.LineRepository
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,11 +43,23 @@ import javax.inject.Inject
 class MoovArApp : Application() {
     @Inject
     lateinit var databaseSeeder: DatabaseSeeder
+    @Inject
+    lateinit var alertRepository: AlertRepository
+    @Inject
+    lateinit var lineRepository: LineRepository
 
     override fun onCreate() {
         super.onCreate()
         CoroutineScope(Dispatchers.IO).launch {
             databaseSeeder.seedInitialData()
+            try {
+                lineRepository.refreshLines()
+            } catch (_: Exception) {
+            }
+            try {
+                alertRepository.refreshAlerts()
+            } catch (_: Exception) {
+            }
         }
     }
 }
