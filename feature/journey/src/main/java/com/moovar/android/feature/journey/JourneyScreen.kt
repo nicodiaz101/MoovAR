@@ -99,6 +99,7 @@ fun JourneyScreen(
                         }
                         StopTimelineList(
                             stops = uiState.stops,
+                            trainCoordinates = uiState.trainCoordinates,
                             onMapClick = { coords ->
                                 onNavigateToMap(coords.latitude, coords.longitude, trainTitle)
                             },

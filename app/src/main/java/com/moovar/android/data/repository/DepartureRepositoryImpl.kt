@@ -220,10 +220,11 @@ class DepartureRepositoryImpl @Inject constructor(
     }
 
     private val stationIdCache = ConcurrentHashMap<String, String>(PRESEEDED_SOFSE_IDS)
-    private val stationCoordsCache = ConcurrentHashMap<String, Coordinates>()
+    private val lineStationCoordsCache = ConcurrentHashMap<String, MutableMap<String, Coordinates>>()
+    private val globalStationCoordsCache = ConcurrentHashMap<String, Coordinates>()
 
     private suspend fun ensureStationCoordsCache() {
-        if (stationCoordsCache.isEmpty()) {
+        if (lineStationCoordsCache.isEmpty()) {
             try {
                 val allStations = stationDao.getAll()
                 for (stn in allStations) {
@@ -231,8 +232,15 @@ class DepartureRepositoryImpl @Inject constructor(
                     val lon = stn.longitude
                     if (lat != null && lon != null) {
                         val coords = Coordinates(lat, lon)
-                        stationCoordsCache[normalizeStationKey(stn.name)] = coords
-                        stationCoordsCache[stn.id] = coords
+                        val lineMap = lineStationCoordsCache.getOrPut(stn.lineId) { ConcurrentHashMap() }
+                        val cleanName = normalizeStationKey(stn.name)
+                        lineMap[cleanName] = coords
+                        globalStationCoordsCache[cleanName] = coords
+                        val stripped = stripStationSuffixes(cleanName)
+                        if (stripped != cleanName) {
+                            lineMap[stripped] = coords
+                            globalStationCoordsCache[stripped] = coords
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -241,17 +249,55 @@ class DepartureRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun findStationCoordinatesSync(stationName: String): Coordinates? {
+    private fun findStationCoordinates(stationName: String, lineId: String?): Coordinates? {
         val clean = normalizeStationKey(stationName)
-        return stationCoordsCache[clean] ?: stationCoordsCache.entries.firstOrNull {
-            clean.contains(it.key) || it.key.contains(clean)
+        val stripped = stripStationSuffixes(clean)
+
+        // 1. Same line lookup
+        if (lineId != null) {
+            lineStationCoordsCache[lineId]?.let { lineMap ->
+                lineMap[clean]?.let { return it }
+                lineMap[stripped]?.let { return it }
+                lineMap.entries.firstOrNull { (k, _) ->
+                    (clean.length >= 4 && (k.contains(clean) || clean.contains(k))) ||
+                    (stripped.length >= 4 && (k.contains(stripped) || stripped.contains(k)))
+                }?.value?.let { return it }
+            }
+        }
+
+        // 2. Global exact lookup
+        globalStationCoordsCache[clean]?.let { return it }
+        globalStationCoordsCache[stripped]?.let { return it }
+
+        // 3. Global fuzzy lookup (min length 4)
+        return globalStationCoordsCache.entries.firstOrNull { (k, _) ->
+            (clean.length >= 4 && (k.contains(clean) || clean.contains(k))) ||
+            (stripped.length >= 4 && (k.contains(stripped) || stripped.contains(k)))
         }?.value
     }
+
+    private fun stripStationSuffixes(s: String): String =
+        s.replace("(mitre)", "")
+            .replace("(san martin)", "")
+            .replace("(san martín)", "")
+            .replace("(belgrano norte)", "")
+            .replace("(belgrano sur)", "")
+            .replace("(roca)", "")
+            .replace("(sarmiento)", "")
+            .replace("(urquiza)", "")
+            .replace(" c", "")
+            .replace(" r", "")
+            .replace("estacion ", "")
+            .replace("estación ", "")
+            .replace(".", "")
+            .trim()
 
     private fun normalizeStationKey(name: String): String =
         name.lowercase().trim()
             .replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
             .replace("ñ", "n")
+            .replace(".", "")
+            .replace(Regex("\\s+"), " ")
 
     override suspend fun getDepartures(
         originId: String,
@@ -421,26 +467,42 @@ class DepartureRepositoryImpl @Inject constructor(
         var trainCoords: Coordinates? = null
 
         if (estaciones.isNotEmpty()) {
-            val currentIdx = when {
-                isCancelled -> {
-                    val orgIdx = estaciones.indexOfFirst { it.nombre.equals(originStation.name, ignoreCase = true) }
-                    if (orgIdx >= 0) orgIdx else 0
-                }
-                else -> {
-                    val firstFuture = estaciones.indexOfFirst { (it.segundos ?: 0) > 0 }
-                    if (firstFuture >= 0) firstFuture else estaciones.lastIndex
-                }
-            }.coerceIn(0, estaciones.lastIndex)
+            val firstFuture = if (isCancelled) -1 else estaciones.indexOfFirst { (it.segundos ?: 0) > 0 }
+            val isInTransit = !isCancelled && firstFuture > 0
 
             val stops = estaciones.mapIndexed { idx, est ->
                 val rawStopIso = est.salida?.estimada ?: est.salida?.programada ?: est.llegada?.estimada ?: est.llegada?.programada
                 val stopTime = formatIsoTimeToLocal(rawStopIso)
                 val state = when {
-                    idx < currentIdx -> StopState.PAST
-                    idx == currentIdx -> StopState.CURRENT
-                    else -> StopState.FUTURE
+                    isCancelled -> {
+                        val orgIdx = estaciones.indexOfFirst { it.nombre.equals(originStation.name, ignoreCase = true) }
+                        val cancelIdx = if (orgIdx >= 0) orgIdx else 0
+                        when {
+                            idx < cancelIdx -> StopState.PAST
+                            idx == cancelIdx -> StopState.CURRENT
+                            else -> StopState.FUTURE
+                        }
+                    }
+                    isInTransit -> {
+                        when {
+                            idx < firstFuture -> StopState.PAST
+                            else -> StopState.FUTURE
+                        }
+                    }
+                    firstFuture == 0 -> {
+                        when {
+                            idx == 0 -> StopState.CURRENT
+                            else -> StopState.FUTURE
+                        }
+                    }
+                    else -> {
+                        when {
+                            idx < estaciones.lastIndex -> StopState.PAST
+                            else -> StopState.CURRENT
+                        }
+                    }
                 }
-                val stopCoords = est.nombre?.let { findStationCoordinatesSync(it) }
+                val stopCoords = est.nombre?.let { findStationCoordinates(it, originStation.lineId) }
                 JourneyStop(
                     stationName = est.nombre ?: "Estación",
                     scheduledTime = stopTime,
@@ -455,8 +517,32 @@ class DepartureRepositoryImpl @Inject constructor(
             val originCoords = if (originLat != null && originLon != null) Coordinates(originLat, originLon) else null
 
             if (!originStation.isTerminus && !isCancelled) {
-                val currentStnName = estaciones[currentIdx].nombre ?: originStation.name
-                trainCoords = findStationCoordinatesSync(currentStnName) ?: originCoords
+                val firstFuture = estaciones.indexOfFirst { (it.segundos ?: 0) > 0 }
+                trainCoords = when {
+                    firstFuture > 0 -> {
+                        val prevName = estaciones[firstFuture - 1].nombre
+                        val nextName = estaciones[firstFuture].nombre
+                        val prevCoords = prevName?.let { findStationCoordinates(it, originStation.lineId) }
+                        val nextCoords = nextName?.let { findStationCoordinates(it, originStation.lineId) }
+                        val secs = (estaciones[firstFuture].segundos ?: 60).coerceAtLeast(0)
+
+                        if (prevCoords != null && nextCoords != null) {
+                            // Interpolate between prev and next station along the rail line
+                            val progress = (1.0 - (secs / 150.0)).coerceIn(0.1, 0.9)
+                            val lat = prevCoords.latitude + (nextCoords.latitude - prevCoords.latitude) * progress
+                            val lon = prevCoords.longitude + (nextCoords.longitude - prevCoords.longitude) * progress
+                            Coordinates(lat, lon)
+                        } else {
+                            nextCoords ?: prevCoords ?: originCoords
+                        }
+                    }
+                    firstFuture == 0 -> {
+                        estaciones[0].nombre?.let { findStationCoordinates(it, originStation.lineId) } ?: originCoords
+                    }
+                    else -> {
+                        estaciones.lastOrNull()?.nombre?.let { findStationCoordinates(it, originStation.lineId) } ?: originCoords
+                    }
+                }
             }
 
             val journeyDetails = JourneyDetails(

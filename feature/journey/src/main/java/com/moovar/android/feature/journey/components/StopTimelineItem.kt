@@ -1,5 +1,11 @@
 package com.moovar.android.feature.journey.components
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -136,8 +143,144 @@ fun StopTimelineItem(
 }
 
 @Composable
+fun InTransitTimelineItem(
+    nextStationName: String,
+    nextScheduledTime: String?,
+    onMapClick: (() -> Unit)? = null,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp, horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        InTransitTimelineNode()
+        Spacer(modifier = Modifier.width(14.dp))
+
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "En camino hacia $nextStationName",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Surface(
+                onClick = { onMapClick?.invoke() },
+                enabled = onMapClick != null,
+                shape = RoundedCornerShape(8.dp),
+                color = MaterialTheme.colorScheme.primaryContainer
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.DirectionsTransit,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "TREN EN TIEMPO REAL",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    if (onMapClick != null) {
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Icon(
+                            imageVector = Icons.Outlined.Map,
+                            contentDescription = "Ver mapa",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(14.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        if (nextScheduledTime != null) {
+            Surface(
+                shape = RoundedCornerShape(6.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                Text(
+                    text = "Próx. $nextScheduledTime",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun InTransitTimelineNode() {
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val primaryContainer = MaterialTheme.colorScheme.primaryContainer
+
+    val infiniteTransition = rememberInfiniteTransition(label = "transitPulse")
+    val auraAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.25f,
+        targetValue = 0.75f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(900, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "auraAlpha"
+    )
+
+    Box(modifier = Modifier.size(32.dp), contentAlignment = Alignment.Center) {
+        Canvas(modifier = Modifier.size(32.dp)) {
+            val strokeWidth = 3.dp.toPx()
+            val centerX = size.width / 2
+
+            // Top segment connecting to previous station
+            drawLine(
+                color = Color.LightGray,
+                start = Offset(centerX, 0f),
+                end = Offset(centerX, size.height / 2),
+                strokeWidth = strokeWidth
+            )
+            // Bottom segment connecting to next station
+            drawLine(
+                color = Color.LightGray,
+                start = Offset(centerX, size.height / 2),
+                end = Offset(centerX, size.height),
+                strokeWidth = strokeWidth
+            )
+        }
+
+        // Soft pulsing glow
+        Box(
+            modifier = Modifier
+                .size(32.dp)
+                .background(primaryContainer.copy(alpha = auraAlpha), CircleShape)
+        )
+
+        // Train node
+        Box(
+            modifier = Modifier
+                .size(26.dp)
+                .background(primaryColor, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.DirectionsTransit,
+                contentDescription = "Tren en camino",
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(15.dp)
+            )
+        }
+    }
+}
+
+@Composable
 fun TimelineNode(isFirst: Boolean, isLast: Boolean, stopState: StopState) {
-    val nodeSize = if (stopState == StopState.CURRENT) 32.dp else 24.dp
     val primaryColor = MaterialTheme.colorScheme.primary
 
     Box(modifier = Modifier.size(32.dp), contentAlignment = Alignment.Center) {

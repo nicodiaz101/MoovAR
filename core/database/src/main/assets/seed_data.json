@@ -233,8 +233,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.6274,
+      "longitude": -58.3811
     },
     {
       "id": "stn_roca_ezeiza_hipolito_yrigoyen",
@@ -244,8 +244,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.6469,
+      "longitude": -58.3792
     },
     {
       "id": "stn_roca_ezeiza_d_santillan_y_m_kosteki_avellaneda",
@@ -255,8 +255,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.6625,
+      "longitude": -58.3758
     },
     {
       "id": "stn_roca_ezeiza_gerli",
@@ -266,8 +266,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.685666,
+      "longitude": -58.3826877
     },
     {
       "id": "stn_roca_ezeiza_lanus",
@@ -277,8 +277,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.7073871,
+      "longitude": -58.3905998
     },
     {
       "id": "stn_roca_ezeiza_remedios_de_escalada",
@@ -288,8 +288,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.7270595,
+      "longitude": -58.3936333
     },
     {
       "id": "stn_roca_ezeiza_banfield",
@@ -299,8 +299,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.7435891,
+      "longitude": -58.3954201
     },
     {
       "id": "stn_roca_ezeiza_lomas_de_zamora",
@@ -310,8 +310,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.7611381,
+      "longitude": -58.397339
     },
     {
       "id": "stn_roca_ezeiza_temperley",
@@ -321,8 +321,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.7760956,
+      "longitude": -58.3961826
     },
     {
       "id": "stn_roca_ezeiza_turdera",
@@ -332,8 +332,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.7950655,
+      "longitude": -58.4076351
     },
     {
       "id": "stn_roca_ezeiza_llavallol",
@@ -343,8 +343,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.7971183,
+      "longitude": -58.4293914
     },
     {
       "id": "stn_roca_ezeiza_luis_guillon",
@@ -354,8 +354,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.8032836,
+      "longitude": -58.4485809
     },
     {
       "id": "stn_roca_ezeiza_monte_grande",
@@ -365,8 +365,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": false,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.8144774,
+      "longitude": -58.4696759
     },
     {
       "id": "stn_roca_ezeiza_el_jaguel",
@@ -376,8 +376,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 14,
       "isTerminus": false,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
+      "latitude": -34.8332467,
+      "longitude": -58.4961352
     },
     {
       "id": "stn_roca_ezeiza_ezeiza",
@@ -387,8 +387,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 15,
       "isTerminus": true,
-      "latitude": -34.678700000000006,
-      "longitude": -58.4566
+      "latitude": -34.8541229,
+      "longitude": -58.5229252
     },
     {
       "id": "stn_roca_korn_plaza_constitucion",
@@ -398,8 +398,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.6274,
+      "longitude": -58.3811
     },
     {
       "id": "stn_roca_korn_lanus",
@@ -409,8 +409,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.7073871,
+      "longitude": -58.3905998
     },
     {
       "id": "stn_roca_korn_banfield",
@@ -420,8 +420,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.7435891,
+      "longitude": -58.3954201
     },
     {
       "id": "stn_roca_korn_lomas_de_zamora",
@@ -431,8 +431,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.7611381,
+      "longitude": -58.397339
     },
     {
       "id": "stn_roca_korn_temperley",
@@ -442,8 +442,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.7760956,
+      "longitude": -58.3961826
     },
     {
       "id": "stn_roca_korn_adrogue",
@@ -453,8 +453,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.797811,
+      "longitude": -58.3942369
     },
     {
       "id": "stn_roca_korn_burzaco",
@@ -464,8 +464,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.8249673,
+      "longitude": -58.3913201
     },
     {
       "id": "stn_roca_korn_longchamps",
@@ -475,8 +475,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.8593912,
+      "longitude": -58.3872485
     },
     {
       "id": "stn_roca_korn_glew",
@@ -486,8 +486,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.8886437,
+      "longitude": -58.3836805
     },
     {
       "id": "stn_roca_korn_guernica",
@@ -497,8 +497,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.9179617,
+      "longitude": -58.3806798
     },
     {
       "id": "stn_roca_korn_alejandro_korn",
@@ -508,8 +508,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": true,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.9805618,
+      "longitude": -58.3739099
     },
     {
       "id": "stn_roca_laplata_plaza_constitucion",
@@ -519,8 +519,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.6274,
+      "longitude": -58.3811
     },
     {
       "id": "stn_roca_laplata_d_santillan_y_m_kosteki_avellaneda",
@@ -530,8 +530,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.6625,
+      "longitude": -58.3758
     },
     {
       "id": "stn_roca_laplata_sarandi",
@@ -541,8 +541,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.678857,
+      "longitude": -58.3446626
     },
     {
       "id": "stn_roca_laplata_villa_dominico",
@@ -552,8 +552,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.6914747,
+      "longitude": -58.3254248
     },
     {
       "id": "stn_roca_laplata_wilde",
@@ -563,8 +563,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.6975203,
+      "longitude": -58.3113947
     },
     {
       "id": "stn_roca_laplata_don_bosco",
@@ -574,8 +574,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.7033183,
+      "longitude": -58.2962759
     },
     {
       "id": "stn_roca_laplata_bernal",
@@ -585,8 +585,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.7093889,
+      "longitude": -58.2803779
     },
     {
       "id": "stn_roca_laplata_quilmes",
@@ -596,8 +596,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.7246723,
+      "longitude": -58.2607914
     },
     {
       "id": "stn_roca_laplata_ezpeleta",
@@ -607,8 +607,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.7518471,
+      "longitude": -58.2342068
     },
     {
       "id": "stn_roca_laplata_berazategui",
@@ -618,8 +618,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.7641265,
+      "longitude": -58.2084227
     },
     {
       "id": "stn_roca_laplata_platanos",
@@ -629,8 +629,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.7823275,
+      "longitude": -58.170802
     },
     {
       "id": "stn_roca_laplata_hudson",
@@ -640,8 +640,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.7910837,
+      "longitude": -58.1553735
     },
     {
       "id": "stn_roca_laplata_pereyra",
@@ -651,8 +651,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": false,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.8365756,
+      "longitude": -58.0946302
     },
     {
       "id": "stn_roca_laplata_villa_elisa",
@@ -662,8 +662,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 14,
       "isTerminus": false,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
+      "latitude": -34.8569,
+      "longitude": -58.0778
     },
     {
       "id": "stn_roca_laplata_city_bell",
@@ -673,8 +673,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 15,
       "isTerminus": false,
-      "latitude": -34.678700000000006,
-      "longitude": -58.4566
+      "latitude": -34.8657439,
+      "longitude": -58.0420871
     },
     {
       "id": "stn_roca_laplata_gonnet",
@@ -684,8 +684,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 16,
       "isTerminus": false,
-      "latitude": -34.6837,
-      "longitude": -58.4616
+      "latitude": -34.8799401,
+      "longitude": -58.010536
     },
     {
       "id": "stn_roca_laplata_ringuelet",
@@ -695,8 +695,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 17,
       "isTerminus": false,
-      "latitude": -34.688700000000004,
-      "longitude": -58.4666
+      "latitude": -34.8814172,
+      "longitude": -57.9960821
     },
     {
       "id": "stn_roca_laplata_tolosa",
@@ -706,8 +706,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 18,
       "isTerminus": false,
-      "latitude": -34.69370000000001,
-      "longitude": -58.4716
+      "latitude": -34.8909143,
+      "longitude": -57.9680852
     },
     {
       "id": "stn_roca_laplata_la_plata",
@@ -717,8 +717,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 19,
       "isTerminus": true,
-      "latitude": -34.6987,
-      "longitude": -58.4766
+      "latitude": -34.9045246,
+      "longitude": -57.9494518
     },
     {
       "id": "stn_roca_bosques_plaza_constitucion",
@@ -728,8 +728,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.6274,
+      "longitude": -58.3811
     },
     {
       "id": "stn_roca_bosques_lanus",
@@ -739,8 +739,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.7073871,
+      "longitude": -58.3905998
     },
     {
       "id": "stn_roca_bosques_lomas_de_zamora",
@@ -750,8 +750,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.7611381,
+      "longitude": -58.397339
     },
     {
       "id": "stn_roca_bosques_temperley",
@@ -761,8 +761,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.7760956,
+      "longitude": -58.3961826
     },
     {
       "id": "stn_roca_bosques_jose_marmol",
@@ -772,8 +772,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.7919179,
+      "longitude": -58.381297
     },
     {
       "id": "stn_roca_bosques_rafael_calzada",
@@ -783,8 +783,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.7967177,
+      "longitude": -58.3590667
     },
     {
       "id": "stn_roca_bosques_claypole",
@@ -794,8 +794,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.8011489,
+      "longitude": -58.3381131
     },
     {
       "id": "stn_roca_bosques_dante_ardigo",
@@ -805,8 +805,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.8089485,
+      "longitude": -58.3022055
     },
     {
       "id": "stn_roca_bosques_florencio_varela",
@@ -816,8 +816,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.8111398,
+      "longitude": -58.2740683
     },
     {
       "id": "stn_roca_bosques_zeballos",
@@ -827,8 +827,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.8109991,
+      "longitude": -58.2566987
     },
     {
       "id": "stn_roca_bosques_bosques",
@@ -838,8 +838,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": true,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.819518,
+      "longitude": -58.2301025
     },
     {
       "id": "stn_roca_canuelas_lobos_ezeiza",
@@ -849,8 +849,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.8541229,
+      "longitude": -58.5229252
     },
     {
       "id": "stn_roca_canuelas_lobos_union_ferroviaria",
@@ -860,8 +860,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.8701573,
+      "longitude": -58.5432552
     },
     {
       "id": "stn_roca_canuelas_lobos_tristan_suarez",
@@ -871,8 +871,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.8894215,
+      "longitude": -58.5678483
     },
     {
       "id": "stn_roca_canuelas_lobos_carlos_spegazzini",
@@ -882,8 +882,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.9100048,
+      "longitude": -58.5943355
     },
     {
       "id": "stn_roca_canuelas_lobos_maximo_paz",
@@ -893,8 +893,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.9363621,
+      "longitude": -58.6205913
     },
     {
       "id": "stn_roca_canuelas_lobos_vicente_casares",
@@ -904,8 +904,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.9622565,
+      "longitude": -58.6479721
     },
     {
       "id": "stn_roca_canuelas_lobos_alejandro_petion",
@@ -915,8 +915,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.9775425,
+      "longitude": -58.674542
     },
     {
       "id": "stn_roca_canuelas_lobos_kloosterman",
@@ -926,8 +926,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.9863865,
+      "longitude": -58.6897078
     },
     {
       "id": "stn_roca_canuelas_lobos_levene",
@@ -937,8 +937,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -35.0216532,
+      "longitude": -58.7238255
     },
     {
       "id": "stn_roca_canuelas_lobos_canuelas",
@@ -948,8 +948,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -35.0592386,
+      "longitude": -58.7544268
     },
     {
       "id": "stn_roca_canuelas_lobos_uribelarrea",
@@ -959,8 +959,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -35.1154669,
+      "longitude": -58.8984051
     },
     {
       "id": "stn_roca_canuelas_lobos_empalme_lobos",
@@ -970,8 +970,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -35.1515661,
+      "longitude": -59.0911366
     },
     {
       "id": "stn_roca_canuelas_lobos_lobos",
@@ -981,8 +981,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": true,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -35.1847797,
+      "longitude": -59.0929135
     },
     {
       "id": "stn_sarmiento_once_moreno_once",
@@ -992,8 +992,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.6084,
+      "longitude": -58.4069
     },
     {
       "id": "stn_sarmiento_once_moreno_caballito",
@@ -1003,8 +1003,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.6192396,
+      "longitude": -58.4436589
     },
     {
       "id": "stn_sarmiento_once_moreno_flores",
@@ -1014,8 +1014,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.6278225,
+      "longitude": -58.4660688
     },
     {
       "id": "stn_sarmiento_once_moreno_floresta",
@@ -1025,8 +1025,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.6323692,
+      "longitude": -58.4808865
     },
     {
       "id": "stn_sarmiento_once_moreno_villa_luro",
@@ -1036,8 +1036,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.6362602,
+      "longitude": -58.5020915
     },
     {
       "id": "stn_sarmiento_once_moreno_liniers",
@@ -1047,8 +1047,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.6388693,
+      "longitude": -58.526338
     },
     {
       "id": "stn_sarmiento_once_moreno_ciudadela",
@@ -1058,8 +1058,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.6399288,
+      "longitude": -58.5410771
     },
     {
       "id": "stn_sarmiento_once_moreno_ramos_mejia",
@@ -1069,8 +1069,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.6404545,
+      "longitude": -58.5642652
     },
     {
       "id": "stn_sarmiento_once_moreno_haedo",
@@ -1080,8 +1080,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.6449332,
+      "longitude": -58.591763
     },
     {
       "id": "stn_sarmiento_once_moreno_moron",
@@ -1091,8 +1091,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.6482379,
+      "longitude": -58.619772
     },
     {
       "id": "stn_sarmiento_once_moreno_castelar",
@@ -1102,8 +1102,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.6520635,
+      "longitude": -58.6419978
     },
     {
       "id": "stn_sarmiento_once_moreno_ituzaingo",
@@ -1113,8 +1113,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.6595202,
+      "longitude": -58.6658823
     },
     {
       "id": "stn_sarmiento_once_moreno_san_antonio_de_padua",
@@ -1124,8 +1124,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": false,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.665507,
+      "longitude": -58.6984785
     },
     {
       "id": "stn_sarmiento_once_moreno_merlo",
@@ -1135,8 +1135,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 14,
       "isTerminus": false,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
+      "latitude": -34.6644504,
+      "longitude": -58.7278818
     },
     {
       "id": "stn_sarmiento_once_moreno_paso_del_rey",
@@ -1146,8 +1146,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 15,
       "isTerminus": false,
-      "latitude": -34.678700000000006,
-      "longitude": -58.4566
+      "latitude": -34.6582188,
+      "longitude": -58.7620664
     },
     {
       "id": "stn_sarmiento_once_moreno_moreno",
@@ -1157,8 +1157,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 16,
       "isTerminus": true,
-      "latitude": -34.6837,
-      "longitude": -58.4616
+      "latitude": -34.6505069,
+      "longitude": -58.7896203
     },
     {
       "id": "stn_sarmiento_merlo_lobos_merlo",
@@ -1168,8 +1168,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.6644504,
+      "longitude": -58.7278818
     },
     {
       "id": "stn_sarmiento_merlo_lobos_km_34_5",
@@ -1179,8 +1179,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.7433283,
+      "longitude": -58.465105
     },
     {
       "id": "stn_sarmiento_merlo_lobos_agustin_ferrari",
@@ -1190,8 +1190,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.7060744,
+      "longitude": -58.7793727
     },
     {
       "id": "stn_sarmiento_merlo_lobos_mariano_acosta",
@@ -1201,8 +1201,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.7243744,
+      "longitude": -58.7930399
     },
     {
       "id": "stn_sarmiento_merlo_lobos_marcos_paz",
@@ -1212,8 +1212,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.7830779,
+      "longitude": -58.8366057
     },
     {
       "id": "stn_sarmiento_merlo_lobos_zamudio",
@@ -1223,8 +1223,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.8579177,
+      "longitude": -58.8922991
     },
     {
       "id": "stn_sarmiento_merlo_lobos_hornos",
@@ -1234,8 +1234,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.8922526,
+      "longitude": -58.9178444
     },
     {
       "id": "stn_sarmiento_merlo_lobos_general_las_heras",
@@ -1245,8 +1245,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.9280308,
+      "longitude": -58.9445391
     },
     {
       "id": "stn_sarmiento_merlo_lobos_speratti",
@@ -1256,8 +1256,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -35.0020916,
+      "longitude": -58.9998034
     },
     {
       "id": "stn_sarmiento_merlo_lobos_zapiola",
@@ -1267,8 +1267,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -35.0584822,
+      "longitude": -59.0419301
     },
     {
       "id": "stn_sarmiento_merlo_lobos_empalme_lobos",
@@ -1278,8 +1278,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -35.1515661,
+      "longitude": -59.0911366
     },
     {
       "id": "stn_sarmiento_merlo_lobos_lobos",
@@ -1289,8 +1289,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": true,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -35.1847797,
+      "longitude": -59.0929135
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_moreno",
@@ -1300,8 +1300,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.6505069,
+      "longitude": -58.7896203
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_la_reja",
@@ -1311,8 +1311,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.6398689,
+      "longitude": -58.827969
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_francisco_alvarez",
@@ -1322,8 +1322,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.6322374,
+      "longitude": -58.8552824
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_ing_pablo_marin",
@@ -1333,8 +1333,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.6227091,
+      "longitude": -58.8936339
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_las_malvinas",
@@ -1344,8 +1344,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.6161215,
+      "longitude": -58.9219594
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_general_rodriguez",
@@ -1355,8 +1355,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.6088266,
+      "longitude": -58.953182
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_la_fraternidad",
@@ -1366,8 +1366,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.5985064,
+      "longitude": -58.9974234
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_lezica_y_torrezuri",
@@ -1377,8 +1377,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.5846174,
+      "longitude": -59.0567004
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_universidad_de_lujan",
@@ -1388,8 +1388,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.5774438,
+      "longitude": -59.0872289
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_lujan",
@@ -1399,8 +1399,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.5776271,
+      "longitude": -59.1051729
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_jauregui",
@@ -1410,8 +1410,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.6007348,
+      "longitude": -59.1735224
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_olivera",
@@ -1421,8 +1421,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.6280088,
+      "longitude": -59.2553952
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_gowland",
@@ -1432,8 +1432,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": false,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.6477809,
+      "longitude": -59.3527227
     },
     {
       "id": "stn_sarmiento_moreno_mercedes_mercedes",
@@ -1443,8 +1443,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 14,
       "isTerminus": true,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
+      "latitude": -34.6577033,
+      "longitude": -59.4323587
     },
     {
       "id": "stn_mitre_tigre_retiro_mitre",
@@ -1454,8 +1454,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.5919,
+      "longitude": -58.3749
     },
     {
       "id": "stn_mitre_tigre_lisandro_de_la_torre",
@@ -1465,8 +1465,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.5625772,
+      "longitude": -58.4363821
     },
     {
       "id": "stn_mitre_tigre_belgrano_c",
@@ -1476,8 +1476,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.5578,
+      "longitude": -58.4503
     },
     {
       "id": "stn_mitre_tigre_nunez",
@@ -1487,8 +1487,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.5484856,
+      "longitude": -58.4627415
     },
     {
       "id": "stn_mitre_tigre_rivadavia",
@@ -1498,8 +1498,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.5366131,
+      "longitude": -58.4680033
     },
     {
       "id": "stn_mitre_tigre_vicente_lopez",
@@ -1509,8 +1509,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.5248373,
+      "longitude": -58.4727635
     },
     {
       "id": "stn_mitre_tigre_olivos",
@@ -1520,8 +1520,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.5078205,
+      "longitude": -58.4805953
     },
     {
       "id": "stn_mitre_tigre_la_lucila",
@@ -1531,8 +1531,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.4976279,
+      "longitude": -58.4884083
     },
     {
       "id": "stn_mitre_tigre_martinez",
@@ -1542,8 +1542,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.4886206,
+      "longitude": -58.4964082
     },
     {
       "id": "stn_mitre_tigre_acassuso",
@@ -1553,8 +1553,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.4798922,
+      "longitude": -58.5040021
     },
     {
       "id": "stn_mitre_tigre_san_isidro",
@@ -1564,8 +1564,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.4720062,
+      "longitude": -58.5135728
     },
     {
       "id": "stn_mitre_tigre_beccar",
@@ -1575,8 +1575,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.4607086,
+      "longitude": -58.5265781
     },
     {
       "id": "stn_mitre_tigre_victoria",
@@ -1586,8 +1586,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": false,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.4563068,
+      "longitude": -58.5409475
     },
     {
       "id": "stn_mitre_tigre_virreyes",
@@ -1597,8 +1597,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 14,
       "isTerminus": false,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
+      "latitude": -34.4506383,
+      "longitude": -58.5507116
     },
     {
       "id": "stn_mitre_tigre_san_fernando",
@@ -1608,8 +1608,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 15,
       "isTerminus": false,
-      "latitude": -34.678700000000006,
-      "longitude": -58.4566
+      "latitude": -34.4442261,
+      "longitude": -58.5587749
     },
     {
       "id": "stn_mitre_tigre_carupa",
@@ -1619,8 +1619,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 16,
       "isTerminus": false,
-      "latitude": -34.6837,
-      "longitude": -58.4616
+      "latitude": -34.4375681,
+      "longitude": -58.5673904
     },
     {
       "id": "stn_mitre_tigre_tigre",
@@ -1630,8 +1630,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 17,
       "isTerminus": true,
-      "latitude": -34.688700000000004,
-      "longitude": -58.4666
+      "latitude": -34.4235341,
+      "longitude": -58.5817628
     },
     {
       "id": "stn_mitre_suarez_retiro_mitre",
@@ -1641,8 +1641,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.5919,
+      "longitude": -58.3749
     },
     {
       "id": "stn_mitre_suarez_3_de_febrero",
@@ -1652,8 +1652,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.5718753,
+      "longitude": -58.4251993
     },
     {
       "id": "stn_mitre_suarez_ministro_carranza",
@@ -1663,8 +1663,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.5752014,
+      "longitude": -58.4346817
     },
     {
       "id": "stn_mitre_suarez_colegiales",
@@ -1674,8 +1674,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.5730241,
+      "longitude": -58.4481908
     },
     {
       "id": "stn_mitre_suarez_belgrano_r",
@@ -1685,8 +1685,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.5678069,
+      "longitude": -58.4624556
     },
     {
       "id": "stn_mitre_suarez_drago",
@@ -1696,8 +1696,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.5684608,
+      "longitude": -58.4791248
     },
     {
       "id": "stn_mitre_suarez_general_urquiza",
@@ -1707,8 +1707,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.5728,
+      "longitude": -58.4983
     },
     {
       "id": "stn_mitre_suarez_pueyrredon_mitre",
@@ -1718,8 +1718,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.5778,
+      "longitude": -58.5064
     },
     {
       "id": "stn_mitre_suarez_miguelete",
@@ -1729,8 +1729,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.5810717,
+      "longitude": -58.5172365
     },
     {
       "id": "stn_mitre_suarez_san_martin_mitre",
@@ -1740,8 +1740,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.5737134,
+      "longitude": -58.5315799
     },
     {
       "id": "stn_mitre_suarez_san_andres",
@@ -1751,8 +1751,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.56347,
+      "longitude": -58.5407268
     },
     {
       "id": "stn_mitre_suarez_malaver",
@@ -1762,8 +1762,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.5574323,
+      "longitude": -58.5478611
     },
     {
       "id": "stn_mitre_suarez_villa_ballester",
@@ -1773,8 +1773,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": false,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.5509077,
+      "longitude": -58.5559691
     },
     {
       "id": "stn_mitre_suarez_chilavert",
@@ -1784,8 +1784,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 14,
       "isTerminus": false,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
+      "latitude": -34.5420483,
+      "longitude": -58.5671706
     },
     {
       "id": "stn_mitre_suarez_jose_leon_suarez",
@@ -1795,8 +1795,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 15,
       "isTerminus": true,
-      "latitude": -34.678700000000006,
-      "longitude": -58.4566
+      "latitude": -34.534488,
+      "longitude": -58.5762177
     },
     {
       "id": "stn_mitre_mitre_retiro_mitre",
@@ -1806,8 +1806,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.5919,
+      "longitude": -58.3749
     },
     {
       "id": "stn_mitre_mitre_belgrano_r",
@@ -1817,8 +1817,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.5678069,
+      "longitude": -58.4624556
     },
     {
       "id": "stn_mitre_mitre_coghlan",
@@ -1828,8 +1828,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.5653298,
+      "longitude": -58.4751219
     },
     {
       "id": "stn_mitre_mitre_saavedra",
@@ -1839,8 +1839,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.5518,
+      "longitude": -58.4874
     },
     {
       "id": "stn_mitre_mitre_juan_b_justo",
@@ -1850,8 +1850,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.5425374,
+      "longitude": -58.4946851
     },
     {
       "id": "stn_mitre_mitre_florida_mitre",
@@ -1861,8 +1861,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.5332,
+      "longitude": -58.4897
     },
     {
       "id": "stn_mitre_mitre_cetrangolo",
@@ -1872,8 +1872,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.5231338,
+      "longitude": -58.4941325
     },
     {
       "id": "stn_mitre_mitre_bartolome_mitre",
@@ -1883,8 +1883,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": true,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.5150168,
+      "longitude": -58.4892309
     },
     {
       "id": "stn_mitre_capilla_victoria",
@@ -1894,8 +1894,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.4563068,
+      "longitude": -58.5409475
     },
     {
       "id": "stn_mitre_capilla_schweitzer",
@@ -1905,8 +1905,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.4720462,
+      "longitude": -58.5743437
     },
     {
       "id": "stn_mitre_capilla_bancalari_r",
@@ -1916,8 +1916,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.4795844,
+      "longitude": -58.6030143
     },
     {
       "id": "stn_mitre_capilla_general_pacheco",
@@ -1927,8 +1927,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.4560336,
+      "longitude": -58.619796
     },
     {
       "id": "stn_mitre_capilla_el_talar",
@@ -1938,8 +1938,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.4628185,
+      "longitude": -58.6459654
     },
     {
       "id": "stn_mitre_capilla_lopez_camelo",
@@ -1949,8 +1949,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.4469241,
+      "longitude": -58.6773693
     },
     {
       "id": "stn_mitre_capilla_garin",
@@ -1960,8 +1960,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.4215728,
+      "longitude": -58.7366518
     },
     {
       "id": "stn_mitre_capilla_maquinista_savio",
@@ -1971,8 +1971,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.4068549,
+      "longitude": -58.7720164
     },
     {
       "id": "stn_mitre_capilla_matheu",
@@ -1982,8 +1982,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.3828026,
+      "longitude": -58.8297517
     },
     {
       "id": "stn_mitre_capilla_zelaya",
@@ -1993,8 +1993,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.3701354,
+      "longitude": -58.8693253
     },
     {
       "id": "stn_mitre_capilla_los_cardales",
@@ -2004,8 +2004,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.3308878,
+      "longitude": -58.9874495
     },
     {
       "id": "stn_mitre_capilla_capilla_del_senor",
@@ -2015,8 +2015,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": true,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.2869463,
+      "longitude": -59.1017427
     },
     {
       "id": "stn_mitre_zarate_villa_ballester",
@@ -2026,8 +2026,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.5509077,
+      "longitude": -58.5559691
     },
     {
       "id": "stn_mitre_zarate_bancalari",
@@ -2037,8 +2037,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.4795844,
+      "longitude": -58.6030143
     },
     {
       "id": "stn_mitre_zarate_general_pacheco",
@@ -2048,8 +2048,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.4560336,
+      "longitude": -58.619796
     },
     {
       "id": "stn_mitre_zarate_benavidez",
@@ -2059,8 +2059,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.409311,
+      "longitude": -58.68455
     },
     {
       "id": "stn_mitre_zarate_ing_maschwitz",
@@ -2070,8 +2070,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.3829548,
+      "longitude": -58.7363667
     },
     {
       "id": "stn_mitre_zarate_escobar",
@@ -2081,8 +2081,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.3496396,
+      "longitude": -58.7950866
     },
     {
       "id": "stn_mitre_zarate_rio_lujan",
@@ -2092,8 +2092,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.2779818,
+      "longitude": -58.8903183
     },
     {
       "id": "stn_mitre_zarate_otamendi",
@@ -2103,8 +2103,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.2221467,
+      "longitude": -58.8965598
     },
     {
       "id": "stn_mitre_zarate_campana",
@@ -2114,8 +2114,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.1567489,
+      "longitude": -58.9585899
     },
     {
       "id": "stn_mitre_zarate_kilometro_83",
@@ -2125,8 +2125,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.1602024,
+      "longitude": -58.977144
     },
     {
       "id": "stn_mitre_zarate_zarate",
@@ -2136,8 +2136,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": true,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.0978184,
+      "longitude": -59.0378411
     },
     {
       "id": "stn_san_martin_main_retiro_san_martin",
@@ -2147,8 +2147,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.5911,
+      "longitude": -58.3768
     },
     {
       "id": "stn_san_martin_main_palermo",
@@ -2158,8 +2158,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.5784903,
+      "longitude": -58.4256173
     },
     {
       "id": "stn_san_martin_main_villa_crespo",
@@ -2169,8 +2169,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.5932867,
+      "longitude": -58.4480481
     },
     {
       "id": "stn_san_martin_main_la_paternal",
@@ -2180,8 +2180,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.5969923,
+      "longitude": -58.4672266
     },
     {
       "id": "stn_san_martin_main_villa_del_parque",
@@ -2191,8 +2191,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.6014043,
+      "longitude": -58.4940744
     },
     {
       "id": "stn_san_martin_main_devoto",
@@ -2202,8 +2202,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.6026745,
+      "longitude": -58.5127834
     },
     {
       "id": "stn_san_martin_main_saenz_pena",
@@ -2213,8 +2213,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.6031704,
+      "longitude": -58.5278853
     },
     {
       "id": "stn_san_martin_main_santos_lugares",
@@ -2224,8 +2224,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.6036894,
+      "longitude": -58.5409757
     },
     {
       "id": "stn_san_martin_main_caseros",
@@ -2235,8 +2235,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.6074,
+      "longitude": -58.5668
     },
     {
       "id": "stn_san_martin_main_el_palomar",
@@ -2246,8 +2246,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.6049309,
+      "longitude": -58.5960446
     },
     {
       "id": "stn_san_martin_main_hurlingham",
@@ -2257,8 +2257,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.5911186,
+      "longitude": -58.6323026
     },
     {
       "id": "stn_san_martin_main_william_morris",
@@ -2268,8 +2268,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.58,
+      "longitude": -58.6708
     },
     {
       "id": "stn_san_martin_main_bella_vista",
@@ -2279,8 +2279,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": false,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.5637982,
+      "longitude": -58.6846696
     },
     {
       "id": "stn_san_martin_main_muniz",
@@ -2290,8 +2290,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 14,
       "isTerminus": false,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
+      "latitude": -34.5512941,
+      "longitude": -58.7034271
     },
     {
       "id": "stn_san_martin_main_san_miguel",
@@ -2301,8 +2301,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 15,
       "isTerminus": false,
-      "latitude": -34.678700000000006,
-      "longitude": -58.4566
+      "latitude": -34.5440129,
+      "longitude": -58.7135064
     },
     {
       "id": "stn_san_martin_main_jose_c_paz",
@@ -2312,8 +2312,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 16,
       "isTerminus": false,
-      "latitude": -34.6837,
-      "longitude": -58.4616
+      "latitude": -34.519251,
+      "longitude": -58.7500269
     },
     {
       "id": "stn_san_martin_main_sol_y_verde",
@@ -2323,8 +2323,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 17,
       "isTerminus": false,
-      "latitude": -34.688700000000004,
-      "longitude": -58.4666
+      "latitude": -34.5039998,
+      "longitude": -58.7976767
     },
     {
       "id": "stn_san_martin_main_presidente_derqui",
@@ -2334,8 +2334,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 18,
       "isTerminus": false,
-      "latitude": -34.69370000000001,
-      "longitude": -58.4716
+      "latitude": -34.4909894,
+      "longitude": -58.8384641
     },
     {
       "id": "stn_san_martin_main_villa_astolfi",
@@ -2345,8 +2345,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 19,
       "isTerminus": false,
-      "latitude": -34.6987,
-      "longitude": -58.4766
+      "latitude": -34.4786641,
+      "longitude": -58.8769703
     },
     {
       "id": "stn_san_martin_main_pilar",
@@ -2356,8 +2356,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 20,
       "isTerminus": false,
-      "latitude": -34.703700000000005,
-      "longitude": -58.4816
+      "latitude": -34.4686551,
+      "longitude": -58.9082325
     },
     {
       "id": "stn_san_martin_main_manzanares",
@@ -2367,8 +2367,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 21,
       "isTerminus": false,
-      "latitude": -34.7087,
-      "longitude": -58.486599999999996
+      "latitude": -34.4522353,
+      "longitude": -59.0067324
     },
     {
       "id": "stn_san_martin_main_dr_domingo_cabred",
@@ -2378,8 +2378,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 22,
       "isTerminus": true,
-      "latitude": -34.7137,
-      "longitude": -58.4916
+      "latitude": -34.4879208,
+      "longitude": -59.0757018
     },
     {
       "id": "stn_belgrano_sur_catan_dr_antonio_saenz",
@@ -2389,8 +2389,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.6491205,
+      "longitude": -58.4166148
     },
     {
       "id": "stn_belgrano_sur_catan_villa_soldati",
@@ -2400,8 +2400,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.6622843,
+      "longitude": -58.4410592
     },
     {
       "id": "stn_belgrano_sur_catan_presidente_illia_belgrano_sur",
@@ -2411,8 +2411,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.6649607,
+      "longitude": -58.4475749
     },
     {
       "id": "stn_belgrano_sur_catan_lugano",
@@ -2422,8 +2422,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.677225,
+      "longitude": -58.4770537
     },
     {
       "id": "stn_belgrano_sur_catan_villa_madero",
@@ -2433,8 +2433,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.6841836,
+      "longitude": -58.4923994
     },
     {
       "id": "stn_belgrano_sur_catan_marinos_del_fournier",
@@ -2444,8 +2444,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.6901435,
+      "longitude": -58.5074759
     },
     {
       "id": "stn_belgrano_sur_catan_tapiales",
@@ -2455,8 +2455,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.7023147,
+      "longitude": -58.5115993
     },
     {
       "id": "stn_belgrano_sur_catan_ing_castello",
@@ -2466,8 +2466,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.710328,
+      "longitude": -58.505909
     },
     {
       "id": "stn_belgrano_sur_catan_querandi",
@@ -2477,8 +2477,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.7223958,
+      "longitude": -58.5306806
     },
     {
       "id": "stn_belgrano_sur_catan_laferrere",
@@ -2488,8 +2488,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.7506177,
+      "longitude": -58.584369
     },
     {
       "id": "stn_belgrano_sur_catan_maria_eva_duarte",
@@ -2499,8 +2499,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.7561174,
+      "longitude": -58.6008521
     },
     {
       "id": "stn_belgrano_sur_catan_independencia",
@@ -2510,8 +2510,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.7609228,
+      "longitude": -58.617715
     },
     {
       "id": "stn_belgrano_sur_catan_gonzalez_catan",
@@ -2521,8 +2521,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": true,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.771634,
+      "longitude": -58.6467472
     },
     {
       "id": "stn_belgrano_sur_marinos_dr_antonio_saenz",
@@ -2532,8 +2532,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.6491205,
+      "longitude": -58.4166148
     },
     {
       "id": "stn_belgrano_sur_marinos_villa_soldati",
@@ -2543,8 +2543,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.6622843,
+      "longitude": -58.4410592
     },
     {
       "id": "stn_belgrano_sur_marinos_presidente_illia_belgrano_sur",
@@ -2554,8 +2554,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.6649607,
+      "longitude": -58.4475749
     },
     {
       "id": "stn_belgrano_sur_marinos_lugano",
@@ -2565,8 +2565,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.677225,
+      "longitude": -58.4770537
     },
     {
       "id": "stn_belgrano_sur_marinos_villa_madero",
@@ -2576,8 +2576,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.6841836,
+      "longitude": -58.4923994
     },
     {
       "id": "stn_belgrano_sur_marinos_marinos_del_fournier",
@@ -2587,8 +2587,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.6901435,
+      "longitude": -58.5074759
     },
     {
       "id": "stn_belgrano_sur_marinos_tapiales",
@@ -2598,8 +2598,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.7023147,
+      "longitude": -58.5115993
     },
     {
       "id": "stn_belgrano_sur_marinos_aldo_bonzi",
@@ -2609,8 +2609,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.710686,
+      "longitude": -58.5144549
     },
     {
       "id": "stn_belgrano_sur_marinos_maria_sanchez_de_mendeville",
@@ -2620,8 +2620,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.7078,
+      "longitude": -58.5316
     },
     {
       "id": "stn_belgrano_sur_marinos_jose_ingenieros",
@@ -2631,8 +2631,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.7107763,
+      "longitude": -58.5372813
     },
     {
       "id": "stn_belgrano_sur_marinos_justo_villegas",
@@ -2642,8 +2642,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.7089954,
+      "longitude": -58.5518984
     },
     {
       "id": "stn_belgrano_sur_marinos_isidro_casanova",
@@ -2653,8 +2653,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.7045421,
+      "longitude": -58.587498
     },
     {
       "id": "stn_belgrano_sur_marinos_rafael_castillo",
@@ -2664,8 +2664,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": false,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.6996985,
+      "longitude": -58.6263207
     },
     {
       "id": "stn_belgrano_sur_marinos_merlo_gomez",
@@ -2675,8 +2675,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 14,
       "isTerminus": false,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
+      "latitude": -34.6971579,
+      "longitude": -58.6467233
     },
     {
       "id": "stn_belgrano_sur_marinos_libertad",
@@ -2686,8 +2686,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 15,
       "isTerminus": false,
-      "latitude": -34.678700000000006,
-      "longitude": -58.4566
+      "latitude": -34.6921599,
+      "longitude": -58.6864782
     },
     {
       "id": "stn_belgrano_sur_marinos_marinos_del_crucero_gral_belgrano",
@@ -2697,8 +2697,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 16,
       "isTerminus": true,
-      "latitude": -34.6837,
-      "longitude": -58.4616
+      "latitude": -34.7087,
+      "longitude": -58.7306
     },
     {
       "id": "stn_belgrano_norte_main_retiro_belgrano_norte",
@@ -2708,8 +2708,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.5925,
+      "longitude": -58.3736
     },
     {
       "id": "stn_belgrano_norte_main_saldias",
@@ -2719,8 +2719,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.5724573,
+      "longitude": -58.4026565
     },
     {
       "id": "stn_belgrano_norte_main_ciudad_universitaria",
@@ -2730,8 +2730,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.5430672,
+      "longitude": -58.4477713
     },
     {
       "id": "stn_belgrano_norte_main_aristobulo_del_valle",
@@ -2741,8 +2741,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.537553,
+      "longitude": -58.4779427
     },
     {
       "id": "stn_belgrano_norte_main_padilla",
@@ -2752,8 +2752,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.5436327,
+      "longitude": -58.5001837
     },
     {
       "id": "stn_belgrano_norte_main_florida",
@@ -2763,8 +2763,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.5385,
+      "longitude": -58.4975
     },
     {
       "id": "stn_belgrano_norte_main_munro",
@@ -2774,8 +2774,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.531664,
+      "longitude": -58.5238448
     },
     {
       "id": "stn_belgrano_norte_main_carapachay",
@@ -2785,8 +2785,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.5288015,
+      "longitude": -58.5373885
     },
     {
       "id": "stn_belgrano_norte_main_villa_adelina",
@@ -2796,8 +2796,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.5236854,
+      "longitude": -58.5462837
     },
     {
       "id": "stn_belgrano_norte_main_boulogne_sur_mer",
@@ -2807,8 +2807,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.509026,
+      "longitude": -58.5648877
     },
     {
       "id": "stn_belgrano_norte_main_vicealmirante_montes",
@@ -2818,8 +2818,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.5041566,
+      "longitude": -58.6194779
     },
     {
       "id": "stn_belgrano_norte_main_don_torcuato",
@@ -2829,8 +2829,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.502633,
+      "longitude": -58.6424905
     },
     {
       "id": "stn_belgrano_norte_main_adolfo_sourdeaux",
@@ -2840,8 +2840,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": false,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.5029758,
+      "longitude": -58.6660524
     },
     {
       "id": "stn_belgrano_norte_main_villa_de_mayo",
@@ -2851,8 +2851,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 14,
       "isTerminus": false,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
+      "latitude": -34.5033713,
+      "longitude": -58.6807051
     },
     {
       "id": "stn_belgrano_norte_main_los_polvorines",
@@ -2862,8 +2862,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 15,
       "isTerminus": false,
-      "latitude": -34.678700000000006,
-      "longitude": -58.4566
+      "latitude": -34.4987808,
+      "longitude": -58.6950361
     },
     {
       "id": "stn_belgrano_norte_main_ing_pablo_nogues",
@@ -2873,8 +2873,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 16,
       "isTerminus": false,
-      "latitude": -34.6837,
-      "longitude": -58.4616
+      "latitude": -34.4937096,
+      "longitude": -58.70637
     },
     {
       "id": "stn_belgrano_norte_main_grand_bourg",
@@ -2884,8 +2884,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 17,
       "isTerminus": false,
-      "latitude": -34.688700000000004,
-      "longitude": -58.4666
+      "latitude": -34.4852922,
+      "longitude": -58.7253257
     },
     {
       "id": "stn_belgrano_norte_main_tierras_altas",
@@ -2895,8 +2895,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 18,
       "isTerminus": false,
-      "latitude": -34.69370000000001,
-      "longitude": -58.4716
+      "latitude": -34.4789729,
+      "longitude": -58.7394714
     },
     {
       "id": "stn_belgrano_norte_main_tortuguitas",
@@ -2906,8 +2906,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 19,
       "isTerminus": false,
-      "latitude": -34.6987,
-      "longitude": -58.4766
+      "latitude": -34.4706624,
+      "longitude": -58.7579951
     },
     {
       "id": "stn_belgrano_norte_main_manuel_alberti",
@@ -2917,8 +2917,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 20,
       "isTerminus": false,
-      "latitude": -34.703700000000005,
-      "longitude": -58.4816
+      "latitude": -34.4628292,
+      "longitude": -58.7756205
     },
     {
       "id": "stn_belgrano_norte_main_del_viso",
@@ -2928,8 +2928,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 21,
       "isTerminus": false,
-      "latitude": -34.7087,
-      "longitude": -58.486599999999996
+      "latitude": -34.4534551,
+      "longitude": -58.7965583
     },
     {
       "id": "stn_belgrano_norte_main_cecilia_grierson",
@@ -2939,8 +2939,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 22,
       "isTerminus": false,
-      "latitude": -34.7137,
-      "longitude": -58.4916
+      "latitude": -34.4392118,
+      "longitude": -58.8241395
     },
     {
       "id": "stn_belgrano_norte_main_villa_rosa",
@@ -2950,8 +2950,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 23,
       "isTerminus": true,
-      "latitude": -34.718700000000005,
-      "longitude": -58.4966
+      "latitude": -34.4162586,
+      "longitude": -58.8721314
     },
     {
       "id": "stn_urquiza_main_federico_lacroze_urquiza",
@@ -2961,8 +2961,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.5871827,
+      "longitude": -58.4551513
     },
     {
       "id": "stn_urquiza_main_jose_artigas",
@@ -2972,8 +2972,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.5900973,
+      "longitude": -58.4662985
     },
     {
       "id": "stn_urquiza_main_pedro_n_arata",
@@ -2983,8 +2983,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.5936,
+      "longitude": -58.4842
     },
     {
       "id": "stn_urquiza_main_francisco_beiro",
@@ -2994,8 +2994,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.5932142,
+      "longitude": -58.4946621
     },
     {
       "id": "stn_urquiza_main_el_libertador",
@@ -3005,8 +3005,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.5944659,
+      "longitude": -58.5031175
     },
     {
       "id": "stn_urquiza_main_devoto",
@@ -3016,8 +3016,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.6026745,
+      "longitude": -58.5127834
     },
     {
       "id": "stn_urquiza_main_coronel_f_lynch",
@@ -3027,8 +3027,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.5971799,
+      "longitude": -58.5243873
     },
     {
       "id": "stn_urquiza_main_fernandez_moreno",
@@ -3038,8 +3038,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.5955449,
+      "longitude": -58.5353246
     },
     {
       "id": "stn_urquiza_main_lourdes",
@@ -3049,8 +3049,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.5937833,
+      "longitude": -58.5469786
     },
     {
       "id": "stn_urquiza_main_tropezon",
@@ -3060,8 +3060,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.5919025,
+      "longitude": -58.5593545
     },
     {
       "id": "stn_urquiza_main_jose_maria_bosch",
@@ -3071,8 +3071,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": false,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.590014,
+      "longitude": -58.5718489
     },
     {
       "id": "stn_urquiza_main_martin_coronado",
@@ -3082,8 +3082,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 12,
       "isTerminus": false,
-      "latitude": -34.663700000000006,
-      "longitude": -58.4416
+      "latitude": -34.5889657,
+      "longitude": -58.5906699
     },
     {
       "id": "stn_urquiza_main_pablo_podesta",
@@ -3093,8 +3093,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 13,
       "isTerminus": false,
-      "latitude": -34.6687,
-      "longitude": -58.4466
+      "latitude": -34.588351,
+      "longitude": -58.6079923
     },
     {
       "id": "stn_urquiza_main_jorge_newbery",
@@ -3104,8 +3104,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 14,
       "isTerminus": false,
-      "latitude": -34.673700000000004,
-      "longitude": -58.4516
+      "latitude": -34.5878563,
+      "longitude": -58.6210301
     },
     {
       "id": "stn_urquiza_main_ruben_dario",
@@ -3115,8 +3115,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 15,
       "isTerminus": false,
-      "latitude": -34.678700000000006,
-      "longitude": -58.4566
+      "latitude": -34.5875405,
+      "longitude": -58.6298509
     },
     {
       "id": "stn_urquiza_main_ejercito_de_los_andes",
@@ -3126,8 +3126,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 16,
       "isTerminus": false,
-      "latitude": -34.6837,
-      "longitude": -58.4616
+      "latitude": -34.5802175,
+      "longitude": -58.6403462
     },
     {
       "id": "stn_urquiza_main_juan_b_de_la_salle",
@@ -3137,8 +3137,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 17,
       "isTerminus": false,
-      "latitude": -34.688700000000004,
-      "longitude": -58.4666
+      "latitude": -34.5733008,
+      "longitude": -58.6455799
     },
     {
       "id": "stn_urquiza_main_sargento_barrufaldi",
@@ -3148,8 +3148,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 18,
       "isTerminus": false,
-      "latitude": -34.69370000000001,
-      "longitude": -58.4716
+      "latitude": -34.5624276,
+      "longitude": -58.6602351
     },
     {
       "id": "stn_urquiza_main_capitan_lozano",
@@ -3159,8 +3159,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 19,
       "isTerminus": false,
-      "latitude": -34.6987,
-      "longitude": -58.4766
+      "latitude": -34.5553143,
+      "longitude": -58.6698581
     },
     {
       "id": "stn_urquiza_main_teniente_agneta",
@@ -3170,8 +3170,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 20,
       "isTerminus": false,
-      "latitude": -34.703700000000005,
-      "longitude": -58.4816
+      "latitude": -34.5488641,
+      "longitude": -58.6787989
     },
     {
       "id": "stn_urquiza_main_campo_de_mayo",
@@ -3181,8 +3181,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 21,
       "isTerminus": false,
-      "latitude": -34.7087,
-      "longitude": -58.486599999999996
+      "latitude": -34.5437873,
+      "longitude": -58.6857531
     },
     {
       "id": "stn_urquiza_main_sargento_cabral",
@@ -3192,8 +3192,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 22,
       "isTerminus": false,
-      "latitude": -34.7137,
-      "longitude": -58.4916
+      "latitude": -34.5371964,
+      "longitude": -58.6949246
     },
     {
       "id": "stn_urquiza_main_general_lemos",
@@ -3203,8 +3203,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 23,
       "isTerminus": true,
-      "latitude": -34.718700000000005,
-      "longitude": -58.4966
+      "latitude": -34.5328607,
+      "longitude": -58.700922
     },
     {
       "id": "stn_tren_costa_main_avenida_maipu",
@@ -3215,8 +3215,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 1,
       "isTerminus": true,
-      "latitude": -34.608700000000006,
-      "longitude": -58.3866
+      "latitude": -34.5129556,
+      "longitude": -58.4874923
     },
     {
       "id": "stn_tren_costa_main_borges",
@@ -3226,8 +3226,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 2,
       "isTerminus": false,
-      "latitude": -34.6137,
-      "longitude": -58.3916
+      "latitude": -34.5085591,
+      "longitude": -58.4847213
     },
     {
       "id": "stn_tren_costa_main_libertador",
@@ -3237,8 +3237,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 3,
       "isTerminus": false,
-      "latitude": -34.618700000000004,
-      "longitude": -58.3966
+      "latitude": -34.5025614,
+      "longitude": -58.4819801
     },
     {
       "id": "stn_tren_costa_main_juan_anchorena",
@@ -3248,8 +3248,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 4,
       "isTerminus": false,
-      "latitude": -34.62370000000001,
-      "longitude": -58.4016
+      "latitude": -34.4891487,
+      "longitude": -58.4812237
     },
     {
       "id": "stn_tren_costa_main_barrancas",
@@ -3259,8 +3259,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 5,
       "isTerminus": false,
-      "latitude": -34.6287,
-      "longitude": -58.4066
+      "latitude": -34.4723772,
+      "longitude": -58.493063
     },
     {
       "id": "stn_tren_costa_main_san_isidro_r",
@@ -3270,8 +3270,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 6,
       "isTerminus": false,
-      "latitude": -34.633700000000005,
-      "longitude": -58.4116
+      "latitude": -34.4654016,
+      "longitude": -58.5082698
     },
     {
       "id": "stn_tren_costa_main_punta_chica",
@@ -3281,8 +3281,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 7,
       "isTerminus": false,
-      "latitude": -34.6387,
-      "longitude": -58.416599999999995
+      "latitude": -34.4505165,
+      "longitude": -58.5238521
     },
     {
       "id": "stn_tren_costa_main_marina_nueva",
@@ -3292,8 +3292,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 8,
       "isTerminus": false,
-      "latitude": -34.6437,
-      "longitude": -58.4216
+      "latitude": -34.44455,
+      "longitude": -58.5390347
     },
     {
       "id": "stn_tren_costa_main_san_fernando_r",
@@ -3303,8 +3303,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 9,
       "isTerminus": false,
-      "latitude": -34.648700000000005,
-      "longitude": -58.4266
+      "latitude": -34.4375312,
+      "longitude": -58.5539384
     },
     {
       "id": "stn_tren_costa_main_canal_san_fernando",
@@ -3314,8 +3314,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 10,
       "isTerminus": false,
-      "latitude": -34.6537,
-      "longitude": -58.431599999999996
+      "latitude": -34.4299239,
+      "longitude": -58.5629021
     },
     {
       "id": "stn_tren_costa_main_delta",
@@ -3326,8 +3326,8 @@
       "networkType": "TREN",
       "sequenceInBranch": 11,
       "isTerminus": true,
-      "latitude": -34.6587,
-      "longitude": -58.4366
+      "latitude": -34.4185467,
+      "longitude": -58.5768043
     }
   ],
   "alerts": [
