@@ -8,8 +8,8 @@
       "iconResName": "ic_line_roca",
       "colorHex": "#0055A5",
       "sortOrder": 1,
-      "status": "DEMORADO",
-      "statusMessage": "Obras en ramal Cañuelas - Lobos"
+      "status": "NORMAL",
+      "statusMessage": "Servicio normal"
     },
     {
       "id": "sarmiento",
@@ -20,7 +20,7 @@
       "colorHex": "#00A8E3",
       "sortOrder": 2,
       "status": "NORMAL",
-      "statusMessage": "Servicio normal en ramal Once - Moreno"
+      "statusMessage": "Servicio normal"
     },
     {
       "id": "mitre",
@@ -30,8 +30,8 @@
       "iconResName": "ic_line_mitre",
       "colorHex": "#008A27",
       "sortOrder": 3,
-      "status": "DEMORADO",
-      "statusMessage": "Alertas por cancelaciones en ramal Ballester a Zárate"
+      "status": "NORMAL",
+      "statusMessage": "Servicio normal"
     },
     {
       "id": "san_martin",
@@ -85,8 +85,8 @@
       "iconResName": "ic_line_tren_costa",
       "colorHex": "#008A27",
       "sortOrder": 8,
-      "status": "SIN_SERVICIO",
-      "statusMessage": "Servicio interrumpido por problemas técnicos"
+      "status": "NORMAL",
+      "statusMessage": "Servicio normal"
     },
     {
       "id": "linea_a",

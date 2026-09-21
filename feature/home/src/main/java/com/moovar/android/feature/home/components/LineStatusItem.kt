@@ -55,11 +55,10 @@ fun LineStatusItem(
     }
 
     Surface(
+        onClick = { onLineClick(line.id) },
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 5.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable { onLineClick(line.id) },
+            .padding(horizontal = 16.dp, vertical = 5.dp),
         shape = RoundedCornerShape(16.dp),
         color = cardBg,
         border = cardBorder,

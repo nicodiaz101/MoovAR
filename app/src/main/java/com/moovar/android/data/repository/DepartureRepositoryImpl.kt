@@ -178,7 +178,22 @@ class DepartureRepositoryImpl @Inject constructor(
             "gonnet" to "153",
             "ringuelet" to "334",
             "tolosa" to "392",
-            "la plata" to "217"
+            "la plata" to "217",
+            "dr. antonio sáenz" to "525",
+            "dr. antonio saenz" to "525",
+            "dr. a. sáenz" to "525",
+            "dr. a. saenz" to "525",
+            "dr. a. sáenz viad." to "525",
+            "dr. a. saenz viad." to "525",
+            "dr. a. sáenz viaducto" to "525",
+            "dr. a. saenz viaducto" to "525",
+            "sáenz" to "525",
+            "saenz" to "525",
+            "gonzález catán" to "154",
+            "gonzalez catan" to "154",
+            "marinos del crucero gral. belgrano" to "259",
+            "marinos del crucero general belgrano" to "259",
+            "marinos c. g belgrano" to "259"
         )
 
         // Closed Subte stations under Plan de Renovación Integral
@@ -283,7 +298,7 @@ class DepartureRepositoryImpl @Inject constructor(
         if (originStation.lineId == "belgrano_norte" && cleanName.contains("retiro")) return null // Privatized concession
         if (originStation.lineId == "roca" && (cleanName.contains("constituci") || cleanName.contains("plaza c"))) return "93"
         if (originStation.lineId == "sarmiento" && cleanName.contains("once")) return "293"
-        if (originStation.lineId == "belgrano_sur" && cleanName.contains("sáenz")) return "349"
+        if (originStation.lineId == "belgrano_sur" && (cleanName.contains("sáenz") || cleanName.contains("saenz"))) return "525"
 
         // Strip parentheses: "retiro (mitre)" -> "retiro"
         val strippedName = cleanName.replace(Regex("\\s*\\([^)]*\\)"), "").trim()
@@ -812,18 +827,20 @@ class DepartureRepositoryImpl @Inject constructor(
     }
 
     private fun normalizeTerminus(name: String): String {
-        return name.lowercase()
+        var s = name.lowercase()
             .replace(Regex("\\(.*?\\)"), "")
             .replace("á", "a")
             .replace("é", "e")
             .replace("í", "i")
             .replace("ó", "o")
             .replace("ú", "u")
-            .replace("plaza", "")
-            .replace("gral.", "")
-            .replace("general", "")
-            .replace("dr.", "")
-            .trim()
+            .replace(".", " ")
+            .replace(",", " ")
+        for (w in listOf("plaza", "gral", "general", "dr", "antonio", "viad", "prov", "viaducto")) {
+            s = s.replace(Regex("\\b$w\\b"), " ")
+        }
+        s = s.replace(Regex("\\b[a-z]\\b"), " ")
+        return s.split(Regex("\\s+")).filter { it.isNotBlank() }.joinToString(" ")
     }
 
     private fun formatIsoTimeToLocal(isoStr: String?): String? {
