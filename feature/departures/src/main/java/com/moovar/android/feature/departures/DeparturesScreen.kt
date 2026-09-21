@@ -35,7 +35,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.moovar.android.core.domain.model.DepartureMode
 import com.moovar.android.feature.departures.components.AlertsBanner
 import com.moovar.android.feature.departures.components.DepartureTicketCard
-import com.moovar.android.feature.departures.components.FilterChipsRow
 import com.moovar.android.feature.departures.components.StationInputField
 
 import androidx.compose.runtime.LaunchedEffect
