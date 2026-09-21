@@ -34,7 +34,7 @@ fun StatusBadge(
 ) {
     val (color, text) = when (status) {
         LineStatus.NORMAL -> StatusNormal to "Normal"
-        LineStatus.DEMORADO -> StatusDemorado to "Demoras"
+        LineStatus.DEMORADO -> StatusDemorado to "Alerta"
         LineStatus.CANCELADO -> StatusCancelado to "Cancelado"
         LineStatus.SIN_SERVICIO -> StatusSinServicio to "Interrumpido"
         LineStatus.DESCONOCIDO -> Color.Gray to "Sin datos"

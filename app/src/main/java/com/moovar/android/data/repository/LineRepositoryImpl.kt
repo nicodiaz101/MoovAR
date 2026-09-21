@@ -100,15 +100,15 @@ class LineRepositoryImpl @Inject constructor(
                 when (entity.id) {
                     "mitre" -> {
                         entity.copy(
-                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
-                            statusMessage = "Normal - Alertas por cancelaciones en ramal Ballester a Zárate",
+                            status = com.moovar.android.core.database.entity.LineStatus.DEMORADO,
+                            statusMessage = "Alertas por cancelaciones en ramal Ballester a Zárate",
                             lastUpdatedAt = System.currentTimeMillis()
                         )
                     }
                     "roca" -> {
                         entity.copy(
-                            status = com.moovar.android.core.database.entity.LineStatus.NORMAL,
-                            statusMessage = "Normal - Tramo Cañuelas a Lobos interrumpido por obras",
+                            status = com.moovar.android.core.database.entity.LineStatus.DEMORADO,
+                            statusMessage = "Tramo Cañuelas a Lobos interrumpido por obras",
                             lastUpdatedAt = System.currentTimeMillis()
                         )
                     }

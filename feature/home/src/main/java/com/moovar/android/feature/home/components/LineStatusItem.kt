@@ -43,6 +43,17 @@ fun LineStatusItem(
         MaterialTheme.colorScheme.primary
     }
 
+    val (cardBorder, cardBg) = when (line.status) {
+        com.moovar.android.core.domain.model.LineStatus.SIN_SERVICIO,
+        com.moovar.android.core.domain.model.LineStatus.CANCELADO -> {
+            androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFD32F2F)) to Color(0xFFD32F2F).copy(alpha = 0.12f)
+        }
+        com.moovar.android.core.domain.model.LineStatus.DEMORADO -> {
+            androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFEF6C00)) to Color(0xFFEF6C00).copy(alpha = 0.12f)
+        }
+        else -> null to MaterialTheme.colorScheme.surfaceContainerLow
+    }
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -50,7 +61,8 @@ fun LineStatusItem(
             .clip(RoundedCornerShape(16.dp))
             .clickable { onLineClick(line.id) },
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = cardBg,
+        border = cardBorder,
         tonalElevation = 1.dp
     ) {
         Row(

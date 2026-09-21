@@ -82,9 +82,12 @@ class AlertRepositoryImpl @Inject constructor(
             for (gerencia in gerencias) {
                 val lineId = GERENCIA_TO_LINE[gerencia.id] ?: continue
 
-                // Add line-level alerts
+                // Add line-level alerts (excluding purely informative CUD notifications)
                 gerencia.alerta.forEach { alertaDto ->
                     val cleanText = alertaDto.contenido.replace('\u00A0', ' ').trim()
+                    if (cleanText.contains("CUD", ignoreCase = true) || cleanText.contains("discapacidad", ignoreCase = true)) {
+                        return@forEach
+                    }
                     entities.add(
                         AlertEntity(
                             id = "sofse_line_${alertaDto.id}",
@@ -106,6 +109,9 @@ class AlertRepositoryImpl @Inject constructor(
                     for (ramal in ramales) {
                         ramal.alerta?.forEach { alertaDto ->
                             val cleanText = alertaDto.contenido.replace('\u00A0', ' ').trim()
+                            if (cleanText.contains("CUD", ignoreCase = true) || cleanText.contains("discapacidad", ignoreCase = true)) {
+                                return@forEach
+                            }
                             entities.add(
                                 AlertEntity(
                                     id = "sofse_ramal_${alertaDto.id}",
@@ -127,13 +133,16 @@ class AlertRepositoryImpl @Inject constructor(
             }
 
             // 2. Real Subte Alerts (Closed stations under Plan de Renovación Integral)
+            // Uniform explanation across all closed stations
+            val subteClosedExplanation = "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación."
+
             entities.add(
                 AlertEntity(
                     id = "subte_alert_medrano",
                     lineId = "linea_b",
                     branchId = null,
                     title = "Línea B: Estación Medrano cerrada",
-                    description = "La estación Medrano permanece cerrada por obras de renovación integral. Los trenes no se detienen en esta estación.",
+                    description = subteClosedExplanation,
                     severity = com.moovar.android.core.database.entity.AlertSeverity.WARNING,
                     publishedAt = now,
                     expiresAt = null,
@@ -146,7 +155,7 @@ class AlertRepositoryImpl @Inject constructor(
                     lineId = "linea_c",
                     branchId = null,
                     title = "Línea C: Estación Lavalle cerrada",
-                    description = "La estación Lavalle se encuentra cerrada por trabajos de puesta en valor y renovación integral.",
+                    description = subteClosedExplanation,
                     severity = com.moovar.android.core.database.entity.AlertSeverity.WARNING,
                     publishedAt = now,
                     expiresAt = null,
@@ -159,7 +168,7 @@ class AlertRepositoryImpl @Inject constructor(
                     lineId = "linea_d",
                     branchId = null,
                     title = "Línea D: Estación Tribunales cerrada",
-                    description = "La estación Tribunales - Teatro Colón se encuentra temporalmente fuera de servicio por obras de infraestructura.",
+                    description = subteClosedExplanation,
                     severity = com.moovar.android.core.database.entity.AlertSeverity.WARNING,
                     publishedAt = now,
                     expiresAt = null,
@@ -171,8 +180,21 @@ class AlertRepositoryImpl @Inject constructor(
                     id = "subte_alert_entre_rios",
                     lineId = "linea_e",
                     branchId = null,
-                    title = "Línea E: Estaciones Entre Ríos y Urquiza cerradas",
-                    description = "Las estaciones Entre Ríos - Rodolfo Walsh y General Urquiza se encuentran cerradas por obras del Plan de Renovación Integral.",
+                    title = "Línea E: Estación Entre Ríos cerrada",
+                    description = subteClosedExplanation,
+                    severity = com.moovar.android.core.database.entity.AlertSeverity.WARNING,
+                    publishedAt = now,
+                    expiresAt = null,
+                    cachedAt = now
+                )
+            )
+            entities.add(
+                AlertEntity(
+                    id = "subte_alert_urquiza",
+                    lineId = "linea_e",
+                    branchId = null,
+                    title = "Línea E: Estación General Urquiza cerrada",
+                    description = subteClosedExplanation,
                     severity = com.moovar.android.core.database.entity.AlertSeverity.WARNING,
                     publishedAt = now,
                     expiresAt = null,

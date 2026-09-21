@@ -8,8 +8,8 @@
       "iconResName": "ic_line_roca",
       "colorHex": "#0055A5",
       "sortOrder": 1,
-      "status": "NORMAL",
-      "statusMessage": "Servicio normal en ramales eléctricos (obras en Cañuelas-Lobos)"
+      "status": "DEMORADO",
+      "statusMessage": "Obras en ramal Cañuelas - Lobos"
     },
     {
       "id": "sarmiento",
@@ -30,8 +30,8 @@
       "iconResName": "ic_line_mitre",
       "colorHex": "#008A27",
       "sortOrder": 3,
-      "status": "NORMAL",
-      "statusMessage": "Servicio normal en eléctricos (obras en diesel Capilla)"
+      "status": "DEMORADO",
+      "statusMessage": "Alertas por cancelaciones en ramal Ballester a Zárate"
     },
     {
       "id": "san_martin",
@@ -85,8 +85,8 @@
       "iconResName": "ic_line_tren_costa",
       "colorHex": "#008A27",
       "sortOrder": 8,
-      "status": "NORMAL",
-      "statusMessage": "Servicio normal"
+      "status": "SIN_SERVICIO",
+      "statusMessage": "Servicio interrumpido por problemas técnicos"
     },
     {
       "id": "linea_a",
@@ -4632,33 +4632,41 @@
       "id": "alert_subte_b_medrano",
       "lineId": "linea_b",
       "branchId": "linea_b_main",
-      "title": "Línea B: Estación Medrano cerrada por obras",
-      "description": "La estación Medrano se encuentra cerrada por trabajos del Plan de Renovación Integral. Las formaciones no se detienen en esta estación. El servicio funciona con normalidad entre Leandro N. Alem y Juan Manuel de Rosas.",
-      "severity": "INFO"
+      "title": "Línea B: Estación Medrano cerrada",
+      "description": "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación.",
+      "severity": "WARNING"
     },
     {
       "id": "alert_subte_c_lavalle",
       "lineId": "linea_c",
       "branchId": "linea_c_main",
-      "title": "Línea C: Estación Lavalle en obra",
-      "description": "Estación Lavalle temporalmente fuera de servicio por obras de puesta en valor. Las formaciones no se detienen en dicha parada.",
-      "severity": "INFO"
+      "title": "Línea C: Estación Lavalle cerrada",
+      "description": "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación.",
+      "severity": "WARNING"
     },
     {
       "id": "alert_subte_d_tribunales",
       "lineId": "linea_d",
       "branchId": "linea_d_main",
-      "title": "Línea D: Estación Tribunales cerrada por obras",
-      "description": "La estación Tribunales - Teatro Colón permanece cerrada por obras de modernización integral. Las formaciones prestan servicio habitual entre Catedral y Congreso de Tucumán sin detenerse en Tribunales.",
-      "severity": "INFO"
+      "title": "Línea D: Estación Tribunales cerrada",
+      "description": "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación.",
+      "severity": "WARNING"
     },
     {
-      "id": "alert_subte_e_obras",
+      "id": "alert_subte_e_entre_rios",
       "lineId": "linea_e",
       "branchId": "linea_e_main",
-      "title": "Línea E: Estaciones Entre Ríos y Urquiza en obra",
-      "description": "Las estaciones Entre Ríos - Rodolfo Walsh y General Urquiza se encuentran cerradas por el Plan de Renovación Integral.",
-      "severity": "INFO"
+      "title": "Línea E: Estación Entre Ríos cerrada",
+      "description": "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación.",
+      "severity": "WARNING"
+    },
+    {
+      "id": "alert_subte_e_urquiza",
+      "lineId": "linea_e",
+      "branchId": "linea_e_main",
+      "title": "Línea E: Estación General Urquiza cerrada",
+      "description": "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación.",
+      "severity": "WARNING"
     },
     {
       "id": "alert_roca_lobos",

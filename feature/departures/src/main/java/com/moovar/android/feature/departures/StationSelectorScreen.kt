@@ -151,9 +151,9 @@ fun StationSelectorScreen(
 
                     items(stations) { station ->
                         Surface(
+                            onClick = { onStationSelected(station) },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { onStationSelected(station) }
                                 .padding(horizontal = 16.dp, vertical = 6.dp),
                             shape = RoundedCornerShape(12.dp),
                             color = MaterialTheme.colorScheme.surfaceContainerLow

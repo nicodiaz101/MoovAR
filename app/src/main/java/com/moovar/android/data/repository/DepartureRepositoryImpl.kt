@@ -40,13 +40,18 @@ class DepartureRepositoryImpl @Inject constructor(
         // Pre-seeded popular station mappings for instantaneous zero-latency lookups
         private val PRESEEDED_SOFSE_IDS = mapOf(
             "retiro" to "332",
+            "retiro (mitre)" to "332",
             "retiro (lgm)" to "332",
-            "retiro (lsm)" to "463",
+            "retiro (san martín)" to "463",
+            "retiro (san martin)" to "463",
+            "retiro - lsm" to "463",
             "once" to "293",
             "plaza constitución" to "93",
+            "plaza c." to "93",
             "constitución" to "93",
             "tigre" to "389",
             "villa ballester" to "412",
+            "v. ballester" to "412",
             "zárate" to "434",
             "capilla del señor" to "61",
             "victoria" to "409",
@@ -65,40 +70,115 @@ class DepartureRepositoryImpl @Inject constructor(
             "martínez" to "262",
             "acassuso" to "5",
             "béccar" to "32",
+            "beccar" to "32",
             "virreyes" to "428",
             "carupá" to "65",
+            "lisandro de la torre" to "229",
+            "l. de la torre" to "229",
+            "dr. cetrángolo" to "119",
+            "cetrángolo" to "119",
+            "bartolomé mitre" to "273",
+            "mitre" to "273",
+            "juan b. justo" to "200",
+            "florida" to "141",
+            "florida (mitre)" to "141",
+            "coghlan" to "90",
+            "l.m. saavedra" to "346",
+            "saavedra" to "346",
             "chilavert" to "79",
             "malaver" to "249",
             "san andrés" to "353",
             "san martín" to "360",
+            "san martín (mitre)" to "360",
+            "josé león suárez" to "190",
+            "jose leon suarez" to "190",
+            "j. l. suarez" to "190",
             "miguelete" to "271",
             "pueyrredón" to "318",
+            "pueyrredón (mitre)" to "318",
             "gral. urquiza" to "150",
+            "general urquiza" to "150",
             "l. m. drago" to "236",
+            "drago" to "236",
             "belgrano r" to "35",
             "colegiales" to "91",
             "ministro carranza" to "272",
             "3 de febrero" to "1",
-            "morón" to "280",
-            "castelar" to "66",
+            "morón" to "279",
+            "castelar" to "70",
             "ituzaingó" to "186",
-            "merlo" to "268",
-            "moreno" to "279",
-            "avellaneda" to "125",
-            "lanús" to "231",
-            "banfield" to "25",
-            "lomas de zamora" to "237",
-            "temperley" to "388",
-            "adrogué" to "6",
+            "san antonio de padua" to "347",
+            "s.a. de padua" to "347",
+            "merlo" to "269",
+            "paso del rey" to "300",
+            "moreno" to "278",
+            "haedo" to "169",
+            "ramos mejía" to "327",
+            "ciudadela" to "84",
+            "liniers" to "234",
+            "villa luro" to "423",
+            "floresta" to "140",
+            "flores" to "139",
+            "caballito" to "50",
+            "palermo" to "297",
+            "villa crespo" to "414",
+            "la paternal" to "216",
+            "villa del parque" to "415",
+            "devoto" to "112",
+            "sáenz peña" to "348",
+            "santos lugares" to "369",
+            "caseros" to "67",
+            "el palomar" to "127",
+            "hurlingham" to "177",
+            "william morris" to "431",
+            "bella vista" to "36",
+            "muñiz" to "283",
+            "san miguel" to "361",
+            "josé c. paz" to "194",
+            "sol y verde" to "378",
+            "presidente derqui" to "106",
+            "derqui" to "106",
+            "villa astolfi" to "411",
+            "pilar" to "306",
+            "manzanares" to "252",
+            "dr. domingo cabred" to "51",
+            "cabred" to "51",
+            "avellaneda" to "368",
+            "d. santillán y m. kosteki (avellaneda)" to "368",
+            "s y kosteki" to "368",
+            "lanús" to "215",
+            "banfield" to "30",
+            "lomas de zamora" to "238",
+            "l. zamora" to "238",
+            "temperley" to "386",
+            "adrogué" to "8",
             "burzaco" to "49",
-            "glew" to "144",
-            "guernica" to "157",
-            "alejandro korn" to "12",
-            "ezeiza" to "133",
-            "monte grande" to "275",
-            "quilmes" to "324",
-            "berazategui" to "37",
-            "la plata" to "211"
+            "longchamps" to "239",
+            "glew" to "152",
+            "guernica" to "165",
+            "alejandro korn" to "13",
+            "a. korn" to "13",
+            "ezeiza" to "132",
+            "monte grande" to "277",
+            "m. grande" to "277",
+            "el jagüel" to "125",
+            "quilmes" to "322",
+            "bernal" to "39",
+            "don bosco" to "115",
+            "wilde" to "430",
+            "villa domínico" to "418",
+            "sarandí" to "370",
+            "ezpeleta" to "133",
+            "berazategui" to "38",
+            "plátanos" to "309",
+            "hudson" to "176",
+            "pereyra" to "303",
+            "villa elisa" to "419",
+            "city bell" to "83",
+            "gonnet" to "153",
+            "ringuelet" to "334",
+            "tolosa" to "392",
+            "la plata" to "217"
         )
 
         // Closed Subte stations under Plan de Renovación Integral
@@ -157,10 +237,19 @@ class DepartureRepositoryImpl @Inject constructor(
 
                     // If user filtered by destination, apply filter
                     val filteredDepartures = if (destStation != null) {
-                        val destNameNorm = destStation.name.lowercase().trim()
+                        val destNameNorm = normalizeTerminus(destStation.name)
                         val matches = departures.filter { dep ->
-                            dep.destination.lowercase().contains(destNameNorm) ||
-                                    destNameNorm.contains(dep.destination.lowercase())
+                            val depDestNorm = normalizeTerminus(dep.destination)
+                            if (depDestNorm.contains(destNameNorm) || destNameNorm.contains(depDestNorm)) return@filter true
+
+                            val cachedJourney = journeyDetailsCache.get(dep.serviceId)
+                            if (cachedJourney != null) {
+                                return@filter cachedJourney.stops.any { stop ->
+                                    val stopNorm = normalizeTerminus(stop.stationName)
+                                    stopNorm.contains(destNameNorm) || destNameNorm.contains(stopNorm)
+                                }
+                            }
+                            false
                         }
                         if (matches.isNotEmpty()) matches else departures
                     } else {
@@ -188,6 +277,22 @@ class DepartureRepositoryImpl @Inject constructor(
         val cached = stationIdCache[cleanName]
         if (cached != null) return cached
 
+        // Fast line-specific terminus overrides
+        if (originStation.lineId == "mitre" && cleanName.contains("retiro")) return "332"
+        if (originStation.lineId == "san_martin" && cleanName.contains("retiro")) return "463"
+        if (originStation.lineId == "belgrano_norte" && cleanName.contains("retiro")) return null // Privatized concession
+        if (originStation.lineId == "roca" && (cleanName.contains("constituci") || cleanName.contains("plaza c"))) return "93"
+        if (originStation.lineId == "sarmiento" && cleanName.contains("once")) return "293"
+        if (originStation.lineId == "belgrano_sur" && cleanName.contains("sáenz")) return "349"
+
+        // Strip parentheses: "retiro (mitre)" -> "retiro"
+        val strippedName = cleanName.replace(Regex("\\s*\\([^)]*\\)"), "").trim()
+        val strippedCached = stationIdCache[strippedName]
+        if (strippedCached != null) {
+            stationIdCache[cleanName] = strippedCached
+            return strippedCached
+        }
+
         val stopId = originStation.gtfsStopId
         if (!stopId.isNullOrBlank() && stopId.all { it.isDigit() }) {
             stationIdCache[cleanName] = stopId
@@ -196,9 +301,11 @@ class DepartureRepositoryImpl @Inject constructor(
 
         // Query SOFSE estaciones search endpoint
         return try {
-            val candidates = sofseApiService.getEstaciones(nombre = originStation.name)
+            val queryName = strippedName.ifBlank { originStation.name }
+            val candidates = sofseApiService.getEstaciones(nombre = queryName)
             if (candidates.isNotEmpty()) {
                 val matched = candidates.firstOrNull {
+                    it.nombre.equals(queryName, ignoreCase = true) ||
                     it.nombre.equals(originStation.name, ignoreCase = true)
                 } ?: candidates.first()
                 stationIdCache[cleanName] = matched.idEstacion
@@ -229,6 +336,12 @@ class DepartureRepositoryImpl @Inject constructor(
         val estimatedTime = formatIsoTimeToLocal(arribo.salida?.estimada ?: arribo.llegada?.estimada)
 
         val targetDest = servicio.hasta?.estacion?.nombre ?: branch?.destinationTerminus ?: "Terminal"
+        val normDest = normalizeTerminus(targetDest)
+        val normOrigin = normalizeTerminus(originStation.name)
+        if (normDest == normOrigin || (normOrigin.isNotEmpty() && normDest.isNotEmpty() && normOrigin.contains(normDest))) {
+            return null
+        }
+
         val directionLabel = "Sentido $targetDest"
 
         val platform = arribo.anden?.nombre?.let { "Andén $it" } ?: "-"
@@ -327,12 +440,16 @@ class DepartureRepositoryImpl @Inject constructor(
         val branchDisplayName = branch?.name ?: line?.name ?: "Subte"
         val directions = mutableListOf<String>()
 
+        val normOrigin = normalizeTerminus(originStation.name)
+        val normBranchOrigin = branch?.originTerminus?.let { normalizeTerminus(it) } ?: ""
+        val normBranchDest = branch?.destinationTerminus?.let { normalizeTerminus(it) } ?: ""
+
         if (destStation != null) {
             directions.add(destStation.name)
         } else if (branch != null) {
-            if (originStation.name.equals(branch.originTerminus, ignoreCase = true)) {
+            if (normOrigin == normBranchOrigin) {
                 directions.add(branch.destinationTerminus)
-            } else if (originStation.name.equals(branch.destinationTerminus, ignoreCase = true)) {
+            } else if (normOrigin == normBranchDest) {
                 directions.add(branch.originTerminus)
             } else {
                 directions.add(branch.destinationTerminus)
@@ -443,12 +560,16 @@ class DepartureRepositoryImpl @Inject constructor(
         val branchDisplayName = branch?.name ?: line?.name ?: "Servicio"
         val directions = mutableListOf<String>()
 
+        val normOrigin = normalizeTerminus(originStation.name)
+        val normBranchOrigin = branch?.originTerminus?.let { normalizeTerminus(it) } ?: ""
+        val normBranchDest = branch?.destinationTerminus?.let { normalizeTerminus(it) } ?: ""
+
         if (destStation != null) {
             directions.add(destStation.name)
         } else if (branch != null) {
-            if (originStation.name.equals(branch.originTerminus, ignoreCase = true)) {
+            if (normOrigin == normBranchOrigin) {
                 directions.add(branch.destinationTerminus)
-            } else if (originStation.name.equals(branch.destinationTerminus, ignoreCase = true)) {
+            } else if (normOrigin == normBranchDest) {
                 directions.add(branch.originTerminus)
             } else {
                 directions.add(branch.destinationTerminus)
@@ -551,17 +672,41 @@ class DepartureRepositoryImpl @Inject constructor(
         departureTime: LocalDateTime
     ): List<Departure> {
         val directions = mutableListOf<String>()
+        val normOrigin = normalizeTerminus(originStation.name)
+        val normBranchOrigin = branch?.originTerminus?.let { normalizeTerminus(it) } ?: ""
+        val normBranchDest = branch?.destinationTerminus?.let { normalizeTerminus(it) } ?: ""
+
         if (destStation != null) {
             directions.add(destStation.name)
-        } else if (branch != null) {
-            if (originStation.name.equals(branch.originTerminus, ignoreCase = true)) {
+        } else if (originStation.isTerminus || (normBranchOrigin.isNotEmpty() && normOrigin == normBranchOrigin)) {
+            // When at origin terminal (e.g. Retiro, Constitución), find all destination termini for the line
+            val lineBranches = if (line != null) branchDao.getByLine(line.id) else emptyList()
+            val terminalDests = lineBranches
+                .filter { b ->
+                    val bOrigin = normalizeTerminus(b.originTerminus ?: "")
+                    bOrigin == normOrigin || normOrigin.contains(bOrigin) || bOrigin.contains(normOrigin)
+                }
+                .map { it.destinationTerminus }
+                .distinct()
+
+            if (terminalDests.isNotEmpty()) {
+                directions.addAll(terminalDests)
+            } else if (branch != null) {
                 directions.add(branch.destinationTerminus)
-            } else if (originStation.name.equals(branch.destinationTerminus, ignoreCase = true)) {
+            } else {
+                directions.add("Cabecera")
+            }
+        } else if (normBranchDest.isNotEmpty() && normOrigin == normBranchDest) {
+            // When at destination terminal (e.g. Tigre), only show departures towards origin terminus
+            if (branch != null) {
                 directions.add(branch.originTerminus)
             } else {
-                directions.add(branch.destinationTerminus)
-                directions.add(branch.originTerminus)
+                directions.add("Cabecera")
             }
+        } else if (branch != null) {
+            // Intermediate station: both directions
+            directions.add(branch.destinationTerminus)
+            directions.add(branch.originTerminus)
         } else {
             directions.add("Cabecera")
         }
