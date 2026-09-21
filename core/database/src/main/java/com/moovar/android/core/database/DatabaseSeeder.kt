@@ -15,11 +15,12 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.InputStreamReader
 
-class DatabaseSeeder(
-    private val context: Context,
-    private val db: AppDatabase
+open class DatabaseSeeder(
+    private val context: Context? = null,
+    private val db: AppDatabase? = null
 ) {
-    suspend fun seedInitialData() = withContext(Dispatchers.IO) {
+    open suspend fun seedInitialData() = withContext(Dispatchers.IO) {
+        if (context == null || db == null) return@withContext
         val lineDao = db.lineDao()
         val branchDao = db.branchDao()
         val stationDao = db.stationDao()

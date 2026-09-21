@@ -107,8 +107,8 @@
       "iconResName": "ic_subte_b",
       "colorHex": "#E30613",
       "sortOrder": 10,
-      "status": "NORMAL",
-      "statusMessage": "Servicio normal (Estación Medrano cerrada por obras)"
+      "status": "AVISO",
+      "statusMessage": "Estación cerrada por obras"
     },
     {
       "id": "linea_c",
@@ -118,8 +118,8 @@
       "iconResName": "ic_subte_c",
       "colorHex": "#006C9A",
       "sortOrder": 11,
-      "status": "NORMAL",
-      "statusMessage": "Servicio normal (Estación Lavalle cerrada por obras)"
+      "status": "AVISO",
+      "statusMessage": "Estación cerrada por obras"
     },
     {
       "id": "linea_d",
@@ -129,8 +129,8 @@
       "iconResName": "ic_subte_d",
       "colorHex": "#00845B",
       "sortOrder": 12,
-      "status": "NORMAL",
-      "statusMessage": "Servicio normal (Estación Tribunales cerrada por obras)"
+      "status": "AVISO",
+      "statusMessage": "Estación cerrada por obras"
     },
     {
       "id": "linea_e",
@@ -140,8 +140,8 @@
       "iconResName": "ic_subte_e",
       "colorHex": "#702A8C",
       "sortOrder": 13,
-      "status": "NORMAL",
-      "statusMessage": "Servicio normal (Estaciones Entre Ríos y Urquiza cerradas)"
+      "status": "AVISO",
+      "statusMessage": "Estaciones cerradas por obras"
     },
     {
       "id": "linea_h",

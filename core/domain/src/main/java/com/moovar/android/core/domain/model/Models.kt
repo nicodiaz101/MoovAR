@@ -1,7 +1,7 @@
 package com.moovar.android.core.domain.model
 
 enum class NetworkType { TREN, SUBTE }
-enum class LineStatus { NORMAL, DEMORADO, CANCELADO, SIN_SERVICIO, DESCONOCIDO }
+enum class LineStatus { NORMAL, AVISO, DEMORADO, CANCELADO, SIN_SERVICIO, DESCONOCIDO }
 enum class AlertSeverity { INFO, WARNING, CRITICAL }
 enum class StopState { PAST, CURRENT, FUTURE }
 

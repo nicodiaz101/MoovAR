@@ -52,6 +52,9 @@ fun LineStatusItem(
         com.moovar.android.core.domain.model.LineStatus.DEMORADO -> {
             androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFEF6C00)) to Color(0xFFEF6C00).copy(alpha = 0.12f)
         }
+        com.moovar.android.core.domain.model.LineStatus.AVISO -> {
+            androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF78909C).copy(alpha = 0.35f)) to Color(0xFF78909C).copy(alpha = 0.06f)
+        }
         else -> null to MaterialTheme.colorScheme.surfaceContainerLow
     }
 
