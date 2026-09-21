@@ -468,18 +468,54 @@ class DepartureRepositoryImpl @Inject constructor(
 
         if (estaciones.isNotEmpty()) {
             val firstFuture = if (isCancelled) -1 else estaciones.indexOfFirst { (it.segundos ?: 0) > 0 }
-            val isInTransit = !isCancelled && firstFuture > 0
+            val now = Instant.now()
+            var atStationIdx: Int? = null
+
+            if (isCancelled) {
+                val orgIdx = estaciones.indexOfFirst { it.nombre.equals(originStation.name, ignoreCase = true) }
+                atStationIdx = if (orgIdx >= 0) orgIdx else 0
+            } else if (firstFuture == 0) {
+                atStationIdx = 0
+            } else if (firstFuture == -1) {
+                atStationIdx = estaciones.lastIndex
+            } else if (firstFuture > 0) {
+                val nextEst = estaciones[firstFuture]
+                val prevEst = estaciones[firstFuture - 1]
+                val secsToNext = nextEst.segundos ?: 60
+
+                // 1. Train is braking into or arrived at nextEst (<= 35 seconds away)
+                if (secsToNext <= 35) {
+                    atStationIdx = firstFuture
+                } else {
+                    // 2. Train is still stopped at prevEst (doors open / before departure)
+                    val prevSalidaIso = prevEst.salida?.estimada ?: prevEst.salida?.programada
+                    val isStillAtPrevStation = if (!prevSalidaIso.isNullOrBlank()) {
+                        try {
+                            val salidaInstant = Instant.parse(prevSalidaIso)
+                            now.isBefore(salidaInstant.plusSeconds(30))
+                        } catch (_: Exception) {
+                            secsToNext >= 140
+                        }
+                    } else {
+                        secsToNext >= 140
+                    }
+
+                    if (isStillAtPrevStation) {
+                        atStationIdx = firstFuture - 1
+                    }
+                }
+            }
+
+            val isInTransit = !isCancelled && atStationIdx == null && firstFuture > 0
 
             val stops = estaciones.mapIndexed { idx, est ->
                 val rawStopIso = est.salida?.estimada ?: est.salida?.programada ?: est.llegada?.estimada ?: est.llegada?.programada
                 val stopTime = formatIsoTimeToLocal(rawStopIso)
                 val state = when {
-                    isCancelled -> {
-                        val orgIdx = estaciones.indexOfFirst { it.nombre.equals(originStation.name, ignoreCase = true) }
-                        val cancelIdx = if (orgIdx >= 0) orgIdx else 0
+                    atStationIdx != null -> {
                         when {
-                            idx < cancelIdx -> StopState.PAST
-                            idx == cancelIdx -> StopState.CURRENT
+                            idx < atStationIdx -> StopState.PAST
+                            idx == atStationIdx -> StopState.CURRENT
                             else -> StopState.FUTURE
                         }
                     }
@@ -489,18 +525,7 @@ class DepartureRepositoryImpl @Inject constructor(
                             else -> StopState.FUTURE
                         }
                     }
-                    firstFuture == 0 -> {
-                        when {
-                            idx == 0 -> StopState.CURRENT
-                            else -> StopState.FUTURE
-                        }
-                    }
-                    else -> {
-                        when {
-                            idx < estaciones.lastIndex -> StopState.PAST
-                            else -> StopState.CURRENT
-                        }
-                    }
+                    else -> StopState.FUTURE
                 }
                 val stopCoords = est.nombre?.let { findStationCoordinates(it, originStation.lineId) }
                 JourneyStop(
@@ -517,8 +542,12 @@ class DepartureRepositoryImpl @Inject constructor(
             val originCoords = if (originLat != null && originLon != null) Coordinates(originLat, originLon) else null
 
             if (!originStation.isTerminus && !isCancelled) {
-                val firstFuture = estaciones.indexOfFirst { (it.segundos ?: 0) > 0 }
                 trainCoords = when {
+                    atStationIdx != null -> {
+                        estaciones.getOrNull(atStationIdx)?.nombre?.let {
+                            findStationCoordinates(it, originStation.lineId)
+                        } ?: originCoords
+                    }
                     firstFuture > 0 -> {
                         val prevName = estaciones[firstFuture - 1].nombre
                         val nextName = estaciones[firstFuture].nombre
@@ -536,12 +565,7 @@ class DepartureRepositoryImpl @Inject constructor(
                             nextCoords ?: prevCoords ?: originCoords
                         }
                     }
-                    firstFuture == 0 -> {
-                        estaciones[0].nombre?.let { findStationCoordinates(it, originStation.lineId) } ?: originCoords
-                    }
-                    else -> {
-                        estaciones.lastOrNull()?.nombre?.let { findStationCoordinates(it, originStation.lineId) } ?: originCoords
-                    }
+                    else -> originCoords
                 }
             }
 

@@ -105,7 +105,7 @@ fun StopTimelineItem(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = "TREN EN TIEMPO REAL AQUÍ",
+                            text = if (stop.isTerminus) "TREN EN ANDÉN" else "TREN EN ESTACIÓN",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
