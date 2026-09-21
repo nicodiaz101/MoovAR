@@ -132,11 +132,10 @@ class LineRepositoryImpl @Inject constructor(
                                 val firstLine = lineAlerts.firstOrNull()
                                 val msg = when {
                                     firstRamal != null -> {
-                                        val clean = firstRamal.second.contenido.replace('\u00A0', ' ').trim()
-                                        "${firstRamal.first.nombre}: $clean"
+                                        summarizeAlert(firstRamal.first.nombre, firstRamal.second.contenido)
                                     }
                                     firstLine != null -> {
-                                        firstLine.contenido.replace('\u00A0', ' ').trim()
+                                        summarizeAlert(null, firstLine.contenido)
                                     }
                                     inoperativeRamales.isNotEmpty() -> {
                                         "Ramal ${inoperativeRamales.first().nombre} no operativo"
@@ -178,6 +177,63 @@ class LineRepositoryImpl @Inject constructor(
     private fun isCudAlert(content: String): Boolean {
         val clean = content.replace('\u00A0', ' ')
         return clean.contains("CUD", ignoreCase = true) || clean.contains("discapacidad", ignoreCase = true)
+    }
+
+    private fun summarizeAlert(ramalName: String?, alertContent: String): String {
+        var clean = alertContent.replace('\u00A0', ' ')
+            .replace(Regex("(?i)Disculp[áa] las molestias.*"), "")
+            .replace(Regex("(?i)Consult[áa] las alternativas.*"), "")
+            .replace(Regex("(?i)M[áa]s informaci[óo]n en.*"), "")
+            .replace(Regex("(?i)trenesargentinos\\.gob\\.ar"), "")
+            .trim()
+        while (clean.endsWith(".") || clean.endsWith(" ")) {
+            clean = clean.dropLast(1).trim()
+        }
+
+        val lower = clean.lowercase()
+        val summary = when {
+            lower.contains("demora") -> {
+                val match = Regex("demoras?\\s*(?:de\\s*)?(\\d+\\s*minutos?)", RegexOption.IGNORE_CASE).find(clean)
+                if (match != null) "Demoras de ${match.groupValues[1]} aprox."
+                else "Demoras en el servicio"
+            }
+            lower.contains("cancelad") || lower.contains("cancelacion") -> {
+                if (lower.contains("problemas operativos")) "Cancelaciones por problemas operativos"
+                else if (lower.contains("problemas t")) "Cancelaciones por problemas técnicos"
+                else "Servicios cancelados"
+            }
+            lower.contains("interrumpid") -> {
+                if (lower.contains("obras") || lower.contains("renovaci")) "Interrumpido por obras"
+                else "Servicio interrumpido"
+            }
+            lower.contains("recorrido limitado") || lower.contains("no saldrán ni llegarán") -> {
+                val match = Regex("entre\\s+([^,]+?)\\s+y\\s+([^,]+?)(?:\\s*,|\\s+por|\\s+debido|\\s+a\\s+causa|$)", RegexOption.IGNORE_CASE).find(clean)
+                if (match != null) {
+                    val b1 = match.groupValues[1].trim()
+                    val b2 = match.groupValues[2].trim()
+                    "Recorrido limitado entre $b1 y $b2"
+                } else {
+                    "Recorrido limitado por obras"
+                }
+            }
+            lower.contains("obras") -> "Obras en zona de vías"
+            else -> {
+                val firstSentence = clean.substringBefore(".").trim()
+                if (firstSentence.length > 55) firstSentence.take(52).trim() + "..."
+                else firstSentence
+            }
+        }
+
+        return if (!ramalName.isNullOrBlank()) {
+            val shortRamal = ramalName
+                .replace(Regex("(?i)^Buenos Aires-"), "")
+                .replace(Regex("(?i)^Retiro-"), "")
+                .replace(Regex("(?i)^Constitución-"), "")
+                .trim()
+            "$shortRamal: $summary"
+        } else {
+            summary
+        }
     }
 
     private fun mapStatus(status: com.moovar.android.core.database.entity.LineStatus): LineStatus = when (status) {
