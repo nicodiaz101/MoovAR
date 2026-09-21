@@ -7,6 +7,8 @@ import com.moovar.android.core.database.entity.StationEntity
 
 @Dao
 interface StationDao {
+    @Query("SELECT * FROM stations")
+    suspend fun getAll(): List<StationEntity>
     @Query("""
         SELECT * FROM stations 
         WHERE (:branchId IS NULL OR branchId = :branchId)

@@ -46,6 +46,7 @@ fun DeparturesScreen(
     onNavigateToSelector: (isOrigin: Boolean) -> Unit,
     onNavigateToAlerts: (lineId: String) -> Unit = {},
     onNavigateToJourney: (serviceId: String) -> Unit = {},
+    onNavigateToMap: (lat: Double, lon: Double, title: String?) -> Unit = { _, _, _ -> },
     viewModel: DeparturesViewModel = hiltViewModel(),
     selectedOriginId: String? = null,
     selectedOriginName: String? = null,
@@ -59,7 +60,11 @@ fun DeparturesScreen(
             when (event) {
                 is DeparturesUiEvent.NavigateToAlerts -> onNavigateToAlerts(event.lineId)
                 is DeparturesUiEvent.NavigateToJourney -> onNavigateToJourney(event.serviceId)
-                is DeparturesUiEvent.NavigateToMap -> {}
+                is DeparturesUiEvent.NavigateToMap -> onNavigateToMap(
+                    event.coordinates.latitude,
+                    event.coordinates.longitude,
+                    event.title
+                )
             }
         }
     }

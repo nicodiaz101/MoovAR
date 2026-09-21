@@ -220,12 +220,45 @@ class DepartureRepositoryImpl @Inject constructor(
     }
 
     private val stationIdCache = ConcurrentHashMap<String, String>(PRESEEDED_SOFSE_IDS)
+    private val stationCoordsCache = ConcurrentHashMap<String, Coordinates>()
+
+    private suspend fun ensureStationCoordsCache() {
+        if (stationCoordsCache.isEmpty()) {
+            try {
+                val allStations = stationDao.getAll()
+                for (stn in allStations) {
+                    val lat = stn.latitude
+                    val lon = stn.longitude
+                    if (lat != null && lon != null) {
+                        val coords = Coordinates(lat, lon)
+                        stationCoordsCache[normalizeStationKey(stn.name)] = coords
+                        stationCoordsCache[stn.id] = coords
+                    }
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Error caching station coordinates: ${e.message}")
+            }
+        }
+    }
+
+    private fun findStationCoordinatesSync(stationName: String): Coordinates? {
+        val clean = normalizeStationKey(stationName)
+        return stationCoordsCache[clean] ?: stationCoordsCache.entries.firstOrNull {
+            clean.contains(it.key) || it.key.contains(clean)
+        }?.value
+    }
+
+    private fun normalizeStationKey(name: String): String =
+        name.lowercase().trim()
+            .replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
+            .replace("ñ", "n")
 
     override suspend fun getDepartures(
         originId: String,
         destinationId: String?,
         departureTime: LocalDateTime
     ): Result<List<Departure>> = withContext(Dispatchers.IO) {
+        ensureStationCoordsCache()
         val originStation = stationDao.getById(originId)
             ?: return@withContext Result.Error("Estación no encontrada")
 
@@ -385,6 +418,8 @@ class DepartureRepositoryImpl @Inject constructor(
 
         // Map and cache real official SOFSE station stops sequence
         val estaciones = servicio.estaciones
+        var trainCoords: Coordinates? = null
+
         if (estaciones.isNotEmpty()) {
             val currentIdx = when {
                 isCancelled -> {
@@ -405,12 +440,23 @@ class DepartureRepositoryImpl @Inject constructor(
                     idx == currentIdx -> StopState.CURRENT
                     else -> StopState.FUTURE
                 }
+                val stopCoords = est.nombre?.let { findStationCoordinatesSync(it) }
                 JourneyStop(
                     stationName = est.nombre ?: "Estación",
                     scheduledTime = stopTime,
                     stopState = state,
-                    isTerminus = (idx == 0 || idx == estaciones.lastIndex)
+                    isTerminus = (idx == 0 || idx == estaciones.lastIndex),
+                    coordinates = stopCoords
                 )
+            }
+
+            val originLat = originStation.latitude
+            val originLon = originStation.longitude
+            val originCoords = if (originLat != null && originLon != null) Coordinates(originLat, originLon) else null
+
+            if (!originStation.isTerminus && !isCancelled) {
+                val currentStnName = estaciones[currentIdx].nombre ?: originStation.name
+                trainCoords = findStationCoordinatesSync(currentStnName) ?: originCoords
             }
 
             val journeyDetails = JourneyDetails(
@@ -420,13 +466,20 @@ class DepartureRepositoryImpl @Inject constructor(
                 platform = platform,
                 departureTime = scheduledTime,
                 currentStatus = status,
-                stops = stops
+                stops = stops,
+                trainCoordinates = trainCoords
             )
 
             journeyDetailsCache.put(safeServiceId, journeyDetails)
             val srvId = servicio.id
             if (!srvId.isNullOrBlank()) {
                 journeyDetailsCache.put(srvId, journeyDetails)
+            }
+        } else if (!originStation.isTerminus && !isCancelled) {
+            val originLat = originStation.latitude
+            val originLon = originStation.longitude
+            if (originLat != null && originLon != null) {
+                trainCoords = Coordinates(originLat, originLon)
             }
         }
 
@@ -439,7 +492,7 @@ class DepartureRepositoryImpl @Inject constructor(
             platform = if (isCancelled) "-" else platform,
             serviceType = serviceType,
             status = status,
-            vehicleCoordinates = null,
+            vehicleCoordinates = trainCoords,
             networkType = NetworkType.TREN,
             isTerminus = originStation.isTerminus,
             direction = directionLabel,

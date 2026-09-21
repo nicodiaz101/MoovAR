@@ -135,6 +135,10 @@ fun MoovArAppContent() {
                             val safeId = java.net.URLEncoder.encode(serviceId, "UTF-8")
                             navController.navigate("journey/$safeId")
                         },
+                        onNavigateToMap = { lat, lon, title ->
+                            val safeTitle = java.net.URLEncoder.encode(title ?: "Ubicación del tren", "UTF-8")
+                            navController.navigate("map/$lat/$lon?title=$safeTitle")
+                        },
                         selectedOriginId = selectedOriginId,
                         selectedOriginName = selectedOriginName,
                         selectedDestId = selectedDestId,
@@ -186,11 +190,26 @@ fun MoovArAppContent() {
                     arguments = listOf(navArgument("serviceId") { type = NavType.StringType })
                 ) {
                     JourneyScreen(
-                        onNavigateBack = { navController.popBackStack() }
+                        onNavigateBack = { navController.popBackStack() },
+                        onNavigateToMap = { lat, lon, title ->
+                            val safeTitle = java.net.URLEncoder.encode(title ?: "Ubicación del tren", "UTF-8")
+                            navController.navigate("map/$lat/$lon?title=$safeTitle")
+                        }
                     )
                 }
 
-                composable("map") {
+                composable(
+                    route = "map/{lat}/{lon}?title={title}",
+                    arguments = listOf(
+                        navArgument("lat") { type = NavType.StringType },
+                        navArgument("lon") { type = NavType.StringType },
+                        navArgument("title") {
+                            type = NavType.StringType
+                            defaultValue = "Ubicación del tren"
+                            nullable = true
+                        }
+                    )
+                ) {
                     MapScreen(onNavigateBack = { navController.popBackStack() })
                 }
             }

@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+import com.moovar.android.core.domain.model.Coordinates
+
 data class JourneyHeader(
     val branchName: String,
     val serviceType: String,
@@ -30,6 +32,7 @@ data class JourneyUiState(
     val lineInfo: String = "",
     val serviceHeader: JourneyHeader? = null,
     val stops: List<JourneyStop> = emptyList(),
+    val trainCoordinates: Coordinates? = null,
     val isLoading: Boolean = true,
     val error: String? = null
 )
@@ -72,6 +75,7 @@ class JourneyViewModel @Inject constructor(
                                     destination = details.destination
                                 ),
                                 stops = details.stops,
+                                trainCoordinates = details.trainCoordinates,
                                 isLoading = false,
                                 error = null
                             )

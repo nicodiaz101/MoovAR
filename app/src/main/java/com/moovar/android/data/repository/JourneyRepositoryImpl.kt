@@ -4,6 +4,7 @@ import com.moovar.android.core.common.Result
 import com.moovar.android.core.database.dao.BranchDao
 import com.moovar.android.core.database.dao.LineDao
 import com.moovar.android.core.database.dao.StationDao
+import com.moovar.android.core.domain.model.Coordinates
 import com.moovar.android.core.domain.model.JourneyDetails
 import com.moovar.android.core.domain.model.JourneyStop
 import com.moovar.android.core.domain.model.StopState
@@ -108,14 +109,22 @@ class JourneyRepositoryImpl @Inject constructor(
                         val diffFromOrigin = index - safeOriginIdx
                         val minutesDelta = diffFromOrigin * 4
                         val stopTime = baseOriginTime.plusMinutes(minutesDelta.toLong()).format(timeFormatter)
+                        val lat = stn.latitude
+                        val lon = stn.longitude
+                        val stopCoords = if (lat != null && lon != null) {
+                            Coordinates(lat, lon)
+                        } else null
 
                         JourneyStop(
                             stationName = stn.name,
                             scheduledTime = if (stopState == StopState.PAST) null else stopTime,
                             stopState = stopState,
-                            isTerminus = (index == 0 || index == stations.lastIndex)
+                            isTerminus = (index == 0 || index == stations.lastIndex),
+                            coordinates = stopCoords
                         )
                     }
+
+                    val trainCoords = stops.firstOrNull { it.stopState == StopState.CURRENT }?.coordinates
 
                     val branchDisplayName = branch?.name ?: line?.name ?: "Servicio"
                     val details = JourneyDetails(
@@ -125,7 +134,8 @@ class JourneyRepositoryImpl @Inject constructor(
                         platform = platform,
                         departureTime = departureTimeStr,
                         currentStatus = currentStatus,
-                        stops = stops
+                        stops = stops,
+                        trainCoordinates = trainCoords
                     )
                     journeyDetailsCache.put(decodedServiceId, details)
                     return@withContext Result.Success(details)

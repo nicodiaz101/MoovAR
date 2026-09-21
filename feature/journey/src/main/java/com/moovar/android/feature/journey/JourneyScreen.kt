@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,9 +34,11 @@ import com.moovar.android.feature.journey.components.StopTimelineList
 @Composable
 fun JourneyScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToMap: (lat: Double, lon: Double, title: String?) -> Unit = { _, _, _ -> },
     viewModel: JourneyViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val trainTitle = uiState.serviceHeader?.let { "Tren a ${it.destination} (${it.branchName})" } ?: "Tren en tiempo real"
 
     Scaffold(
         topBar = {
@@ -44,6 +47,18 @@ fun JourneyScreen(
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atrás")
+                    }
+                },
+                actions = {
+                    if (uiState.trainCoordinates != null) {
+                        IconButton(
+                            onClick = {
+                                val coords = uiState.trainCoordinates!!
+                                onNavigateToMap(coords.latitude, coords.longitude, trainTitle)
+                            }
+                        ) {
+                            Icon(Icons.Outlined.Map, contentDescription = "Ver en mapa")
+                        }
                     }
                 }
             )
@@ -84,6 +99,9 @@ fun JourneyScreen(
                         }
                         StopTimelineList(
                             stops = uiState.stops,
+                            onMapClick = { coords ->
+                                onNavigateToMap(coords.latitude, coords.longitude, trainTitle)
+                            },
                             modifier = Modifier.weight(1f)
                         )
                     }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DirectionsTransit
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -37,6 +38,7 @@ fun StopTimelineItem(
     stop: JourneyStop,
     isFirst: Boolean,
     isLast: Boolean,
+    onMapClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val isCurrent = stop.stopState == StopState.CURRENT
@@ -79,26 +81,37 @@ fun StopTimelineItem(
             if (isCurrent) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Surface(
-                    shape = RoundedCornerShape(6.dp),
+                    onClick = { onMapClick?.invoke() },
+                    enabled = onMapClick != null,
+                    shape = RoundedCornerShape(8.dp),
                     color = MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             imageVector = Icons.Default.DirectionsTransit,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.size(12.dp)
+                            modifier = Modifier.size(14.dp)
                         )
-                        Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = "TREN EN TIEMPO REAL AQUÍ",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
+                        if (onMapClick != null) {
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Icon(
+                                imageVector = Icons.Outlined.Map,
+                                contentDescription = "Ver mapa",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(14.dp)
+                            )
+                        }
                     }
                 }
             }

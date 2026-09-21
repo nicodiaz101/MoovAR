@@ -7,10 +7,15 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.moovar.android.core.domain.model.Coordinates
 import com.moovar.android.core.domain.model.JourneyStop
 
 @Composable
-fun StopTimelineList(stops: List<JourneyStop>, modifier: Modifier = Modifier) {
+fun StopTimelineList(
+    stops: List<JourneyStop>,
+    onMapClick: ((Coordinates) -> Unit)? = null,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(top = 8.dp, bottom = 24.dp)
@@ -19,7 +24,13 @@ fun StopTimelineList(stops: List<JourneyStop>, modifier: Modifier = Modifier) {
             StopTimelineItem(
                 stop = stop,
                 isFirst = index == 0,
-                isLast = index == stops.lastIndex
+                isLast = index == stops.lastIndex,
+                onMapClick = run {
+                    val coords = stop.coordinates
+                    if (coords != null && onMapClick != null) {
+                        { onMapClick(coords) }
+                    } else null
+                }
             )
         }
     }

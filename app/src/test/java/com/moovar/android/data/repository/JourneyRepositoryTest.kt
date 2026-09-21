@@ -152,6 +152,7 @@ class JourneyRepositoryTest {
             stationsByBranch[branchId] ?: emptyList()
 
         override suspend fun getByLine(lineId: String): List<StationEntity> = emptyList()
+        override suspend fun getAll(): List<StationEntity> = stationsByBranch.values.flatten()
         override suspend fun getById(id: String): StationEntity? = null
         override suspend fun getByIds(ids: List<String>): List<StationEntity> = emptyList()
         override suspend fun upsertAll(stations: List<StationEntity>) {}
@@ -159,6 +160,7 @@ class JourneyRepositoryTest {
 
     private class FakeBranchDao : BranchDao {
         val branches = mutableMapOf<String, BranchEntity>()
+        override suspend fun getAll(): List<BranchEntity> = branches.values.toList()
         override suspend fun getByLine(lineId: String): List<BranchEntity> = branches.values.filter { it.lineId == lineId }
         override suspend fun getById(id: String): BranchEntity? = branches[id]
         override suspend fun upsertAll(branches: List<BranchEntity>) {}

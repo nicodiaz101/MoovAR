@@ -204,6 +204,7 @@ private class FakeLineTestDao : LineDao {
 }
 
 private class FakeBranchTestDao : BranchDao {
+    override suspend fun getAll(): List<BranchEntity> = emptyList()
     override suspend fun getByLine(lineId: String): List<BranchEntity> = emptyList()
     override suspend fun getById(id: String): BranchEntity? = null
     override suspend fun upsertAll(branches: List<BranchEntity>) {}

@@ -47,7 +47,7 @@ data class DeparturesUiState(
 
 sealed class DeparturesUiEvent {
     data class NavigateToJourney(val serviceId: String, val line: Line) : DeparturesUiEvent()
-    data class NavigateToMap(val coordinates: Coordinates) : DeparturesUiEvent()
+    data class NavigateToMap(val coordinates: Coordinates, val title: String? = null) : DeparturesUiEvent()
     data class NavigateToAlerts(val lineId: String) : DeparturesUiEvent()
 }
 
@@ -217,7 +217,8 @@ class DeparturesViewModel @Inject constructor(
     fun onMapButtonClicked(departure: Departure) {
         viewModelScope.launch {
             departure.vehicleCoordinates?.let {
-                _events.emit(DeparturesUiEvent.NavigateToMap(it))
+                val title = "Tren a ${departure.destination} (${departure.branchName})"
+                _events.emit(DeparturesUiEvent.NavigateToMap(it, title))
             }
         }
     }

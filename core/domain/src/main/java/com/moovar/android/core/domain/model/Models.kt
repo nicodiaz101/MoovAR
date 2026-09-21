@@ -68,7 +68,8 @@ data class JourneyDetails(
     val platform: String?,
     val departureTime: String,
     val currentStatus: String,
-    val stops: List<JourneyStop>
+    val stops: List<JourneyStop>,
+    val trainCoordinates: Coordinates? = null
 )
 
 @androidx.compose.runtime.Immutable
@@ -76,7 +77,8 @@ data class JourneyStop(
     val stationName: String,
     val scheduledTime: String?,
     val stopState: StopState,
-    val isTerminus: Boolean
+    val isTerminus: Boolean,
+    val coordinates: Coordinates? = null
 )
 
 @androidx.compose.runtime.Immutable
