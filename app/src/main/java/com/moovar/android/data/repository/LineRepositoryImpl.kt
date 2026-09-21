@@ -145,26 +145,6 @@ class LineRepositoryImpl @Inject constructor(
                     } else {
                         entity
                     }
-                } else if (entity.networkType == com.moovar.android.core.database.entity.NetworkType.SUBTE) {
-                    val (subteStatus, subteMsg) = when (entity.id) {
-                        "linea_b", "linea_c", "linea_d" -> Pair(
-                            com.moovar.android.core.database.entity.LineStatus.AVISO,
-                            "Estación cerrada por obras"
-                        )
-                        "linea_e" -> Pair(
-                            com.moovar.android.core.database.entity.LineStatus.AVISO,
-                            "Estaciones cerradas por obras"
-                        )
-                        else -> Pair(
-                            com.moovar.android.core.database.entity.LineStatus.NORMAL,
-                            "Servicio normal"
-                        )
-                    }
-                    entity.copy(
-                        status = subteStatus,
-                        statusMessage = subteMsg,
-                        lastUpdatedAt = System.currentTimeMillis()
-                    )
                 } else {
                     entity
                 }

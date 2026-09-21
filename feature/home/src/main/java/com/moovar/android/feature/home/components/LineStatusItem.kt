@@ -72,45 +72,22 @@ fun LineStatusItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(14.dp)
         ) {
-            if (line.networkType == NetworkType.SUBTE) {
-                // Subte badge: Circle with line letter
-                val subteLetter = line.name
-                    .replace("Línea", "", ignoreCase = true)
-                    .trim()
-                    .take(1)
-                    .uppercase()
-
-                Box(
-                    modifier = Modifier
-                        .size(44.dp)
-                        .background(color = parsedColor, shape = CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = subteLetter,
-                        color = Color.White,
-                        fontWeight = FontWeight.Black,
-                        fontSize = 20.sp
-                    )
-                }
-            } else {
-                // Tren badge: Rounded container with train icon
-                Box(
-                    modifier = Modifier
-                        .size(44.dp)
-                        .background(
-                            color = parsedColor.copy(alpha = 0.15f),
-                            shape = RoundedCornerShape(12.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.DirectionsTransit,
-                        contentDescription = "Tren",
-                        tint = parsedColor,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
+            // Tren badge: Rounded container with train icon
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .background(
+                        color = parsedColor.copy(alpha = 0.15f),
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.DirectionsTransit,
+                    contentDescription = "Tren",
+                    tint = parsedColor,
+                    modifier = Modifier.size(24.dp)
+                )
             }
 
             Spacer(modifier = Modifier.width(14.dp))

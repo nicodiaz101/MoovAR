@@ -8,8 +8,6 @@ import com.moovar.android.core.domain.model.JourneyStop
 import com.moovar.android.core.domain.model.Line
 import com.moovar.android.core.domain.model.ServiceAlert
 import com.moovar.android.core.domain.model.Station
-import com.moovar.android.core.domain.model.SubteArrival
-import com.moovar.android.core.domain.model.VehicleLocation
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 
@@ -50,8 +48,4 @@ interface FavoriteRouteRepository {
     fun observeFavorites(): Flow<List<FavoriteRoute>>
     fun isFavorite(originId: String, destinationId: String): Flow<Boolean>
     suspend fun toggleFavorite(origin: Station, destination: Station)
-}
-
-interface SubteRealtimeRepository {
-    fun observeSubteData(): Flow<Result<Pair<Map<String, List<SubteArrival>>, List<VehicleLocation>>>>
 }

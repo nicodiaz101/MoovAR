@@ -42,8 +42,7 @@ fun DepartureTicketCard(
     val showMapButton = remember(departure) {
         !departure.isTerminus &&
         !departure.isCancelled &&
-        departure.vehicleCoordinates != null &&
-        departure.networkType != NetworkType.SUBTE
+        departure.vehicleCoordinates != null
     }
 
     val leftBgColor = when {

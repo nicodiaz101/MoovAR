@@ -49,10 +49,7 @@ class LineRepositoryTest {
             LineEntity("mitre", "Línea Mitre", "Mitre", NetworkType.TREN, "ic_line_mitre", "#008A27", LineStatus.NORMAL, "Servicio normal", 0L, 3),
             LineEntity("san_martin", "Línea San Martín", "San Martín", NetworkType.TREN, "ic_line_san_martin", "#E3001B", LineStatus.NORMAL, "Servicio normal", 0L, 4),
             LineEntity("belgrano_sur", "Línea Belgrano Sur", "Belgrano Sur", NetworkType.TREN, "ic_line_belgrano_sur", "#00A9E0", LineStatus.NORMAL, "Servicio normal", 0L, 5),
-            LineEntity("tren_costa", "Tren de la Costa", "Tren de la Costa", NetworkType.TREN, "ic_line_tren_costa", "#008A27", LineStatus.NORMAL, "Servicio normal", 0L, 8),
-            LineEntity("linea_a", "Línea A", "A", NetworkType.SUBTE, "ic_subte_a", "#18B4E9", LineStatus.NORMAL, "Servicio normal", 0L, 9),
-            LineEntity("linea_b", "Línea B", "B", NetworkType.SUBTE, "ic_subte_b", "#E30613", LineStatus.NORMAL, "Servicio normal", 0L, 10),
-            LineEntity("linea_e", "Línea E", "E", NetworkType.SUBTE, "ic_subte_e", "#702A8C", LineStatus.NORMAL, "Servicio normal", 0L, 13)
+            LineEntity("tren_costa", "Tren de la Costa", "Tren de la Costa", NetworkType.TREN, "ic_line_tren_costa", "#008A27", LineStatus.NORMAL, "Servicio normal", 0L, 8)
         )
 
         repository = LineRepositoryImpl(
@@ -188,24 +185,6 @@ class LineRepositoryTest {
         val belgranoSur = fakeLineDao.lines.first { it.id == "belgrano_sur" }
         assertEquals(LineStatus.DEMORADO, belgranoSur.status)
         assertEquals("Ramal con recorrido limitado", belgranoSur.statusMessage)
-    }
-
-    @Test
-    fun refreshLines_subteLines_classifiedAccurately() = runTest {
-        repository.refreshLines()
-
-        val lineaA = fakeLineDao.lines.first { it.id == "linea_a" }
-        val lineaB = fakeLineDao.lines.first { it.id == "linea_b" }
-        val lineaE = fakeLineDao.lines.first { it.id == "linea_e" }
-
-        assertEquals(LineStatus.NORMAL, lineaA.status)
-        assertEquals("Servicio normal", lineaA.statusMessage)
-
-        assertEquals(LineStatus.AVISO, lineaB.status)
-        assertEquals("Estación cerrada por obras", lineaB.statusMessage)
-
-        assertEquals(LineStatus.AVISO, lineaE.status)
-        assertEquals("Estaciones cerradas por obras", lineaE.statusMessage)
     }
 }
 

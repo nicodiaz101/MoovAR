@@ -217,17 +217,6 @@ class DepartureRepositoryImpl @Inject constructor(
             "canal san fernando" to "58",
             "c. san fernando" to "58"
         )
-
-        // Closed Subte stations under Plan de Renovación Integral
-        private val CLOSED_SUBTE_STATIONS = setOf(
-            "medrano",
-            "lavalle",
-            "tribunales",
-            "tribunales - teatro colón",
-            "entre ríos",
-            "entre ríos - rodolfo walsh",
-            "general urquiza"
-        )
     }
 
     private val stationIdCache = ConcurrentHashMap<String, String>(PRESEEDED_SOFSE_IDS)
@@ -245,22 +234,14 @@ class DepartureRepositoryImpl @Inject constructor(
         val destStation = if (!destinationId.isNullOrEmpty()) stationDao.getById(destinationId) else null
         val branchDisplayName = branch?.name ?: line?.name ?: "Principal"
 
-        val isSubte = originStation.networkType == com.moovar.android.core.database.entity.NetworkType.SUBTE
         val isConcession = originStation.lineId in listOf("belgrano_norte", "urquiza")
 
-        // 1. SUBTE LOGIC
-        if (isSubte) {
-            return@withContext Result.Success(
-                computeSubteDepartures(originStation, destStation, branch, line, departureTime)
-            )
-        }
-
-        // 2. PRIVATIZED CONCESSIONS (Belgrano Norte / Urquiza - No official SOFSE GPS)
+        // 1. PRIVATIZED CONCESSIONS (Belgrano Norte / Urquiza - No official SOFSE GPS)
         if (isConcession) {
             return@withContext Result.Error("Línea concesionada sin datos en tiempo real de SOFSE")
         }
 
-        // 3. OFFICIAL SOFSE TRAINS (Mitre, Roca, Sarmiento, San Martín, Belgrano Sur, Tren de la Costa)
+        // 2. OFFICIAL SOFSE TRAINS (Mitre, Roca, Sarmiento, San Martín, Belgrano Sur, Tren de la Costa)
         try {
             val sofseStationId = resolveSofseStationId(originStation)
                 ?: return@withContext Result.Error("Estación no encontrada en los servidores de SOFSE")
@@ -464,145 +445,6 @@ class DepartureRepositoryImpl @Inject constructor(
             direction = directionLabel,
             isCancelled = isCancelled
         )
-    }
-
-    private suspend fun computeSubteDepartures(
-        originStation: com.moovar.android.core.database.entity.StationEntity,
-        destStation: com.moovar.android.core.database.entity.StationEntity?,
-        branch: com.moovar.android.core.database.entity.BranchEntity?,
-        line: com.moovar.android.core.database.entity.LineEntity?,
-        departureTime: LocalDateTime
-    ): List<Departure> {
-        val cleanName = originStation.name.lowercase().trim()
-        val isClosed = CLOSED_SUBTE_STATIONS.any { cleanName.contains(it) }
-
-        val branchDisplayName = branch?.name ?: line?.name ?: "Subte"
-        val directions = mutableListOf<String>()
-
-        val normOrigin = normalizeTerminus(originStation.name)
-        val normBranchOrigin = branch?.originTerminus?.let { normalizeTerminus(it) } ?: ""
-        val normBranchDest = branch?.destinationTerminus?.let { normalizeTerminus(it) } ?: ""
-
-        if (destStation != null) {
-            directions.add(destStation.name)
-        } else if (branch != null) {
-            if (normOrigin == normBranchOrigin) {
-                directions.add(branch.destinationTerminus)
-            } else if (normOrigin == normBranchDest) {
-                directions.add(branch.originTerminus)
-            } else {
-                directions.add(branch.destinationTerminus)
-                directions.add(branch.originTerminus)
-            }
-        } else {
-            directions.add("Cabecera")
-        }
-
-        val branchId = branch?.id
-        val allStations = if (branchId != null) stationDao.getByBranch(branchId) else emptyList()
-        val result = mutableListOf<Departure>()
-        val m = departureTime.minute
-
-        for ((dirIdx, targetDest) in directions.withIndex()) {
-            val directionLabel = "Sentido $targetDest"
-            val initMin = ((m * 3 + dirIdx * 2 + 1) % 4) + 2
-            val offsets = listOf(initMin, initMin + 4, initMin + 8, initMin + 13)
-
-            val isHeadingOrigin = isHeadingTowardsOrigin(targetDest, branch?.originTerminus, branch?.destinationTerminus)
-            val orderedStations = if (isHeadingOrigin) allStations.reversed() else allStations
-            val originIdx = orderedStations.indexOfFirst { it.name.equals(originStation.name, ignoreCase = true) }
-            val safeOriginIdx = if (originIdx >= 0) originIdx else 0
-
-            for ((idx, offset) in offsets.withIndex()) {
-                val arrivalTime = departureTime.plusMinutes(offset.toLong())
-                val timeStr = arrivalTime.format(TIME_FORMATTER)
-                val platform = "Andén ${if (dirIdx % 2 == 0) 1 else 2}"
-
-                val status = if (isClosed) {
-                    "ESTACIÓN CERRADA POR OBRAS"
-                } else if (offset <= 2) {
-                    "Próximo a arribar"
-                } else {
-                    "Frecuencia regular cada 3-4 min"
-                }
-
-                val safeServiceId = "srv___${branch?.id ?: ""}___${targetDest.replace('/', '-')}___${originStation.id}___${offset}___${timeStr}___${platform}___Regular___${status.replace('/', '-')}___$isClosed"
-
-                if (orderedStations.isNotEmpty()) {
-                    val currentTrainIndex = when {
-                        isClosed -> safeOriginIdx
-                        safeOriginIdx == 0 -> 0
-                        offset <= 2 -> safeOriginIdx
-                        else -> maxOf(0, safeOriginIdx - 1)
-                    }.coerceIn(0, orderedStations.lastIndex)
-
-                    val stops = orderedStations.mapIndexed { stopIdx, stn ->
-                        val stopState = when {
-                            stopIdx < currentTrainIndex -> StopState.PAST
-                            stopIdx == currentTrainIndex -> StopState.CURRENT
-                            else -> StopState.FUTURE
-                        }
-                        val diffFromOrigin = stopIdx - safeOriginIdx
-                        val stopTime = arrivalTime.plusMinutes((diffFromOrigin * 3).toLong()).format(TIME_FORMATTER)
-
-                        JourneyStop(
-                            stationName = stn.name,
-                            scheduledTime = if (stopState == StopState.PAST) null else stopTime,
-                            stopState = stopState,
-                            isTerminus = (stopIdx == 0 || stopIdx == orderedStations.lastIndex)
-                        )
-                    }
-
-                    journeyDetailsCache.put(
-                        safeServiceId,
-                        JourneyDetails(
-                            branchName = branchDisplayName,
-                            serviceType = if (isClosed) "Cerrada" else "Regular",
-                            destination = targetDest,
-                            platform = platform,
-                            departureTime = timeStr,
-                            currentStatus = status,
-                            stops = stops
-                        )
-                    )
-                }
-
-                result.add(
-                    Departure(
-                        serviceId = safeServiceId,
-                        branchName = branchDisplayName,
-                        destination = targetDest,
-                        minutesAway = if (isClosed) 0 else offset,
-                        scheduledTime = timeStr,
-                        platform = if (isClosed) "-" else platform,
-                        serviceType = if (isClosed) "Cerrada" else "Regular",
-                        status = status,
-                        vehicleCoordinates = null,
-                        networkType = NetworkType.SUBTE,
-                        isTerminus = originStation.isTerminus,
-                        direction = directionLabel,
-                        isCancelled = isClosed
-                    )
-                )
-            }
-        }
-        return result
-    }
-
-    private fun isHeadingTowardsOrigin(
-        targetDest: String,
-        originTerminus: String?,
-        destinationTerminus: String?
-    ): Boolean {
-        if (originTerminus.isNullOrBlank()) return false
-        val normDest = normalizeTerminus(targetDest)
-        val normOrigin = normalizeTerminus(originTerminus)
-        val normDestTerminus = destinationTerminus?.let { normalizeTerminus(it) } ?: ""
-
-        if (normDestTerminus.isNotEmpty() && (normDest.contains(normDestTerminus) || normDestTerminus.contains(normDest))) {
-            return false
-        }
-        return normDest.contains(normOrigin) || normOrigin.contains(normDest)
     }
 
     private fun normalizeTerminus(name: String): String {

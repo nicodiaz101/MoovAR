@@ -92,7 +92,6 @@ class JourneyRepositoryImpl @Inject constructor(
                         else -> maxOf(0, safeOriginIdx - 3)
                     }.coerceIn(0, stations.lastIndex)
 
-                    val isSubte = line?.networkType == com.moovar.android.core.database.entity.NetworkType.SUBTE
                     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
                     val baseOriginTime = try {
                         LocalTime.parse(departureTimeStr, timeFormatter)
@@ -107,7 +106,7 @@ class JourneyRepositoryImpl @Inject constructor(
                             else -> StopState.FUTURE
                         }
                         val diffFromOrigin = index - safeOriginIdx
-                        val minutesDelta = if (isSubte) diffFromOrigin * 3 else diffFromOrigin * 4
+                        val minutesDelta = diffFromOrigin * 4
                         val stopTime = baseOriginTime.plusMinutes(minutesDelta.toLong()).format(timeFormatter)
 
                         JourneyStop(

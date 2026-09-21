@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
-    id("com.google.protobuf") version "0.9.4"
 }
 android {
     namespace = "com.moovar.android.core.network"
@@ -27,24 +26,6 @@ kotlin {
     }
 }
 
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:4.29.3"
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                create("java") {
-                    option("lite")
-                }
-                create("kotlin") {
-                    option("lite")
-                }
-            }
-        }
-    }
-}
-
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:domain"))
@@ -59,8 +40,6 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.kotlinx.serialization.json)
-    
-    implementation(libs.protobuf.kotlin)
 
     testImplementation(libs.junit)
     testImplementation(libs.coroutines.test)
