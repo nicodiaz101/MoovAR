@@ -49,6 +49,8 @@ class LineRepositoryImpl @Inject constructor(
         private val HIDDEN_LINE_IDS = setOf("belgrano_norte", "urquiza")
     }
 
+    var clock: java.time.Clock = java.time.Clock.system(ARGENTINA_ZONE)
+
     private enum class AlertCategory {
         INTERRUPTED,
         LIMITED_ROUTE,
@@ -318,7 +320,7 @@ class LineRepositoryImpl @Inject constructor(
         }
 
         val today = try {
-            LocalDate.now(ARGENTINA_ZONE)
+            LocalDate.now(clock)
         } catch (e: Exception) {
             LocalDate.now()
         }
@@ -350,7 +352,7 @@ class LineRepositoryImpl @Inject constructor(
         val minute = match.groupValues[2].toIntOrNull() ?: return false
 
         return try {
-            val now = LocalTime.now(ARGENTINA_ZONE)
+            val now = LocalTime.now(clock)
             val serviceTime = LocalTime.of(hour, minute)
             now.isAfter(serviceTime.plusMinutes(40))
         } catch (e: Exception) {

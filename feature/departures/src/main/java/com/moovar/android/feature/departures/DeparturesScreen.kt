@@ -158,6 +158,22 @@ fun DeparturesScreen(
                         )
                     }
                 }
+                uiState.error != null -> {
+                    androidx.compose.foundation.layout.Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = uiState.error ?: "Error al cargar las próximas partidas.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.error,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                    }
+                }
                 uiState.departures.isEmpty() -> {
                     androidx.compose.foundation.layout.Box(
                         modifier = Modifier

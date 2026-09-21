@@ -26,6 +26,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
 
 class LineRepositoryTest {
 
@@ -57,7 +60,9 @@ class LineRepositoryTest {
             branchDao = fakeBranchDao,
             sofseApiService = fakeSofseApiService,
             databaseSeeder = FakeDatabaseSeeder()
-        )
+        ).apply {
+            clock = Clock.fixed(Instant.parse("2026-09-21T14:40:00Z"), ZoneId.of("America/Argentina/Buenos_Aires"))
+        }
     }
 
     @Test
@@ -148,6 +153,7 @@ class LineRepositoryTest {
 
     @Test
     fun refreshLines_singleBranchDelayed_classifiedAsDemorado() = runTest {
+        repository.clock = Clock.fixed(Instant.parse("2026-09-21T14:40:00Z"), ZoneId.of("America/Argentina/Buenos_Aires"))
         fakeSofseApiService.gerencias = listOf(
             GerenciaDto(1, 1, "Sarmiento", GerenciaEstadoDto(13, "Alertas por ramal", "#435a6c"), emptyList())
         )
