@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
         childColumns = ["branchId"],
         onDelete = ForeignKey.CASCADE
     )],
-    indices = [Index("branchId"), Index("name")]
+    indices = [Index("branchId"), Index("name"), Index("lineId")]
 )
 data class StationEntity(
     @PrimaryKey val id: String,

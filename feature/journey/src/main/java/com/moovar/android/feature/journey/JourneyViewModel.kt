@@ -1,6 +1,7 @@
 package com.moovar.android.feature.journey
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moovar.android.core.common.Result
@@ -24,6 +25,7 @@ data class JourneyHeader(
     val destination: String = ""
 )
 
+@androidx.compose.runtime.Immutable
 data class JourneyUiState(
     val lineInfo: String = "",
     val serviceHeader: JourneyHeader? = null,

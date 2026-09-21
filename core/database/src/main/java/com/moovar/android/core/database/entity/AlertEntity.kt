@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
         childColumns = ["lineId"],
         onDelete = ForeignKey.CASCADE
     )],
-    indices = [Index("lineId")]
+    indices = [Index("lineId"), Index("cachedAt")]
 )
 data class AlertEntity(
     @PrimaryKey val id: String,

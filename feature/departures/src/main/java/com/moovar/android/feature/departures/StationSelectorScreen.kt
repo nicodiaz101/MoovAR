@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +49,7 @@ fun StationSelectorScreen(
     onStationSelected: (Station) -> Unit,
     viewModel: StationSelectorViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -91,7 +92,7 @@ fun StationSelectorScreen(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(uiState.branches) { branch ->
+                    items(uiState.branches, key = { it.id }) { branch ->
                         val selected = uiState.selectedBranchId == branch.id
                         FilterChip(
                             selected = selected,
@@ -149,7 +150,7 @@ fun StationSelectorScreen(
                         }
                     }
 
-                    items(stations) { station ->
+                    items(stations, key = { it.id }) { station ->
                         Surface(
                             onClick = { onStationSelected(station) },
                             modifier = Modifier

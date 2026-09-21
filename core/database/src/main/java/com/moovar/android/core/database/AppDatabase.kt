@@ -27,7 +27,7 @@ import com.moovar.android.core.database.entity.StationEntity
         RecentStationEntity::class,
         FavoriteRouteEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(RoomTypeConverters::class)
@@ -42,7 +42,10 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
-                // Stub for future migration
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_stations_lineId` ON `stations` (`lineId`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_recent_stations_accessedAt` ON `recent_stations` (`accessedAt`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_favorite_routes_createdAt` ON `favorite_routes` (`createdAt`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_alerts_cachedAt` ON `alerts` (`cachedAt`)")
             }
         }
     }

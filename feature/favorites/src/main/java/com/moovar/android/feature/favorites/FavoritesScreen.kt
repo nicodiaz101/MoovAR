@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +44,7 @@ fun FavoritesScreen(
     onNavigateToDepartures: (lineId: String, originId: String, originName: String, destId: String, destName: String) -> Unit = { _, _, _, _, _ -> },
     viewModel: FavoritesViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -109,7 +110,7 @@ fun FavoritesScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp)
                     ) {
-                        items(uiState.favorites) { route ->
+                        items(uiState.favorites, key = { it.id }) { route ->
                             FavoriteRouteCard(
                                 route = route,
                                 onClick = {

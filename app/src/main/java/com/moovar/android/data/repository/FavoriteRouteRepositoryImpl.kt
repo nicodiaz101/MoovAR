@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,7 +33,7 @@ class FavoriteRouteRepositoryImpl @Inject constructor(
                     createdAt = entity.createdAt
                 )
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override fun isFavorite(originId: String, destinationId: String): Flow<Boolean> =
         favoriteRouteDao.isFavorite(originId, destinationId)

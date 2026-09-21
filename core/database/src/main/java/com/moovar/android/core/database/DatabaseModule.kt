@@ -26,8 +26,9 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "moovar_database"
-        )
+            "moovar_database")
+    .addMigrations(AppDatabase.MIGRATION_1_2)
+
         .addCallback(object : RoomDatabase.Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)

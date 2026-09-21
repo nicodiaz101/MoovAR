@@ -16,3 +16,4 @@ java {
 kotlin {
     jvmToolchain(21)
 }
+dependencies { compileOnly("androidx.compose.runtime:runtime:1.6.0") }

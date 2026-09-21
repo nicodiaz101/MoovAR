@@ -1,5 +1,6 @@
 package com.moovar.android.feature.home
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moovar.android.core.common.Result
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@androidx.compose.runtime.Immutable
 data class HomeUiState(
     val lines: List<Line> = emptyList(),
     val isLoading: Boolean = false,

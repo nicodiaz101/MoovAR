@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +47,7 @@ fun AlertsScreen(
     onBackClick: (() -> Unit)? = null,
     viewModel: AlertsViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val titleText = if (uiState.lineName != null) {
         "Alertas • ${uiState.lineName}"
@@ -130,7 +131,7 @@ fun AlertsScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp)
                     ) {
-                        items(uiState.allAlerts) { alert ->
+                        items(uiState.allAlerts, key = { it.id }) { alert ->
                             AlertCard(alert = alert)
                             Spacer(modifier = Modifier.height(12.dp))
                         }

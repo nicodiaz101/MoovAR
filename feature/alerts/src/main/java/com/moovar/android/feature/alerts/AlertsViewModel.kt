@@ -1,6 +1,7 @@
 package com.moovar.android.feature.alerts
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moovar.android.core.common.Result
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@androidx.compose.runtime.Immutable
 data class AlertsUiState(
     val lineId: String? = null,
     val lineName: String? = null,

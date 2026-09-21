@@ -1,5 +1,8 @@
 package com.moovar.android.core.database
 
+import androidx.room.withTransaction
+
+
 import android.content.Context
 import android.util.Log
 import com.moovar.android.core.database.entity.AlertEntity
@@ -37,12 +40,14 @@ open class DatabaseSeeder(
             val stations = seedData.stations.map { it.toEntity() }
             val alerts = seedData.alerts.map { it.toEntity() }
 
-            lineDao.upsertAll(lines)
-            branchDao.upsertAll(branches)
-            stationDao.upsertAll(stations)
-            alertDao.deleteAll()
-            if (alerts.isNotEmpty()) {
-                alertDao.upsertAll(alerts)
+            db.withTransaction {
+                lineDao.upsertAll(lines)
+                branchDao.upsertAll(branches)
+                stationDao.upsertAll(stations)
+                alertDao.deleteAll()
+                if (alerts.isNotEmpty()) {
+                    alertDao.upsertAll(alerts)
+                }
             }
             Log.d("DatabaseSeeder", "Seeded ${lines.size} lines, ${branches.size} branches, ${stations.size} stations, and ${alerts.size} alerts")
         } catch (e: Exception) {

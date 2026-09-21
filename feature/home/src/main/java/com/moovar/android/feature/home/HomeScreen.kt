@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,7 +31,7 @@ fun HomeScreen(
     navigateToAlerts: (String?) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     
     val greeting = remember {
         val hour = LocalTime.now().hour
@@ -70,7 +71,7 @@ fun HomeScreen(
                 .padding(padding),
             contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
         ) {
-            items(uiState.lines) { line ->
+            items(uiState.lines, key = { it.id }) { line ->
                 LineStatusItem(
                     line = line,
                     onLineClick = navigateToDepartures,

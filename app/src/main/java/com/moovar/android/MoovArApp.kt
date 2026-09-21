@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -158,10 +159,10 @@ fun MoovArAppContent() {
                     arguments = listOf(navArgument("lineId") { type = NavType.StringType })
                 ) { backStackEntry ->
                     val lineId = backStackEntry.arguments?.getString("lineId") ?: ""
-                    val selectedOriginId by backStackEntry.savedStateHandle.getStateFlow<String?>("selected_origin_id", null).collectAsState()
-                    val selectedOriginName by backStackEntry.savedStateHandle.getStateFlow<String?>("selected_origin_name", null).collectAsState()
-                    val selectedDestId by backStackEntry.savedStateHandle.getStateFlow<String?>("selected_dest_id", null).collectAsState()
-                    val selectedDestName by backStackEntry.savedStateHandle.getStateFlow<String?>("selected_dest_name", null).collectAsState()
+                    val selectedOriginId by backStackEntry.savedStateHandle.getStateFlow<String?>("selected_origin_id", null).collectAsStateWithLifecycle()
+                    val selectedOriginName by backStackEntry.savedStateHandle.getStateFlow<String?>("selected_origin_name", null).collectAsStateWithLifecycle()
+                    val selectedDestId by backStackEntry.savedStateHandle.getStateFlow<String?>("selected_dest_id", null).collectAsStateWithLifecycle()
+                    val selectedDestName by backStackEntry.savedStateHandle.getStateFlow<String?>("selected_dest_name", null).collectAsStateWithLifecycle()
 
                     DeparturesScreen(
                         onNavigateBack = { navController.popBackStack() },

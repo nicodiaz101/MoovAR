@@ -125,6 +125,8 @@ fun DepartureTicketCard(
                 }
             }
 
+            val dashEffect = remember { PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f) }
+
             Box(
                 modifier = Modifier
                     .width(1.dp)
@@ -134,7 +136,8 @@ fun DepartureTicketCard(
                             color = Color.LightGray,
                             start = Offset(0f, 0f),
                             end = Offset(0f, size.height),
-                            pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                            strokeWidth = 1.dp.toPx(),
+                            pathEffect = dashEffect
                         )
                     }
             )

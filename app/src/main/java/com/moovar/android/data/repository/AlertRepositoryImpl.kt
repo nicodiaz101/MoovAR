@@ -11,6 +11,7 @@ import com.moovar.android.core.network.sofse.api.SofseApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -65,7 +66,7 @@ class AlertRepositoryImpl @Inject constructor(
                 )
             }
             Result.Success(alerts)
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     override suspend fun refreshAlerts(): Unit = withContext(Dispatchers.IO) {
@@ -150,9 +151,9 @@ class AlertRepositoryImpl @Inject constructor(
             }
 
             if (gerencias.isNotEmpty()) {
-                alertDao.deleteAll()
+                
                 if (entities.isNotEmpty()) {
-                    alertDao.upsertAll(entities)
+                    alertDao.replaceAll(entities)
                 }
                 Log.d(TAG, "Refreshed ${entities.size} active SOFSE alerts")
             }

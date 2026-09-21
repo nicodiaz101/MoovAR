@@ -3,6 +3,7 @@ package com.moovar.android.core.database.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import androidx.room.Transaction
 import com.moovar.android.core.database.entity.AlertEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -29,4 +30,9 @@ interface AlertDao {
 
     @Upsert
     suspend fun upsertAll(alerts: List<AlertEntity>)
+    @Transaction
+    suspend fun replaceAll(alerts: List<AlertEntity>) {
+        deleteAll()
+        upsertAll(alerts)
+    }
 }

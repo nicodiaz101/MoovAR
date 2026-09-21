@@ -1,6 +1,7 @@
 package com.moovar.android.feature.map
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import com.moovar.android.core.domain.model.Coordinates
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+@androidx.compose.runtime.Immutable
 data class MapUiState(
     val coordinates: Coordinates?,
     val isLoading: Boolean = false

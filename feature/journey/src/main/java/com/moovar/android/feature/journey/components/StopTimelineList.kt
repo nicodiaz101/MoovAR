@@ -15,7 +15,7 @@ fun StopTimelineList(stops: List<JourneyStop>, modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(top = 8.dp, bottom = 24.dp)
     ) {
-        itemsIndexed(stops, key = { index, stop -> "${stop.stationName}_$index" }) { index, stop ->
+        itemsIndexed(stops, key = { index, stop -> "${stop.stationName}_${stop.scheduledTime}_$index" }) { index, stop ->
             StopTimelineItem(
                 stop = stop,
                 isFirst = index == 0,

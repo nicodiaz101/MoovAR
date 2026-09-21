@@ -1,5 +1,6 @@
 package com.moovar.android.feature.favorites
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moovar.android.core.domain.model.FavoriteRoute
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@androidx.compose.runtime.Immutable
 data class FavoritesUiState(
     val favorites: List<FavoriteRoute> = emptyList(),
     val isLoading: Boolean = true

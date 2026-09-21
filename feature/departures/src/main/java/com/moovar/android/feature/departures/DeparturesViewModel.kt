@@ -1,6 +1,7 @@
 package com.moovar.android.feature.departures
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moovar.android.core.common.Result
@@ -29,6 +30,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+@androidx.compose.runtime.Immutable
 data class DeparturesUiState(
     val line: Line? = null,
     val branches: List<Branch> = emptyList(),

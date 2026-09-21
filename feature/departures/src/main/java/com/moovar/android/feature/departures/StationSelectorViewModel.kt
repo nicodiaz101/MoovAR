@@ -1,6 +1,7 @@
 package com.moovar.android.feature.departures
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moovar.android.core.domain.model.Branch
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@androidx.compose.runtime.Immutable
 data class StationSelectorUiState(
     val searchQuery: String = "",
     val branches: List<Branch> = emptyList(),

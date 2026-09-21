@@ -1,12 +1,16 @@
 package com.moovar.android.core.domain.model
 
+import androidx.compose.runtime.Immutable
+
 enum class NetworkType { TREN, SUBTE }
 enum class LineStatus { NORMAL, AVISO, DEMORADO, CANCELADO, SIN_SERVICIO, DESCONOCIDO }
 enum class AlertSeverity { INFO, WARNING, CRITICAL }
 enum class StopState { PAST, CURRENT, FUTURE }
 
+@androidx.compose.runtime.Immutable
 data class Coordinates(val latitude: Double, val longitude: Double)
 
+@androidx.compose.runtime.Immutable
 data class Line(
     val id: String,
     val name: String,
@@ -17,6 +21,7 @@ data class Line(
     val branches: List<Branch> = emptyList()
 )
 
+@androidx.compose.runtime.Immutable
 data class Branch(
     val id: String,
     val lineId: String,
@@ -25,6 +30,7 @@ data class Branch(
     val destinationTerminus: String
 )
 
+@androidx.compose.runtime.Immutable
 data class Station(
     val id: String,
     val name: String,
@@ -37,6 +43,7 @@ data class Station(
     val coordinates: Coordinates?
 )
 
+@androidx.compose.runtime.Immutable
 data class Departure(
     val serviceId: String,
     val branchName: String,
@@ -53,6 +60,7 @@ data class Departure(
     val isCancelled: Boolean = false
 )
 
+@androidx.compose.runtime.Immutable
 data class JourneyDetails(
     val branchName: String,
     val serviceType: String,
@@ -63,6 +71,7 @@ data class JourneyDetails(
     val stops: List<JourneyStop>
 )
 
+@androidx.compose.runtime.Immutable
 data class JourneyStop(
     val stationName: String,
     val scheduledTime: String?,
@@ -70,6 +79,7 @@ data class JourneyStop(
     val isTerminus: Boolean
 )
 
+@androidx.compose.runtime.Immutable
 data class ServiceAlert(
     val id: String,
     val lineId: String,
@@ -79,6 +89,7 @@ data class ServiceAlert(
     val severity: AlertSeverity
 )
 
+@androidx.compose.runtime.Immutable
 data class FavoriteRoute(
     val id: Long = 0,
     val originStationId: String,
@@ -93,6 +104,8 @@ data class FavoriteRoute(
 enum class DepartureMode { NOW, SCHEDULED }
 
 sealed class StationSelectorData {
-    data class Recent(val stations: List<Station>) : StationSelectorData()
-    data class Results(val stations: List<Station>) : StationSelectorData()
+    @androidx.compose.runtime.Immutable
+data class Recent(val stations: List<Station>) : StationSelectorData()
+    @androidx.compose.runtime.Immutable
+data class Results(val stations: List<Station>) : StationSelectorData()
 }

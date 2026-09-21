@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "favorite_routes",
-    indices = [Index(value = ["originStationId", "destinationStationId"], unique = true)]
+    indices = [Index(value = ["originStationId", "destinationStationId"], unique = true), Index("createdAt")]
 )
 data class FavoriteRouteEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,

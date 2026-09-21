@@ -1,5 +1,9 @@
 package com.moovar.android.data.repository
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+
+
 import android.util.Log
 import com.moovar.android.core.common.Result
 import com.moovar.android.core.database.DatabaseSeeder
@@ -77,10 +81,11 @@ class LineRepositoryImpl @Inject constructor(
             if (entities.isEmpty()) {
                 databaseSeeder.seedInitialData()
             }
+            val allBranches = branchDao.getAll().groupBy { it.lineId }
             val lines = entities
                 .filterNot { it.id in HIDDEN_LINE_IDS }
                 .map { entity ->
-                    val branches = branchDao.getByLine(entity.id).map { b ->
+                    val branches = allBranches[entity.id].orEmpty().map { b ->
                         Branch(
                             id = b.id,
                             lineId = b.lineId,
@@ -118,36 +123,45 @@ class LineRepositoryImpl @Inject constructor(
             val existing = lineDao.getAll()
             if (existing.isEmpty()) return@withContext
 
-            val updated = existing.map { entity ->
-                if (entity.id in HIDDEN_LINE_IDS) {
-                    return@map entity
-                }
-
-                val gerenciaId = GERENCIA_TO_LINE.entries.firstOrNull { it.value == entity.id }?.key
-                if (gerenciaId != null) {
-                    val gerencia = gerenciaMap[gerenciaId]
-                    if (gerencia != null) {
-                        val ramales = try {
-                            sofseApiService.getRamales(idGerencia = gerencia.id)
-                        } catch (e: Exception) {
-                            Log.w(TAG, "Failed to get ramales for gerencia $gerenciaId: ${e.message}")
-                            emptyList()
+            val updated = kotlinx.coroutines.coroutineScope {
+                existing.map { entity ->
+                    async {
+                        if (entity.id in HIDDEN_LINE_IDS) {
+                            return@async entity
                         }
 
-                        val lineAlerts = gerencia.alerta.filterNot { isCudAlert(it.contenido) }
-                        val (newStatus, newMsg) = evaluateLine(ramales, lineAlerts)
+                        val gerenciaId = GERENCIA_TO_LINE.entries.firstOrNull { it.value == entity.id }?.key
+                        if (gerenciaId != null) {
+                            val gerencia = gerenciaMap[gerenciaId]
+                            if (gerencia != null) {
+                                val ramales = try {
+                                    sofseApiService.getRamales(idGerencia = gerencia.id)
+                                } catch (e: Exception) {
+                                    Log.w(TAG, "Failed to get ramales for gerencia $gerenciaId: ${e.message}")
+                                    null // Return null on error instead of emptyList
+                                }
 
-                        entity.copy(
-                            status = newStatus,
-                            statusMessage = newMsg,
-                            lastUpdatedAt = System.currentTimeMillis()
-                        )
-                    } else {
-                        entity
+                                if (ramales == null) {
+                                    // On network error, retain existing status instead of declaring it NORMAL
+                                    entity
+                                } else {
+                                    val lineAlerts = gerencia.alerta.filterNot { isCudAlert(it.contenido) }
+                                    val (newStatus, newMsg) = evaluateLine(ramales, lineAlerts)
+
+                                    entity.copy(
+                                        status = newStatus,
+                                        statusMessage = newMsg,
+                                        lastUpdatedAt = System.currentTimeMillis()
+                                    )
+                                }
+                            } else {
+                                entity
+                            }
+                        } else {
+                            entity
+                        }
                     }
-                } else {
-                    entity
-                }
+                }.awaitAll()
             }
 
             lineDao.upsertAll(updated)
