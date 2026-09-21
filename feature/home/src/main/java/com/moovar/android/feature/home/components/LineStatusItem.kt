@@ -38,12 +38,6 @@ fun LineStatusItem(
     onStatusClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val parsedColor = try {
-        Color(android.graphics.Color.parseColor(line.colorHex))
-    } catch (e: Exception) {
-        MaterialTheme.colorScheme.primary
-    }
-
     val (cardBorder, cardBg) = when (line.status) {
         com.moovar.android.core.domain.model.LineStatus.SIN_SERVICIO,
         com.moovar.android.core.domain.model.LineStatus.CANCELADO -> {
@@ -72,21 +66,21 @@ fun LineStatusItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(14.dp)
         ) {
-            // Tren badge: Rounded container with train icon
+            // Tren badge: Material Expressive dynamic wallpaper container with train icon
             Box(
                 modifier = Modifier
-                    .size(44.dp)
+                    .size(48.dp)
                     .background(
-                        color = parsedColor.copy(alpha = 0.15f),
-                        shape = RoundedCornerShape(12.dp)
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = RoundedCornerShape(16.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.DirectionsTransit,
                     contentDescription = "Tren",
-                    tint = parsedColor,
-                    modifier = Modifier.size(24.dp)
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(26.dp)
                 )
             }
 
