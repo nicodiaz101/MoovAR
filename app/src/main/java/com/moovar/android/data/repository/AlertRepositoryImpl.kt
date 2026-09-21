@@ -47,7 +47,9 @@ class AlertRepositoryImpl @Inject constructor(
             }
         }
 
-        return alertDao.observeAlerts(lineId).map { entities ->
+        val effectiveLineId = if (lineId.isNullOrBlank()) null else lineId
+
+        return alertDao.observeAlerts(effectiveLineId).map { entities ->
             val alerts = entities.map { entity ->
                 ServiceAlert(
                     id = entity.id,
@@ -85,7 +87,7 @@ class AlertRepositoryImpl @Inject constructor(
                 // Add line-level alerts (excluding purely informative CUD notifications)
                 gerencia.alerta.forEach { alertaDto ->
                     val cleanText = alertaDto.contenido.replace('\u00A0', ' ').trim()
-                    if (cleanText.contains("CUD", ignoreCase = true) || cleanText.contains("discapacidad", ignoreCase = true)) {
+                    if (isCudAlert(cleanText)) {
                         return@forEach
                     }
                     entities.add(
@@ -95,7 +97,7 @@ class AlertRepositoryImpl @Inject constructor(
                             branchId = null,
                             title = "Línea ${gerencia.nombre}",
                             description = cleanText,
-                            severity = mapSofseSeverity(alertaDto.criticidadColorFondo, alertaDto.criticidadOrden),
+                            severity = mapSofseSeverity(cleanText, alertaDto.criticidadColorFondo, alertaDto.criticidadOrden),
                             publishedAt = now,
                             expiresAt = null,
                             cachedAt = now
@@ -103,23 +105,38 @@ class AlertRepositoryImpl @Inject constructor(
                     )
                 }
 
-                // Query ramales for this gerencia to get real-time cancellation alerts (e.g. Ballester - Zárate)
+                // Query ramales for this gerencia to get real-time cancellation/disruption alerts
                 try {
                     val ramales = sofseApiService.getRamales(idGerencia = gerencia.id)
                     for (ramal in ramales) {
-                        ramal.alerta?.forEach { alertaDto ->
+                        val ramalAlerts = ramal.alerta?.filterNot { isCudAlert(it.contenido) } ?: emptyList()
+                        for (alertaDto in ramalAlerts) {
                             val cleanText = alertaDto.contenido.replace('\u00A0', ' ').trim()
-                            if (cleanText.contains("CUD", ignoreCase = true) || cleanText.contains("discapacidad", ignoreCase = true)) {
-                                return@forEach
-                            }
                             entities.add(
                                 AlertEntity(
-                                    id = "sofse_ramal_${alertaDto.id}",
+                                    id = "sofse_ramal_${ramal.id}_${alertaDto.id}",
                                     lineId = lineId,
                                     branchId = "${lineId}_${ramal.id}",
-                                    title = "Ramal ${ramal.nombre}",
+                                    title = "Línea ${gerencia.nombre} • ${ramal.nombre}",
                                     description = cleanText,
-                                    severity = mapSofseSeverity(alertaDto.criticidadColorFondo, alertaDto.criticidadOrden),
+                                    severity = mapSofseSeverity(cleanText, alertaDto.criticidadColorFondo, alertaDto.criticidadOrden),
+                                    publishedAt = now,
+                                    expiresAt = null,
+                                    cachedAt = now
+                                )
+                            )
+                        }
+
+                        // If branch is marked non-operational in SOFSE and has no specific alert text, synthesize an alert
+                        if (ramal.operativo == 0 && ramalAlerts.isEmpty()) {
+                            entities.add(
+                                AlertEntity(
+                                    id = "sofse_ramal_inop_${ramal.id}",
+                                    lineId = lineId,
+                                    branchId = "${lineId}_${ramal.id}",
+                                    title = "Línea ${gerencia.nombre} • ${ramal.nombre}",
+                                    description = "Servicio interrumpido en este ramal.",
+                                    severity = com.moovar.android.core.database.entity.AlertSeverity.CRITICAL,
                                     publishedAt = now,
                                     expiresAt = null,
                                     cachedAt = now
@@ -132,91 +149,37 @@ class AlertRepositoryImpl @Inject constructor(
                 }
             }
 
-            // 2. Real Subte Alerts (Closed stations under Plan de Renovación Integral)
-            // Uniform explanation across all closed stations
-            val subteClosedExplanation = "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación."
-
-            entities.add(
-                AlertEntity(
-                    id = "subte_alert_medrano",
-                    lineId = "linea_b",
-                    branchId = null,
-                    title = "Línea B: Estación Medrano cerrada",
-                    description = subteClosedExplanation,
-                    severity = com.moovar.android.core.database.entity.AlertSeverity.WARNING,
-                    publishedAt = now,
-                    expiresAt = null,
-                    cachedAt = now
-                )
-            )
-            entities.add(
-                AlertEntity(
-                    id = "subte_alert_lavalle",
-                    lineId = "linea_c",
-                    branchId = null,
-                    title = "Línea C: Estación Lavalle cerrada",
-                    description = subteClosedExplanation,
-                    severity = com.moovar.android.core.database.entity.AlertSeverity.WARNING,
-                    publishedAt = now,
-                    expiresAt = null,
-                    cachedAt = now
-                )
-            )
-            entities.add(
-                AlertEntity(
-                    id = "subte_alert_tribunales",
-                    lineId = "linea_d",
-                    branchId = null,
-                    title = "Línea D: Estación Tribunales cerrada",
-                    description = subteClosedExplanation,
-                    severity = com.moovar.android.core.database.entity.AlertSeverity.WARNING,
-                    publishedAt = now,
-                    expiresAt = null,
-                    cachedAt = now
-                )
-            )
-            entities.add(
-                AlertEntity(
-                    id = "subte_alert_entre_rios",
-                    lineId = "linea_e",
-                    branchId = null,
-                    title = "Línea E: Estación Entre Ríos cerrada",
-                    description = subteClosedExplanation,
-                    severity = com.moovar.android.core.database.entity.AlertSeverity.WARNING,
-                    publishedAt = now,
-                    expiresAt = null,
-                    cachedAt = now
-                )
-            )
-            entities.add(
-                AlertEntity(
-                    id = "subte_alert_urquiza",
-                    lineId = "linea_e",
-                    branchId = null,
-                    title = "Línea E: Estación General Urquiza cerrada",
-                    description = subteClosedExplanation,
-                    severity = com.moovar.android.core.database.entity.AlertSeverity.WARNING,
-                    publishedAt = now,
-                    expiresAt = null,
-                    cachedAt = now
-                )
-            )
-
-            if (entities.isNotEmpty()) {
+            if (gerencias.isNotEmpty()) {
                 alertDao.deleteAll()
-                alertDao.upsertAll(entities)
+                if (entities.isNotEmpty()) {
+                    alertDao.upsertAll(entities)
+                }
+                Log.d(TAG, "Refreshed ${entities.size} active SOFSE alerts")
             }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to refresh alerts: ${e.message}", e)
         }
     }
 
-    private fun mapSofseSeverity(colorHex: String?, orden: Int?): com.moovar.android.core.database.entity.AlertSeverity {
+    private fun isCudAlert(content: String): Boolean {
+        val clean = content.replace('\u00A0', ' ')
+        return clean.contains("CUD", ignoreCase = true) || clean.contains("discapacidad", ignoreCase = true)
+    }
+
+    private fun mapSofseSeverity(
+        content: String,
+        colorHex: String?,
+        orden: Int?
+    ): com.moovar.android.core.database.entity.AlertSeverity {
+        val lower = content.lowercase()
         return when {
-            orden == 1 -> com.moovar.android.core.database.entity.AlertSeverity.CRITICAL
-            orden in listOf(2, 3) -> com.moovar.android.core.database.entity.AlertSeverity.WARNING
-            colorHex?.lowercase() in listOf("#c9302c", "#a94442") -> com.moovar.android.core.database.entity.AlertSeverity.CRITICAL
-            colorHex?.lowercase() in listOf("#d49532", "#f0ad4e", "#d9534f", "#faebcc") -> com.moovar.android.core.database.entity.AlertSeverity.WARNING
+            orden == 1 || lower.contains("interrumpid") || lower.contains("sin servicio") ->
+                com.moovar.android.core.database.entity.AlertSeverity.CRITICAL
+            orden in listOf(2, 3) || colorHex?.lowercase() in listOf("#c9302c", "#a94442") ->
+                com.moovar.android.core.database.entity.AlertSeverity.CRITICAL
+            lower.contains("demora") || lower.contains("cancelad") || lower.contains("recorrido limitado") ||
+            colorHex?.lowercase() in listOf("#d49532", "#f0ad4e", "#d9534f", "#faebcc") ->
+                com.moovar.android.core.database.entity.AlertSeverity.WARNING
             else -> com.moovar.android.core.database.entity.AlertSeverity.INFO
         }
     }

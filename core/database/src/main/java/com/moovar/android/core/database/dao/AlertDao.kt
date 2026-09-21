@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface AlertDao {
     @Query("""
         SELECT * FROM alerts 
-        WHERE (:lineId IS NULL OR lineId = :lineId) 
+        WHERE (:lineId IS NULL OR :lineId = '' OR lineId = :lineId) 
         ORDER BY 
             CASE severity 
                 WHEN 'CRITICAL' THEN 1 

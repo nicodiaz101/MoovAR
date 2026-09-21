@@ -18,6 +18,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class AlertsUiState(
+    val lineId: String? = null,
+    val lineName: String? = null,
     val allAlerts: List<ServiceAlert> = emptyList(),
     val filteredAlerts: List<ServiceAlert> = emptyList(),
     val filterQuery: String = "",
@@ -34,7 +36,17 @@ class AlertsViewModel @Inject constructor(
 
     private val lineId: String? = savedStateHandle["lineId"]
 
-    private val _uiState = MutableStateFlow(AlertsUiState())
+    private val lineName: String? = when (lineId) {
+        "roca" -> "Línea Roca"
+        "sarmiento" -> "Línea Sarmiento"
+        "mitre" -> "Línea Mitre"
+        "san_martin" -> "Línea San Martín"
+        "belgrano_sur" -> "Línea Belgrano Sur"
+        "tren_costa" -> "Tren de la Costa"
+        else -> null
+    }
+
+    private val _uiState = MutableStateFlow(AlertsUiState(lineId = lineId, lineName = lineName))
     val uiState: StateFlow<AlertsUiState> = _uiState.asStateFlow()
 
     init {

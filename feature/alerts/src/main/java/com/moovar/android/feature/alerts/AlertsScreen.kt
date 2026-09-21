@@ -48,12 +48,18 @@ fun AlertsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    val titleText = if (uiState.lineName != null) {
+        "Alertas • ${uiState.lineName}"
+    } else {
+        "Alertas del Servicio"
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Alertas del Servicio",
+                        text = titleText,
                         fontWeight = FontWeight.Bold
                     )
                 },
@@ -107,8 +113,13 @@ fun AlertsScreen(
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(8.dp))
+                        val emptySubtext = if (uiState.lineName != null) {
+                            "No se registran alertas ni interrupciones en ${uiState.lineName}."
+                        } else {
+                            "No se registran alertas ni interrupciones en las líneas de tren."
+                        }
                         Text(
-                            text = "No se registran alertas ni interrupciones en las líneas seleccionadas.",
+                            text = emptySubtext,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -142,6 +153,7 @@ private fun AlertCard(alert: ServiceAlert) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
+        border = androidx.compose.foundation.BorderStroke(1.dp, severityColor.copy(alpha = 0.35f)),
         tonalElevation = 1.dp
     ) {
         Row(

@@ -3332,46 +3332,6 @@
   ],
   "alerts": [
     {
-      "id": "alert_subte_b_medrano",
-      "lineId": "linea_b",
-      "branchId": "linea_b_main",
-      "title": "Línea B: Estación Medrano cerrada",
-      "description": "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación.",
-      "severity": "WARNING"
-    },
-    {
-      "id": "alert_subte_c_lavalle",
-      "lineId": "linea_c",
-      "branchId": "linea_c_main",
-      "title": "Línea C: Estación Lavalle cerrada",
-      "description": "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación.",
-      "severity": "WARNING"
-    },
-    {
-      "id": "alert_subte_d_tribunales",
-      "lineId": "linea_d",
-      "branchId": "linea_d_main",
-      "title": "Línea D: Estación Tribunales cerrada",
-      "description": "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación.",
-      "severity": "WARNING"
-    },
-    {
-      "id": "alert_subte_e_entre_rios",
-      "lineId": "linea_e",
-      "branchId": "linea_e_main",
-      "title": "Línea E: Estación Entre Ríos cerrada",
-      "description": "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación.",
-      "severity": "WARNING"
-    },
-    {
-      "id": "alert_subte_e_urquiza",
-      "lineId": "linea_e",
-      "branchId": "linea_e_main",
-      "title": "Línea E: Estación General Urquiza cerrada",
-      "description": "Estación cerrada por obras del Plan de Renovación Integral. Los trenes no se detienen en esta estación.",
-      "severity": "WARNING"
-    },
-    {
       "id": "alert_roca_lobos",
       "lineId": "roca",
       "branchId": "roca_canuelas_lobos",
