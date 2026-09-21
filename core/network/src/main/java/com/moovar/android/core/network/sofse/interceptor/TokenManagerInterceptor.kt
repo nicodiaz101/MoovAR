@@ -43,8 +43,6 @@ class TokenManagerInterceptor @Inject constructor(
 
         // 2. If unauthorized or forbidden, refresh token and retry once
         return if (response.code == 401 || response.code == 403) {
-            response.close()
-
             val newToken = synchronized(this) {
                 val currentToken = tokenStorage.getToken()
                 if (!currentToken.isNullOrBlank() && currentToken != token) {
@@ -62,6 +60,7 @@ class TokenManagerInterceptor @Inject constructor(
             }
 
             if (!newToken.isNullOrBlank()) {
+                response.close()
                 chain.proceed(originalRequest.withToken(newToken))
             } else {
                 response

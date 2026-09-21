@@ -86,6 +86,7 @@ object NetworkModule {
         if (com.moovar.android.core.network.BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
+                redactHeader("Authorization")
             }
             builder.addInterceptor(loggingInterceptor)
         }
