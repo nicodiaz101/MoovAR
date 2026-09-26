@@ -39,3 +39,12 @@ Podés descargar la última APK lista para instalar desde la sección de **[Rele
 
 Este proyecto está bajo la Licencia **[MIT](LICENSE)**.
 Los íconos y símbolos vectoriales se basan en **Google Material Symbols** bajo licencia **Apache 2.0**.
+
+---
+
+## ⚠️ Aviso Legal / Disclaimer
+
+Este proyecto es un desarrollo independiente y de código abierto sin fines de lucro. **No está afiliado, respaldado ni asociado de ninguna manera con Trenes Argentinos, SOFSE ni con ningún organismo gubernamental.**
+
+Toda la información sobre horarios y estado del servicio es de carácter meramente informativo y proviene de fuentes públicas de consulta. Las marcas, nombres comerciales y logotipos mencionados pertenecen a sus respectivos titulares.
+
