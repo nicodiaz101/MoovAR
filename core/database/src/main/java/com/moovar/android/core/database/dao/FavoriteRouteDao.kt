@@ -18,6 +18,9 @@ interface FavoriteRouteDao {
     @Query("DELETE FROM favorite_routes WHERE originStationId = :oId AND destinationStationId = :dId")
     suspend fun delete(oId: String, dId: String)
 
+    @Query("DELETE FROM favorite_routes WHERE id = :id")
+    suspend fun deleteById(id: Long)
+
     @Query("SELECT EXISTS(SELECT 1 FROM favorite_routes WHERE originStationId = :oId AND destinationStationId = :dId)")
     fun isFavorite(oId: String, dId: String): Flow<Boolean>
 }

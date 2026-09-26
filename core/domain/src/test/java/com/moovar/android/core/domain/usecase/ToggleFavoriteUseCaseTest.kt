@@ -47,25 +47,41 @@ class ToggleFavoriteUseCaseTest {
     }
 
     @Test
-    fun `toggleFavorite toggles repository state`() = runBlocking {
+    @Test
+    fun `toggleFavorite toggles repository state with origin and destination`() = runBlocking {
         // Initially empty
         assertEquals(0, fakeFavoriteRepo.toggledCount)
 
         // First toggle
-        useCase(origin, destination)
+        useCase(origin, destination, "Línea Roca")
         assertEquals(1, fakeFavoriteRepo.toggledCount)
 
         // Second toggle
-        useCase(origin, destination)
+        useCase(origin, destination, "Línea Roca")
         assertEquals(2, fakeFavoriteRepo.toggledCount)
+    }
+
+    @Test
+    fun `toggleFavorite toggles repository state with origin only`() = runBlocking {
+        assertEquals(0, fakeFavoriteRepo.toggledCount)
+
+        // Toggle single station
+        useCase(origin, null, "Línea Roca")
+        assertEquals(1, fakeFavoriteRepo.toggledCount)
     }
 
     private class FakeFavoriteRouteRepository : FavoriteRouteRepository {
         var toggledCount = 0
         override fun observeFavorites(): Flow<List<FavoriteRoute>> = flowOf(emptyList())
-        override fun isFavorite(originId: String, destinationId: String): Flow<Boolean> = flowOf(false)
-        override suspend fun toggleFavorite(origin: Station, destination: Station) {
+        override fun isFavorite(originId: String, destinationId: String?): Flow<Boolean> = flowOf(false)
+        override suspend fun toggleFavorite(origin: Station, destination: Station?, lineName: String) {
             toggledCount++
+        }
+        override suspend fun deleteFavorite(originId: String, destinationId: String?) {
+            toggledCount--
+        }
+        override suspend fun deleteFavoriteById(id: Long) {
+            toggledCount--
         }
     }
 }

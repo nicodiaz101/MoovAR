@@ -34,4 +34,10 @@ class FavoritesViewModel @Inject constructor(
             }
         }
     }
+
+    fun removeFavorite(route: FavoriteRoute) {
+        viewModelScope.launch {
+            favoriteRouteRepository.deleteFavoriteById(route.id)
+        }
+    }
 }

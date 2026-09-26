@@ -35,25 +35,35 @@ class FavoriteRouteRepositoryImpl @Inject constructor(
             }
         }.flowOn(Dispatchers.IO)
 
-    override fun isFavorite(originId: String, destinationId: String): Flow<Boolean> =
-        favoriteRouteDao.isFavorite(originId, destinationId)
+    override fun isFavorite(originId: String, destinationId: String?): Flow<Boolean> =
+        favoriteRouteDao.isFavorite(originId, destinationId ?: "")
 
-    override suspend fun toggleFavorite(origin: Station, destination: Station) = withContext(Dispatchers.IO) {
-        val currentlyFav = favoriteRouteDao.isFavorite(origin.id, destination.id).first()
+    override suspend fun toggleFavorite(origin: Station, destination: Station?, lineName: String) = withContext(Dispatchers.IO) {
+        val destId = destination?.id ?: ""
+        val destName = destination?.name ?: ""
+        val currentlyFav = favoriteRouteDao.isFavorite(origin.id, destId).first()
         if (currentlyFav) {
-            favoriteRouteDao.delete(origin.id, destination.id)
+            favoriteRouteDao.delete(origin.id, destId)
         } else {
             val entity = FavoriteRouteEntity(
                 id = 0L,
                 originStationId = origin.id,
                 originStationName = origin.name,
-                destinationStationId = destination.id,
-                destinationStationName = destination.name,
+                destinationStationId = destId,
+                destinationStationName = destName,
                 lineId = origin.lineId,
-                lineName = "",
+                lineName = lineName,
                 createdAt = System.currentTimeMillis()
             )
             favoriteRouteDao.insert(entity)
         }
+    }
+
+    override suspend fun deleteFavorite(originId: String, destinationId: String?) = withContext(Dispatchers.IO) {
+        favoriteRouteDao.delete(originId, destinationId ?: "")
+    }
+
+    override suspend fun deleteFavoriteById(id: Long) = withContext(Dispatchers.IO) {
+        favoriteRouteDao.deleteById(id)
     }
 }

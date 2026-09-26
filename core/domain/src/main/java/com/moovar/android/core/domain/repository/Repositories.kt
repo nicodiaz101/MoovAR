@@ -46,6 +46,8 @@ interface RecentStationRepository {
 
 interface FavoriteRouteRepository {
     fun observeFavorites(): Flow<List<FavoriteRoute>>
-    fun isFavorite(originId: String, destinationId: String): Flow<Boolean>
-    suspend fun toggleFavorite(origin: Station, destination: Station)
+    fun isFavorite(originId: String, destinationId: String? = null): Flow<Boolean>
+    suspend fun toggleFavorite(origin: Station, destination: Station? = null, lineName: String = "")
+    suspend fun deleteFavorite(originId: String, destinationId: String? = null)
+    suspend fun deleteFavoriteById(id: Long)
 }

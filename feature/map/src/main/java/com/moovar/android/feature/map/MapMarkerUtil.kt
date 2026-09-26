@@ -2,20 +2,30 @@ package com.moovar.android.feature.map
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.LinearGradient
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
-import kotlin.math.cos
-import kotlin.math.sin
+import androidx.core.graphics.PathParser
 
 object MapMarkerUtil {
+
+    // Canonical Google Maps teardrop pin path in 44x56 coordinate space
+    private const val GOOGLE_MAPS_PIN_PATH =
+        "M22,2 C12.6,2 5,9.6 5,19 C5,31.5 22,55 22,55 C22,55 39,31.5 39,19 C39,9.6 31.4,2 22,2 Z"
+
+    // Material DirectionsTransit vector path
+    private const val DIRECTIONS_TRANSIT_PATH =
+        "M12,2c-4.42,0 -8,0.5 -8,4v9.5C4,17.43 5.57,19 7.5,19L6,20.5v0.5h12v-0.5L16.5,19c1.93,0 3.5,-1.57 3.5,-3.5V6c0,-3.5 -3.58,-4 -8,-4zM7.5,17c-0.83,0 -1.5,-0.67 -1.5,-1.5s0.67,-1.5 1.5,-1.5 1.5,0.67 1.5,1.5 -0.67,1.5 -1.5,1.5zM11,11H6V6h5v5zm5.5,6c-0.83,0 -1.5,-0.67 -1.5,-1.5s0.67,-1.5 1.5,-1.5 1.5,0.67 1.5,1.5 -0.67,1.5 -1.5,1.5zM18,11h-5V6h5v5z"
 
     fun createTrainMarkerDrawable(
         context: Context,
@@ -26,196 +36,120 @@ object MapMarkerUtil {
         surfaceColor: Int = Color.WHITE
     ): Drawable {
         val density = context.resources.displayMetrics.density
-        val width = (56 * density).toInt()
-        val height = (72 * density).toInt()
+        val width = (44 * density).toInt()
+        val height = (56 * density).toInt()
 
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
         val centerX = width / 2f
-        val bulbRadius = 20f * density
-        val bulbCenterY = bulbRadius + 4f * density
-        val groundY = height - 4f * density
-        val tipY = groundY - 2f * density
+        val tipY = 55f * density
 
-        // 1. MATERIAL EXPRESSIVE LIVE RADAR / BEACON PULSE AT GROUND
-        val outerPulsePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        // Determine pin body color: ensure rich, high-contrast hue against light map tiles
+        val pinBodyColor = if (ColorUtils.calculateLuminance(primaryColor) > 0.45f) {
+            // Dark theme: primary is a light pastel. Use containerColor if dark, or a rich primary blend
+            if (ColorUtils.calculateLuminance(containerColor) < 0.35f) {
+                containerColor
+            } else {
+                ColorUtils.blendARGB(primaryColor, Color.BLACK, 0.45f)
+            }
+        } else {
+            // Light theme: primary is already deep & rich
+            primaryColor
+        }
+
+        // 1. GROUND CONTACT SHADOW underneath the tip
+        val groundShadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.FILL
-            color = ColorUtils.setAlphaComponent(primaryColor, 35)
+            color = Color.argb(65, 0, 0, 0)
         }
-        val midPulsePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        val groundRect = RectF(
+            centerX - 8f * density,
+            53.5f * density,
+            centerX + 8f * density,
+            55.5f * density
+        )
+        canvas.drawOval(groundRect, groundShadowPaint)
+
+        // 2. PIN PATH SCALED BY DENSITY
+        val pinPath = PathParser.createPathFromPathData(GOOGLE_MAPS_PIN_PATH)
+        val scaleMatrix = Matrix().apply {
+            postScale(density, density)
+        }
+        pinPath.transform(scaleMatrix)
+
+        // 3. PIN AMBIENT ELEVATION DROP SHADOW
+        val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.FILL
-            color = ColorUtils.setAlphaComponent(primaryColor, 80)
+            color = Color.argb(70, 0, 0, 0)
+            try {
+                maskFilter = BlurMaskFilter(2.2f * density, BlurMaskFilter.Blur.NORMAL)
+            } catch (_: Exception) {}
         }
-        val groundPointPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL
-            color = primaryColor
+        val shadowMatrix = Matrix().apply {
+            postTranslate(0f, 1.8f * density)
         }
-        val groundPointStroke = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.STROKE
-            strokeWidth = 1.2f * density
-            color = Color.WHITE
-        }
+        val shadowPath = Path(pinPath)
+        shadowPath.transform(shadowMatrix)
+        canvas.drawPath(shadowPath, shadowPaint)
 
-        // Draw ground radar rings
-        canvas.drawOval(
-            RectF(centerX - 14f * density, groundY - 4f * density, centerX + 14f * density, groundY + 4f * density),
-            outerPulsePaint
-        )
-        canvas.drawOval(
-            RectF(centerX - 8f * density, groundY - 2.5f * density, centerX + 8f * density, groundY + 2.5f * density),
-            midPulsePaint
-        )
-        canvas.drawOval(
-            RectF(centerX - 3f * density, groundY - 1.2f * density, centerX + 3f * density, groundY + 1.2f * density),
-            groundPointPaint
-        )
-        canvas.drawOval(
-            RectF(centerX - 3f * density, groundY - 1.2f * density, centerX + 3f * density, groundY + 1.2f * density),
-            groundPointStroke
-        )
-
-        // 2. DROPLET PIN AMBIENT SHADOW
-        val shadowPath = Path()
-        val shadowOffset = 3f * density
-        buildDropletPath(shadowPath, centerX, bulbCenterY + shadowOffset, bulbRadius, tipY + shadowOffset)
-        val ambientShadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL
-            color = Color.argb(45, 0, 0, 0)
-        }
-        canvas.drawPath(shadowPath, ambientShadowPaint)
-
-        // 3. EXPRESSIVE DROPLET PIN BODY WITH DYNAMIC GRADIENT
-        val pinPath = Path()
-        buildDropletPath(pinPath, centerX, bulbCenterY, bulbRadius, tipY)
-
-        val darkerPrimary = ColorUtils.blendARGB(primaryColor, Color.BLACK, 0.15f)
+        // 4. PIN BODY FILL (Material Expressive subtle vertical gradient for depth)
         val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.FILL
             shader = LinearGradient(
-                centerX, bulbCenterY - bulbRadius,
+                centerX, 2f * density,
                 centerX, tipY,
-                primaryColor, darkerPrimary,
+                pinBodyColor,
+                ColorUtils.blendARGB(pinBodyColor, Color.BLACK, 0.14f),
                 Shader.TileMode.CLAMP
             )
         }
+        canvas.drawPath(pinPath, fillPaint)
 
-        val outlinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        // 5. CRISP WHITE OUTER STROKE (2dp for contrast on busy map tiles)
+        val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.STROKE
-            strokeWidth = 2.2f * density
+            strokeWidth = 1.8f * density
+            strokeJoin = Paint.Join.ROUND
             color = Color.WHITE
         }
+        canvas.drawPath(pinPath, strokePaint)
 
-        canvas.drawPath(pinPath, fillPaint)
-        canvas.drawPath(pinPath, outlinePaint)
+        // 6. OFFICIAL DIRECTIONS_TRANSIT TRAIN ICON (Centered in pin bulb at x=22dp, y=19dp)
+        val bulbCenterY = 19f * density
+        val iconSize = (20f * density).toInt()
+        val iconLeft = (centerX - iconSize / 2f).toInt()
+        val iconTop = (bulbCenterY - iconSize / 2f).toInt()
 
-        // 4. INNER CONTAINER DISC
-        val innerRadius = bulbRadius * 0.72f
-        val innerDiscPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL
-            color = surfaceColor
-        }
-        val innerBorderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.STROKE
-            strokeWidth = 1.2f * density
-            color = ColorUtils.setAlphaComponent(primaryColor, 40)
+        val trainDrawable = try {
+            ContextCompat.getDrawable(context, R.drawable.ic_directions_transit)?.mutate()
+        } catch (_: Exception) {
+            null
         }
 
-        canvas.drawCircle(centerX, bulbCenterY, innerRadius, innerDiscPaint)
-        canvas.drawCircle(centerX, bulbCenterY, innerRadius, innerBorderPaint)
+        if (trainDrawable != null) {
+            trainDrawable.setTint(Color.WHITE)
+            trainDrawable.setBounds(iconLeft, iconTop, iconLeft + iconSize, iconTop + iconSize)
+            trainDrawable.draw(canvas)
+        } else {
+            // High-fidelity fallback via PathParser
+            try {
+                val iconPath = PathParser.createPathFromPathData(DIRECTIONS_TRANSIT_PATH)
+                val iconMatrix = Matrix().apply {
+                    val scale = iconSize / 24f
+                    postScale(scale, scale)
+                    postTranslate(iconLeft.toFloat(), iconTop.toFloat())
+                }
+                iconPath.transform(iconMatrix)
 
-        // 5. TRAIN GLYPH (Material Expressive icon)
-        val trainPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL
-            color = primaryColor
+                val iconPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    style = Paint.Style.FILL
+                    color = Color.WHITE
+                }
+                canvas.drawPath(iconPath, iconPaint)
+            } catch (_: Exception) {}
         }
-        val windowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL
-            color = surfaceColor
-        }
-        val headlightPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL
-            color = Color.parseColor("#FFD54F") // Warm luminous train headlights
-        }
-        val railPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.STROKE
-            strokeWidth = 1.4f * density
-            color = primaryColor
-            strokeCap = Paint.Cap.ROUND
-        }
-
-        val trainW = innerRadius * 1.18f
-        val trainH = innerRadius * 1.32f
-        val trainLeft = centerX - trainW / 2f
-        val trainTop = bulbCenterY - trainH / 2f
-        val trainRight = centerX + trainW / 2f
-        val trainBottom = bulbCenterY + trainH / 2f
-
-        // Train main body
-        val cornerR = 3.5f * density
-        val bodyRect = RectF(trainLeft, trainTop, trainRight, trainBottom - 2.5f * density)
-        canvas.drawRoundRect(bodyRect, cornerR, cornerR, trainPaint)
-
-        // Train dual panoramic windshield
-        val winMarginH = 2f * density
-        val winTop = trainTop + 2.5f * density
-        val winBottom = trainTop + trainH * 0.44f
-        val winRect = RectF(trainLeft + winMarginH, winTop, trainRight - winMarginH, winBottom)
-        canvas.drawRoundRect(winRect, 1.8f * density, 1.8f * density, windowPaint)
-
-        // Windshield center pillar
-        val pillarW = 1.4f * density
-        canvas.drawRect(centerX - pillarW / 2f, winTop, centerX + pillarW / 2f, winBottom, trainPaint)
-
-        // Warm dual headlights
-        val lightR = 1.4f * density
-        val lightY = bodyRect.bottom - 2.8f * density
-        canvas.drawCircle(trainLeft + 3.2f * density, lightY, lightR, headlightPaint)
-        canvas.drawCircle(trainRight - 3.2f * density, lightY, lightR, headlightPaint)
-
-        // Rail line underneath
-        val railY = trainBottom + 0.5f * density
-        val railW = trainW * 0.95f
-        canvas.drawLine(centerX - railW / 2f, railY, centerX + railW / 2f, railY, railPaint)
 
         return BitmapDrawable(context.resources, bitmap)
-    }
-
-    private fun buildDropletPath(
-        path: Path,
-        centerX: Float,
-        bulbCenterY: Float,
-        bulbRadius: Float,
-        tipY: Float
-    ) {
-        path.reset()
-        val arcRect = RectF(
-            centerX - bulbRadius,
-            bulbCenterY - bulbRadius,
-            centerX + bulbRadius,
-            bulbCenterY + bulbRadius
-        )
-        // Sweep arc from 38 degrees through top to 142 degrees
-        path.arcTo(arcRect, 38f, 264f, false)
-
-        val rad38 = Math.toRadians(38.0)
-        val arcRightX = centerX + bulbRadius * cos(rad38).toFloat()
-        val arcRightY = bulbCenterY + bulbRadius * sin(rad38).toFloat()
-
-        // Left curve from arc edge down to tip
-        val ctrlX1 = centerX - bulbRadius * 0.85f
-        val ctrlY1 = bulbCenterY + bulbRadius * 0.7f
-        val ctrlX2 = centerX - 2.5f
-        val ctrlY2 = tipY - 4f
-        path.cubicTo(ctrlX1, ctrlY1, ctrlX2, ctrlY2, centerX, tipY)
-
-        // Right curve from tip back to right arc edge
-        val ctrlX3 = centerX + 2.5f
-        val ctrlY3 = tipY - 4f
-        val ctrlX4 = centerX + bulbRadius * 0.85f
-        val ctrlY4 = bulbCenterY + bulbRadius * 0.7f
-        path.cubicTo(ctrlX3, ctrlY3, ctrlX4, ctrlY4, arcRightX, arcRightY)
-
-        path.close()
     }
 }

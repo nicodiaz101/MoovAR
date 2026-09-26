@@ -111,8 +111,8 @@ fun MoovArAppContent() {
                             navController.navigate("departures/$lineId")
                             navController.currentBackStackEntry?.savedStateHandle?.set("selected_origin_id", originId)
                             navController.currentBackStackEntry?.savedStateHandle?.set("selected_origin_name", originName)
-                            navController.currentBackStackEntry?.savedStateHandle?.set("selected_dest_id", destId)
-                            navController.currentBackStackEntry?.savedStateHandle?.set("selected_dest_name", destName)
+                            navController.currentBackStackEntry?.savedStateHandle?.set("selected_dest_id", if (destId.isNotBlank()) destId else null)
+                            navController.currentBackStackEntry?.savedStateHandle?.set("selected_dest_name", if (destName.isNotBlank()) destName else null)
                         }
                     )
                 }

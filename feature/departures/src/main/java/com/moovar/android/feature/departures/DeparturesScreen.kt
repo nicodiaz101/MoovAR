@@ -91,8 +91,22 @@ fun DeparturesScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = viewModel::onToggleFavorite) {
-                        Icon(Icons.Default.FavoriteBorder, contentDescription = "Favorito")
+                    val hasOrigin = uiState.originStation != null
+                    IconButton(
+                        onClick = viewModel::onToggleFavorite,
+                        enabled = hasOrigin
+                    ) {
+                        Icon(
+                            imageVector = if (uiState.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = if (uiState.isFavorite) "Quitar de favoritos" else "Guardar en favoritos",
+                            tint = if (uiState.isFavorite) {
+                                MaterialTheme.colorScheme.primary
+                            } else if (hasOrigin) {
+                                MaterialTheme.colorScheme.onSurface
+                            } else {
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                            }
+                        )
                     }
                 }
             )

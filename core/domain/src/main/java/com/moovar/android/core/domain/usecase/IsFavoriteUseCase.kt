@@ -7,6 +7,6 @@ import javax.inject.Inject
 class IsFavoriteUseCase @Inject constructor(
     private val favoriteRouteRepository: FavoriteRouteRepository
 ) {
-    operator fun invoke(originId: String, destinationId: String): Flow<Boolean> =
+    operator fun invoke(originId: String, destinationId: String? = null): Flow<Boolean> =
         favoriteRouteRepository.isFavorite(originId, destinationId)
 }

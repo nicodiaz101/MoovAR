@@ -15,9 +15,11 @@ import com.moovar.android.core.domain.usecase.GetAlertsUseCase
 import com.moovar.android.core.domain.usecase.GetBranchesByLineUseCase
 import com.moovar.android.core.domain.usecase.GetLinesStatusUseCase
 import com.moovar.android.core.domain.usecase.GetNextDeparturesUseCase
+import com.moovar.android.core.domain.usecase.IsFavoriteUseCase
 import com.moovar.android.core.domain.usecase.ToggleFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -42,7 +44,8 @@ data class DeparturesUiState(
     val isLoadingDepartures: Boolean = false,
     val departureMode: DepartureMode = DepartureMode.NOW,
     val scheduledTime: LocalDateTime? = null,
-    val error: String? = null
+    val error: String? = null,
+    val isFavorite: Boolean = false
 )
 
 sealed class DeparturesUiEvent {
@@ -58,6 +61,7 @@ class DeparturesViewModel @Inject constructor(
     private val getNextDeparturesUseCase: GetNextDeparturesUseCase,
     private val getAlertsUseCase: GetAlertsUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
+    private val isFavoriteUseCase: IsFavoriteUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -112,8 +116,28 @@ class DeparturesViewModel @Inject constructor(
         }
     }
 
+    private var favoriteObservationJob: Job? = null
+
+    private fun updateFavoriteObservation() {
+        favoriteObservationJob?.cancel()
+        val origin = _uiState.value.originStation
+        val destination = _uiState.value.destinationStation
+        if (origin == null) {
+            _uiState.update { it.copy(isFavorite = false) }
+            return
+        }
+        favoriteObservationJob = viewModelScope.launch(Dispatchers.Default) {
+            isFavoriteUseCase(origin.id, destination?.id)
+                .catch { /* ignore */ }
+                .collect { isFav ->
+                    _uiState.update { it.copy(isFavorite = isFav) }
+                }
+        }
+    }
+
     fun onOriginSelected(station: Station) {
         _uiState.update { it.copy(originStation = station) }
+        updateFavoriteObservation()
         triggerSearchIfReady()
     }
 
@@ -134,6 +158,7 @@ class DeparturesViewModel @Inject constructor(
 
     fun onDestinationSelected(station: Station) {
         _uiState.update { it.copy(destinationStation = station) }
+        updateFavoriteObservation()
         triggerSearchIfReady()
     }
 
@@ -164,15 +189,18 @@ class DeparturesViewModel @Inject constructor(
                 destinationStation = temp
             )
         }
+        updateFavoriteObservation()
         triggerSearchIfReady()
     }
 
     fun onClearOrigin() {
-        _uiState.update { it.copy(originStation = null, departures = emptyList()) }
+        _uiState.update { it.copy(originStation = null, departures = emptyList(), isFavorite = false) }
+        updateFavoriteObservation()
     }
 
     fun onClearDestination() {
         _uiState.update { it.copy(destinationStation = null) }
+        updateFavoriteObservation()
         triggerSearchIfReady()
     }
 
@@ -232,10 +260,11 @@ class DeparturesViewModel @Inject constructor(
     fun onToggleFavorite() {
         val origin = _uiState.value.originStation
         val destination = _uiState.value.destinationStation
-        if (origin != null && destination != null) {
+        val lineName = _uiState.value.line?.name ?: ""
+        if (origin != null) {
             viewModelScope.launch(Dispatchers.Default) {
                 try {
-                    toggleFavoriteUseCase(origin, destination)
+                    toggleFavoriteUseCase(origin, destination, lineName)
                 } catch (e: Exception) {
                     // Ignore error for now
                 }
