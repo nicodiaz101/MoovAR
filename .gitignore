@@ -17,3 +17,9 @@ captures
 *.aab
 /.idea
 **/build/
+
+# Keystores & Signing Secrets
+*.jks
+*.keystore
+keystore.properties
+/keystore/
