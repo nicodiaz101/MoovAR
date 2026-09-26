@@ -7,7 +7,7 @@
 ## PRINCIPIOS DE ORQUESTACIÓN
 
 ### R1 — Verificación Post-Fase Obligatoria
-Al finalizar cualquier fase de desarrollo (o iteración importante), el agente DEBE ejecutar el script `verify_phase.sh` (o el equivalente comando de Gradle `./gradlew assembleDebug`) para asegurar que no existan errores de compilación ni problemas en Gradle. **Importante:** La ejecución de Gradle debe hacerse usando **JDK 21** para mantener compatibilidad con las dependencias del proyecto (ej. Kotlin 2.3.0). El entorno local debe ser configurado con:
+Al finalizar cualquier fase de desarrollo (o iteración importante), el agente DEBE ejecutar los comandos de Gradle (`./gradlew testDebugUnitTest && ./gradlew assembleDebug`) para asegurar que no existan errores de compilación ni problemas en Gradle. **Importante:** La ejecución de Gradle debe hacerse usando **JDK 21** para mantener compatibilidad con las dependencias del proyecto (ej. Kotlin 2.3.0). El entorno local debe ser configurado con:
 `export JAVA_HOME=/usr/lib/jvm/java-21-openjdk && export ANDROID_HOME=/home/nicolas/Android/Sdk && export PATH="$JAVA_HOME/bin:$ANDROID_HOME/platform-tools:$PATH"`
 Nunca asumas que un scaffold o refactor está correcto sin haber pasado el `assembleDebug`.
 
