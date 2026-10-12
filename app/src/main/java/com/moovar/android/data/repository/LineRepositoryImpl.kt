@@ -60,6 +60,7 @@ class LineRepositoryImpl @Inject constructor(
         LIMITED_ROUTE,
         CANCELLED,
         DELAY,
+        HOLIDAY_SCHEDULE,
         FUTURE_SCHEDULED,
         INFO_WORKS,
         IGNORED
@@ -181,6 +182,8 @@ class LineRepositoryImpl @Inject constructor(
         val limitedCount = ramalCats.count { it == AlertCategory.LIMITED_ROUTE }
         val cancelledCount = ramalCats.count { it == AlertCategory.CANCELLED }
         val delayCount = ramalCats.count { it == AlertCategory.DELAY }
+        val holidayCount = ramalCats.count { it == AlertCategory.HOLIDAY_SCHEDULE } +
+                lineCatList.count { it == AlertCategory.HOLIDAY_SCHEDULE }
         val futureWorksCount = ramalCats.count { it == AlertCategory.FUTURE_SCHEDULED } +
                 lineCatList.count { it == AlertCategory.FUTURE_SCHEDULED }
         val infoWorksCount = ramalCats.count { it == AlertCategory.INFO_WORKS } +
@@ -232,6 +235,19 @@ class LineRepositoryImpl @Inject constructor(
             return Pair(com.moovar.android.core.database.entity.LineStatus.DEMORADO, msg)
         }
 
+        // Holiday / Sunday schedule advisory (AVISO)
+        if (holidayCount > 0) {
+            val allAlertTexts = lineAlerts.map { it.contenido } +
+                    ramales.flatMap { r -> r.alerta.orEmpty().map { it.contenido } }
+            val mentionsSunday = allAlertTexts.any { it.contains("domingo", ignoreCase = true) }
+            val msg = if (mentionsSunday) {
+                "Horarios de domingo por feriado"
+            } else {
+                "Cronograma especial por feriado"
+            }
+            return Pair(com.moovar.android.core.database.entity.LineStatus.AVISO, msg)
+        }
+
         // Future Scheduled Works or Info Works (AVISO)
         if (futureWorksCount > 0 || infoWorksCount > 0) {
             val msg = when {
@@ -258,6 +274,7 @@ class LineRepositoryImpl @Inject constructor(
             AlertCategory.LIMITED_ROUTE in categories -> AlertCategory.LIMITED_ROUTE
             AlertCategory.CANCELLED in categories -> AlertCategory.CANCELLED
             AlertCategory.DELAY in categories -> AlertCategory.DELAY
+            AlertCategory.HOLIDAY_SCHEDULE in categories -> AlertCategory.HOLIDAY_SCHEDULE
             AlertCategory.FUTURE_SCHEDULED in categories -> AlertCategory.FUTURE_SCHEDULED
             AlertCategory.INFO_WORKS in categories -> AlertCategory.INFO_WORKS
             else -> AlertCategory.IGNORED
@@ -267,6 +284,11 @@ class LineRepositoryImpl @Inject constructor(
     private fun classifyAlert(alertContent: String): AlertCategory {
         val clean = alertContent.replace('\u00A0', ' ').trim()
         if (isCudAlert(clean)) return AlertCategory.IGNORED
+
+        // 0. Check if holiday / Sunday schedule advisory
+        if (isHolidayScheduleAlert(clean)) {
+            return AlertCategory.HOLIDAY_SCHEDULE
+        }
 
         val lower = clean.lowercase()
 
@@ -300,6 +322,34 @@ class LineRepositoryImpl @Inject constructor(
         }
 
         return AlertCategory.IGNORED
+    }
+
+    private fun isHolidayScheduleAlert(content: String): Boolean {
+        val lower = content.lowercase()
+        val mentionsHoliday = lower.contains("feriado") || lower.contains("feriados")
+        val mentionsSunday = lower.contains("domingo") || lower.contains("domingos")
+        val mentionsSchedule = lower.contains("cronograma") || lower.contains("horario") ||
+                lower.contains("itinerario") || lower.contains("diagrama") || lower.contains("esquema")
+
+        // Direct common phrasing in Trenes Argentinos notices
+        if (lower.contains("cronograma de domingo") || lower.contains("horario de domingo") ||
+            lower.contains("horarios de domingo") || lower.contains("horarios de domingos") ||
+            lower.contains("itinerario de domingo") || lower.contains("diagrama de domingo") ||
+            lower.contains("diagrama de domingos") || lower.contains("itinerario de domingos") ||
+            lower.contains("domingos y feriados") || lower.contains("domingo y feriados") ||
+            lower.contains("domingos y feriado") || lower.contains("cronograma de feriado") ||
+            lower.contains("cronograma por feriado") || lower.contains("horarios de feriado") ||
+            lower.contains("horarios por feriado")
+        ) {
+            return true
+        }
+
+        // Combined pattern: mentions holiday AND (mentions schedule OR mentions sunday)
+        if (mentionsHoliday && (mentionsSchedule || mentionsSunday)) {
+            return true
+        }
+
+        return false
     }
 
     private fun isCudAlert(content: String): Boolean {

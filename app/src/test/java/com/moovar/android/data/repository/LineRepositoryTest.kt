@@ -186,6 +186,41 @@ class LineRepositoryTest {
         assertEquals(LineStatus.DEMORADO, belgranoSur.status)
         assertEquals("Ramal con recorrido limitado", belgranoSur.statusMessage)
     }
+    @Test
+    fun refreshLines_holidaySundaySchedule_classifiedAsAvisoWithSundayScheduleMessage() = runTest {
+        fakeSofseApiService.gerencias = listOf(
+            GerenciaDto(5, 1, "Mitre", GerenciaEstadoDto(13, "Aviso", "#435a6c"), listOf(
+                SofseAlertaDto(50, 5, 0, null, null, "El próximo lunes 12/10 (feriado), los trenes de la línea circularán con horarios de domingos y feriados.", 1, null, 4, null, null)
+            ))
+        )
+        fakeSofseApiService.ramalesByGerencia[5] = listOf(
+            RamalDto(1, 5, "Retiro-Tigre", 17, 1, 1, null, null, emptyList())
+        )
+
+        repository.refreshLines()
+
+        val mitre = fakeLineDao.lines.first { it.id == "mitre" }
+        assertEquals(LineStatus.AVISO, mitre.status)
+        assertEquals("Horarios de domingo por feriado", mitre.statusMessage)
+    }
+
+    @Test
+    fun refreshLines_holidaySpecialSchedule_classifiedAsAvisoWithSpecialScheduleMessage() = runTest {
+        fakeSofseApiService.gerencias = listOf(
+            GerenciaDto(1, 1, "Sarmiento", GerenciaEstadoDto(13, "Aviso", "#435a6c"), emptyList())
+        )
+        fakeSofseApiService.ramalesByGerencia[1] = listOf(
+            RamalDto(20, 1, "Once-Moreno", 16, 1, 1, null, null, listOf(
+                SofseAlertaDto(60, 1, 20, null, null, "El próximo viernes 16/10 (feriado) regirá un cronograma especial en el servicio.", 1, null, 4, null, null)
+            ))
+        )
+
+        repository.refreshLines()
+
+        val sarmiento = fakeLineDao.lines.first { it.id == "sarmiento" }
+        assertEquals(LineStatus.AVISO, sarmiento.status)
+        assertEquals("Cronograma especial por feriado", sarmiento.statusMessage)
+    }
 }
 
 private class FakeLineTestDao : LineDao {
