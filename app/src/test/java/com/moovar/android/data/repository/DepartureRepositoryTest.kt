@@ -128,6 +128,10 @@ class DepartureRepositoryTest {
         // Coordinates should be between Retiro and Lisandro de la Torre
         assertTrue(coords.latitude > retiroMitreCoords.first && coords.latitude < lisandroCoords.first)
         assertTrue(coords.longitude < retiroMitreCoords.second && coords.longitude > lisandroCoords.second)
+
+        // Coordinates at ~50% progress should follow the Saldías/Costanera track curve
+        assertEquals(-34.5723, coords.latitude, 0.005)
+        assertEquals(-58.4034, coords.longitude, 0.005)
     }
 
     @Test

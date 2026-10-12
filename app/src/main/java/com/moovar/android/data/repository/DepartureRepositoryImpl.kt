@@ -240,6 +240,21 @@ class DepartureRepositoryImpl @Inject constructor(
             "dr cetrángolo" to "cetrangolo",
             "dr. cetrángolo" to "cetrangolo"
         )
+
+        // Intermediate rail track waypoints along the curve between Retiro Mitre and Lisandro de la Torre
+        private val RETIRO_LISANDRO_TRACK_WAYPOINTS = listOf(
+            Coordinates(-34.5908, -58.3752), // Cabecera / Salida de Retiro
+            Coordinates(-34.5885, -58.3792), // Curva bajo Autopista Illia
+            Coordinates(-34.5860, -58.3826), // Empalme San Martín
+            Coordinates(-34.5804, -58.3922), // Playa Saldías Norte
+            Coordinates(-34.5736, -58.4021), // Estación Saldías
+            Coordinates(-34.5712, -58.4046), // Frente Costanera / Aeroparque
+            Coordinates(-34.5678, -58.4113), // Recta Costanera
+            Coordinates(-34.5675, -58.4150), // Empalme Maldonado
+            Coordinates(-34.5662, -58.4200), // Curva Palermo (Rosedal / Dorrego)
+            Coordinates(-34.5647, -58.4232), // Inicio Viaducto Mitre
+            Coordinates(-34.5636, -58.4285)  // Viaducto Olleros
+        )
     }
 
     private val stationIdCache = ConcurrentHashMap<String, String>(PRESEEDED_SOFSE_IDS)
@@ -659,9 +674,7 @@ class DepartureRepositoryImpl @Inject constructor(
                             // Interpolate between prev and next station along the rail line based on segment duration
                             val totalSegmentSecs = calculateSegmentDurationSecs(prevEst, nextEst, secs)
                             val progress = (1.0 - (secs.toDouble() / totalSegmentSecs.toDouble())).coerceIn(0.08, 0.92)
-                            val lat = prevCoords.latitude + (nextCoords.latitude - prevCoords.latitude) * progress
-                            val lon = prevCoords.longitude + (nextCoords.longitude - prevCoords.longitude) * progress
-                            Coordinates(lat, lon)
+                            interpolateCoordinatesAlongSegment(prevEst, nextEst, prevCoords, nextCoords, progress)
                         } else {
                             nextCoords ?: prevCoords ?: originCoords
                         }
@@ -731,6 +744,79 @@ class DepartureRepositoryImpl @Inject constructor(
             }
         }
         return maxOf(remainingSecs.toLong(), 180L)
+    }
+
+    private fun interpolateCoordinatesAlongSegment(
+        prevEst: com.moovar.android.core.network.sofse.dto.EstacionParadaDto,
+        nextEst: com.moovar.android.core.network.sofse.dto.EstacionParadaDto,
+        prevCoords: Coordinates,
+        nextCoords: Coordinates,
+        progress: Double
+    ): Coordinates {
+        val polyline = getSegmentPolyline(prevEst, nextEst, prevCoords, nextCoords)
+        if (polyline.size <= 2) {
+            val lat = prevCoords.latitude + (nextCoords.latitude - prevCoords.latitude) * progress
+            val lon = prevCoords.longitude + (nextCoords.longitude - prevCoords.longitude) * progress
+            return Coordinates(lat, lon)
+        }
+        return interpolatePolyline(polyline, progress)
+    }
+
+    private fun getSegmentPolyline(
+        prevEst: com.moovar.android.core.network.sofse.dto.EstacionParadaDto,
+        nextEst: com.moovar.android.core.network.sofse.dto.EstacionParadaDto,
+        prevCoords: Coordinates,
+        nextCoords: Coordinates
+    ): List<Coordinates> {
+        val prevId = prevEst.idElemento
+        val nextId = nextEst.idElemento
+        val prevKey = normalizeStationKey(prevEst.nombre.orEmpty())
+        val nextKey = normalizeStationKey(nextEst.nombre.orEmpty())
+
+        val isRetiroToLisandro = (prevId == 332 && nextId == 229) ||
+                (prevKey.contains("retiro") && nextKey.contains("lisandro"))
+        if (isRetiroToLisandro) {
+            return listOf(prevCoords) + RETIRO_LISANDRO_TRACK_WAYPOINTS + listOf(nextCoords)
+        }
+
+        val isLisandroToRetiro = (prevId == 229 && nextId == 332) ||
+                (prevKey.contains("lisandro") && nextKey.contains("retiro"))
+        if (isLisandroToRetiro) {
+            return listOf(prevCoords) + RETIRO_LISANDRO_TRACK_WAYPOINTS.reversed() + listOf(nextCoords)
+        }
+
+        return listOf(prevCoords, nextCoords)
+    }
+
+    private fun interpolatePolyline(points: List<Coordinates>, progress: Double): Coordinates {
+        val pClamped = progress.coerceIn(0.0, 1.0)
+        if (points.size <= 1) return points.firstOrNull() ?: Coordinates(0.0, 0.0)
+
+        var totalDist = 0.0
+        val segDists = DoubleArray(points.size - 1)
+        for (i in 0 until points.size - 1) {
+            val dLat = points[i + 1].latitude - points[i].latitude
+            val dLon = points[i + 1].longitude - points[i].longitude
+            val d = Math.hypot(dLat, dLon)
+            segDists[i] = d
+            totalDist += d
+        }
+
+        if (totalDist == 0.0) return points.first()
+
+        val targetDist = pClamped * totalDist
+        var accum = 0.0
+        for (i in segDists.indices) {
+            val d = segDists[i]
+            if (accum + d >= targetDist || i == segDists.lastIndex) {
+                val segProgress = if (d > 0.0) ((targetDist - accum) / d).coerceIn(0.0, 1.0) else 0.0
+                val lat = points[i].latitude + (points[i + 1].latitude - points[i].latitude) * segProgress
+                val lon = points[i].longitude + (points[i + 1].longitude - points[i].longitude) * segProgress
+                return Coordinates(lat, lon)
+            }
+            accum += d
+        }
+        return points.last()
     }
 
     private fun normalizeTerminus(name: String): String {
