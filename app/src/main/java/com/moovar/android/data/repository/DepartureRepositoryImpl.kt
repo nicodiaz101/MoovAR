@@ -14,7 +14,10 @@ import com.moovar.android.core.domain.model.StopState
 import com.moovar.android.core.domain.repository.DepartureRepository
 import com.moovar.android.core.network.sofse.api.SofseApiService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.time.Clock
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -32,10 +35,19 @@ class DepartureRepositoryImpl @Inject constructor(
     private val journeyDetailsCache: JourneyDetailsCache
 ) : DepartureRepository {
 
+    var clock: Clock = Clock.system(ARGENTINA_ZONE)
+
     companion object {
         private const val TAG = "DepartureRepoImpl"
         private val ARGENTINA_ZONE = ZoneId.of("America/Argentina/Buenos_Aires")
         private val TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
+
+        private val WHITESPACE_REGEX = Regex("\\s+")
+        private val PARENTHESES_REGEX = Regex("\\s*\\([^)]*\\)")
+        private val QUERY_PREFIX_REGEX = Regex("""^(dr\.|doctor|gral\.|general|avenida|av\.)\s+""")
+        private val TERMINUS_PARENTHESES_REGEX = Regex("\\(.*?\\)")
+        private val SINGLE_LETTER_REGEX = Regex("\\b[a-z]\\b")
+        private val TERMINUS_KEYWORDS_REGEX = Regex("\\b(plaza|gral|general|dr|antonio|viad|prov|viaducto|avenida|av)\\b")
 
         // Pre-seeded popular station mappings for instantaneous zero-latency lookups
         private val PRESEEDED_SOFSE_IDS = mapOf(
@@ -221,24 +233,16 @@ class DepartureRepositoryImpl @Inject constructor(
 
         private val KNOWN_STATION_ALIASES = mapOf(
             "l de la torre" to "lisandro de la torre",
-            "l. de la torre" to "lisandro de la torre",
             "c san fernando" to "canal san fernando",
-            "c. san fernando" to "canal san fernando",
             "retiro (lgm)" to "retiro (mitre)",
             "retiro lgm" to "retiro (mitre)",
             "san fernando c" to "san fernando",
             "san isidro c" to "san isidro",
             "las barrancas" to "barrancas",
             "maipu" to "avenida maipu",
-            "maipú" to "avenida maipu",
             "bme mitre" to "bartolome mitre",
-            "bme. mitre" to "bartolome mitre",
             "gral urquiza" to "general urquiza",
-            "gral. urquiza" to "general urquiza",
-            "dr cetrangolo" to "cetrangolo",
-            "dr. cetrangolo" to "cetrangolo",
-            "dr cetrángolo" to "cetrangolo",
-            "dr. cetrángolo" to "cetrangolo"
+            "dr cetrangolo" to "cetrangolo"
         )
 
         // Intermediate rail track waypoints along the curve between Retiro Mitre and Lisandro de la Torre
@@ -257,6 +261,9 @@ class DepartureRepositoryImpl @Inject constructor(
         )
     }
 
+    private val coordsCacheMutex = Mutex()
+    @Volatile private var isCoordsCacheInitialized = false
+
     private val stationIdCache = ConcurrentHashMap<String, String>(PRESEEDED_SOFSE_IDS)
     private val lineStationCoordsCache = ConcurrentHashMap<String, MutableMap<String, Coordinates>>()
     private val globalStationCoordsCache = ConcurrentHashMap<String, Coordinates>()
@@ -264,9 +271,12 @@ class DepartureRepositoryImpl @Inject constructor(
     private val globalSofseCoordsCache = ConcurrentHashMap<String, Coordinates>()
 
     private suspend fun ensureStationCoordsCache() {
-        if (lineStationCoordsCache.isEmpty()) {
+        if (isCoordsCacheInitialized) return
+        coordsCacheMutex.withLock {
+            if (isCoordsCacheInitialized) return
             try {
                 val allStations = stationDao.getAll()
+                if (allStations.isEmpty()) return@withLock
                 for (stn in allStations) {
                     val lat = stn.latitude
                     val lon = stn.longitude
@@ -310,6 +320,7 @@ class DepartureRepositoryImpl @Inject constructor(
                         }
                     }
                 }
+                isCoordsCacheInitialized = true
             } catch (e: Exception) {
                 Log.w(TAG, "Error caching station coordinates: ${e.message}")
             }
@@ -377,12 +388,15 @@ class DepartureRepositoryImpl @Inject constructor(
         val candIsCanal = candidate.startsWith("c ") || candidate.startsWith("canal ")
         if (inputIsCanal != candIsCanal) return false
 
-        // Prevent collision between "belgrano c" and "belgrano r"
-        if ((input.contains(" c") && candidate.contains(" r")) || (input.contains(" r") && candidate.contains(" c"))) {
+        // Prevent collision between terminal branch variants (e.g., "belgrano c" vs "belgrano r", "san isidro c" vs "san isidro r")
+        val inputEndsWithC = input.endsWith(" c")
+        val candEndsWithC = candidate.endsWith(" c")
+        val inputEndsWithR = input.endsWith(" r")
+        val candEndsWithR = candidate.endsWith(" r")
+        if ((inputEndsWithC && candEndsWithR) || (inputEndsWithR && candEndsWithC)) {
             return false
         }
-        // Prevent collision between "san fernando" and "san fernando r"
-        if (input.endsWith(" r") != candidate.endsWith(" r")) {
+        if (inputEndsWithR != candEndsWithR) {
             return false
         }
 
@@ -409,7 +423,7 @@ class DepartureRepositoryImpl @Inject constructor(
             .replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
             .replace("ñ", "n")
             .replace(".", "")
-            .replace(Regex("\\s+"), " ")
+            .replace(WHITESPACE_REGEX, " ")
 
     override suspend fun getDepartures(
         originId: String,
@@ -494,7 +508,7 @@ class DepartureRepositoryImpl @Inject constructor(
         if (originStation.lineId == "tren_costa" && cleanName.contains("delta")) return "104"
 
         // Strip parentheses: "retiro (mitre)" -> "retiro"
-        val strippedName = cleanName.replace(Regex("\\s*\\([^)]*\\)"), "").trim()
+        val strippedName = cleanName.replace(PARENTHESES_REGEX, "").trim()
         val strippedCached = stationIdCache[strippedName]
         if (strippedCached != null) {
             stationIdCache[cleanName] = strippedCached
@@ -510,7 +524,7 @@ class DepartureRepositoryImpl @Inject constructor(
         // Query SOFSE estaciones search endpoint
         return try {
             val queryClean = strippedName
-                .replace(Regex("""^(dr\.|doctor|gral\.|general|avenida|av\.)\s+"""), "")
+                .replace(QUERY_PREFIX_REGEX, "")
                 .trim()
             val queryName = queryClean.ifBlank { strippedName.ifBlank { originStation.name } }
             val candidates = sofseApiService.getEstaciones(nombre = queryName)
@@ -580,7 +594,7 @@ class DepartureRepositoryImpl @Inject constructor(
 
         if (estaciones.isNotEmpty()) {
             val firstFuture = if (isCancelled) -1 else estaciones.indexOfFirst { (it.segundos ?: 0) > 0 }
-            val now = Instant.now()
+            val now = try { clock.instant() } catch (_: Exception) { Instant.now() }
             var atStationIdx: Int? = null
 
             if (isCancelled) {
@@ -796,7 +810,8 @@ class DepartureRepositoryImpl @Inject constructor(
         val segDists = DoubleArray(points.size - 1)
         for (i in 0 until points.size - 1) {
             val dLat = points[i + 1].latitude - points[i].latitude
-            val dLon = points[i + 1].longitude - points[i].longitude
+            val avgLatRad = Math.toRadians((points[i + 1].latitude + points[i].latitude) / 2.0)
+            val dLon = (points[i + 1].longitude - points[i].longitude) * Math.cos(avgLatRad)
             val d = Math.hypot(dLat, dLon)
             segDists[i] = d
             totalDist += d
@@ -821,7 +836,7 @@ class DepartureRepositoryImpl @Inject constructor(
 
     private fun normalizeTerminus(name: String): String {
         var s = name.lowercase()
-            .replace(Regex("\\(.*?\\)"), "")
+            .replace(TERMINUS_PARENTHESES_REGEX, "")
             .replace("á", "a")
             .replace("é", "e")
             .replace("í", "i")
@@ -829,11 +844,9 @@ class DepartureRepositoryImpl @Inject constructor(
             .replace("ú", "u")
             .replace(".", " ")
             .replace(",", " ")
-        for (w in listOf("plaza", "gral", "general", "dr", "antonio", "viad", "prov", "viaducto", "avenida", "av")) {
-            s = s.replace(Regex("\\b$w\\b"), " ")
-        }
-        s = s.replace(Regex("\\b[a-z]\\b"), " ")
-        return s.split(Regex("\\s+")).filter { it.isNotBlank() }.joinToString(" ")
+            .replace(TERMINUS_KEYWORDS_REGEX, " ")
+            .replace(SINGLE_LETTER_REGEX, " ")
+        return s.split(WHITESPACE_REGEX).filter { it.isNotBlank() }.joinToString(" ")
     }
 
     private fun formatIsoTimeToLocal(isoStr: String?): String? {

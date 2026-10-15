@@ -140,7 +140,7 @@ fun MapScreen(
             AndroidView(
                 modifier = Modifier.fillMaxSize(),
                 factory = { ctx ->
-                    Configuration.getInstance().userAgentValue = "MoovAR/1.0"
+                    Configuration.getInstance().userAgentValue = "MoovAR/1.1"
                     MapView(ctx).apply {
                         setMultiTouchControls(true)
                         setTileSource(TileSourceFactory.MAPNIK)

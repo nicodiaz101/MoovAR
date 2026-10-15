@@ -188,6 +188,10 @@ class LineRepositoryTest {
     }
     @Test
     fun refreshLines_holidaySundaySchedule_classifiedAsAvisoWithSundayScheduleMessage() = runTest {
+        repository.clock = java.time.Clock.fixed(
+            java.time.Instant.parse("2026-10-10T12:00:00Z"),
+            java.time.ZoneId.of("America/Argentina/Buenos_Aires")
+        )
         fakeSofseApiService.gerencias = listOf(
             GerenciaDto(5, 1, "Mitre", GerenciaEstadoDto(13, "Aviso", "#435a6c"), listOf(
                 SofseAlertaDto(50, 5, 0, null, null, "El próximo lunes 12/10 (feriado), los trenes de la línea circularán con horarios de domingos y feriados.", 1, null, 4, null, null)
@@ -206,6 +210,10 @@ class LineRepositoryTest {
 
     @Test
     fun refreshLines_holidaySpecialSchedule_classifiedAsAvisoWithSpecialScheduleMessage() = runTest {
+        repository.clock = java.time.Clock.fixed(
+            java.time.Instant.parse("2026-10-10T12:00:00Z"),
+            java.time.ZoneId.of("America/Argentina/Buenos_Aires")
+        )
         fakeSofseApiService.gerencias = listOf(
             GerenciaDto(1, 1, "Sarmiento", GerenciaEstadoDto(13, "Aviso", "#435a6c"), emptyList())
         )
