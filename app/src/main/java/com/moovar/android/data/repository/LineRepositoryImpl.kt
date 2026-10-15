@@ -51,6 +51,10 @@ class LineRepositoryImpl @Inject constructor(
             41 to "tren_costa"
         )
         private val HIDDEN_LINE_IDS = setOf("belgrano_norte", "urquiza")
+
+        private val DATE_REGEX = Regex("""\b(\d{1,2})/(\d{1,2})\b""")
+        private val HASTA_REGEX = Regex("""(?i)hasta el \d{1,2}/\d{1,2}""")
+        private val SINGLE_SERVICE_REGEX = Regex("""(?i)el tren de las?\s*(\d{1,2}):(\d{2})""")
     }
 
     var clock: java.time.Clock = java.time.Clock.system(ARGENTINA_ZONE)
@@ -60,6 +64,7 @@ class LineRepositoryImpl @Inject constructor(
         LIMITED_ROUTE,
         CANCELLED,
         DELAY,
+        HOLIDAY_SCHEDULE,
         FUTURE_SCHEDULED,
         INFO_WORKS,
         IGNORED
@@ -181,6 +186,8 @@ class LineRepositoryImpl @Inject constructor(
         val limitedCount = ramalCats.count { it == AlertCategory.LIMITED_ROUTE }
         val cancelledCount = ramalCats.count { it == AlertCategory.CANCELLED }
         val delayCount = ramalCats.count { it == AlertCategory.DELAY }
+        val holidayCount = ramalCats.count { it == AlertCategory.HOLIDAY_SCHEDULE } +
+                lineCatList.count { it == AlertCategory.HOLIDAY_SCHEDULE }
         val futureWorksCount = ramalCats.count { it == AlertCategory.FUTURE_SCHEDULED } +
                 lineCatList.count { it == AlertCategory.FUTURE_SCHEDULED }
         val infoWorksCount = ramalCats.count { it == AlertCategory.INFO_WORKS } +
@@ -232,6 +239,20 @@ class LineRepositoryImpl @Inject constructor(
             return Pair(com.moovar.android.core.database.entity.LineStatus.DEMORADO, msg)
         }
 
+        // Holiday / Sunday schedule advisory (AVISO)
+        if (holidayCount > 0) {
+            val holidayAlertTexts = (lineAlerts.map { it.contenido } +
+                    ramales.flatMap { r -> r.alerta.orEmpty().map { it.contenido } })
+                .filter { isHolidayScheduleAlert(it) }
+            val mentionsSunday = holidayAlertTexts.any { it.contains("domingo", ignoreCase = true) }
+            val msg = if (mentionsSunday) {
+                "Horarios de domingo por feriado"
+            } else {
+                "Cronograma especial por feriado"
+            }
+            return Pair(com.moovar.android.core.database.entity.LineStatus.AVISO, msg)
+        }
+
         // Future Scheduled Works or Info Works (AVISO)
         if (futureWorksCount > 0 || infoWorksCount > 0) {
             val msg = when {
@@ -258,6 +279,7 @@ class LineRepositoryImpl @Inject constructor(
             AlertCategory.LIMITED_ROUTE in categories -> AlertCategory.LIMITED_ROUTE
             AlertCategory.CANCELLED in categories -> AlertCategory.CANCELLED
             AlertCategory.DELAY in categories -> AlertCategory.DELAY
+            AlertCategory.HOLIDAY_SCHEDULE in categories -> AlertCategory.HOLIDAY_SCHEDULE
             AlertCategory.FUTURE_SCHEDULED in categories -> AlertCategory.FUTURE_SCHEDULED
             AlertCategory.INFO_WORKS in categories -> AlertCategory.INFO_WORKS
             else -> AlertCategory.IGNORED
@@ -267,6 +289,11 @@ class LineRepositoryImpl @Inject constructor(
     private fun classifyAlert(alertContent: String): AlertCategory {
         val clean = alertContent.replace('\u00A0', ' ').trim()
         if (isCudAlert(clean)) return AlertCategory.IGNORED
+
+        // 0. Check if holiday / Sunday schedule advisory
+        if (isHolidayScheduleAlert(clean)) {
+            return AlertCategory.HOLIDAY_SCHEDULE
+        }
 
         val lower = clean.lowercase()
 
@@ -302,6 +329,52 @@ class LineRepositoryImpl @Inject constructor(
         return AlertCategory.IGNORED
     }
 
+    private fun isHolidayScheduleAlert(content: String): Boolean {
+        if (isCudAlert(content)) return false
+
+        val lower = content.lowercase()
+        val mentionsHoliday = lower.contains("feriado") || lower.contains("feriados")
+        val mentionsSunday = lower.contains("domingo") || lower.contains("domingos")
+        val mentionsSchedule = lower.contains("cronograma") || lower.contains("horario") ||
+                lower.contains("itinerario") || lower.contains("diagrama") || lower.contains("esquema")
+
+        // Direct common phrasing in Trenes Argentinos notices
+        val matchesHolidayPhrasing = lower.contains("cronograma de domingo") || lower.contains("horario de domingo") ||
+            lower.contains("horarios de domingo") || lower.contains("horarios de domingos") ||
+            lower.contains("itinerario de domingo") || lower.contains("diagrama de domingo") ||
+            lower.contains("diagrama de domingos") || lower.contains("itinerario de domingos") ||
+            lower.contains("domingos y feriados") || lower.contains("domingo y feriados") ||
+            lower.contains("domingos y feriado") || lower.contains("cronograma de feriado") ||
+            lower.contains("cronograma por feriado") || lower.contains("horarios de feriado") ||
+            lower.contains("horarios por feriado") || (mentionsHoliday && (mentionsSchedule || mentionsSunday))
+
+        if (!matchesHolidayPhrasing) return false
+
+        // Check if all dates mentioned in the notice are strictly in the past
+        val today = try {
+            LocalDate.now(clock)
+        } catch (_: Exception) {
+            LocalDate.now()
+        }
+        val dateMatches = DATE_REGEX.findAll(content).toList()
+        if (dateMatches.isNotEmpty()) {
+            val parsedDates = dateMatches.mapNotNull { match ->
+                try {
+                    val day = match.groupValues[1].toInt()
+                    val month = match.groupValues[2].toInt()
+                    LocalDate.of(today.year, month, day)
+                } catch (_: Exception) {
+                    null
+                }
+            }
+            if (parsedDates.isNotEmpty() && parsedDates.all { it.isBefore(today) }) {
+                return false
+            }
+        }
+
+        return true
+    }
+
     private fun isCudAlert(content: String): Boolean {
         val clean = content.replace('\u00A0', ' ')
         return clean.contains("CUD", ignoreCase = true) || clean.contains("discapacidad", ignoreCase = true)
@@ -319,11 +392,11 @@ class LineRepositoryImpl @Inject constructor(
             LocalDate.now()
         }
 
-        val dateMatches = Regex("""\b(\d{1,2})/(\d{1,2})\b""").findAll(content).toList()
+        val dateMatches = DATE_REGEX.findAll(content).toList()
         if (dateMatches.isEmpty()) return false
 
         // Ongoing notice check (e.g. "Hasta el 17/10...")
-        val hasHasta = Regex("""(?i)hasta el \d{1,2}/\d{1,2}""").containsMatchIn(lower)
+        val hasHasta = HASTA_REGEX.containsMatchIn(lower)
         if (hasHasta) return false
 
         val parsedDates = dateMatches.mapNotNull { match ->
@@ -341,7 +414,7 @@ class LineRepositoryImpl @Inject constructor(
     }
 
     private fun isPastSingleService(content: String): Boolean {
-        val match = Regex("""(?i)el tren de las?\s*(\d{1,2}):(\d{2})""").find(content) ?: return false
+        val match = SINGLE_SERVICE_REGEX.find(content) ?: return false
         val hour = match.groupValues[1].toIntOrNull() ?: return false
         val minute = match.groupValues[2].toIntOrNull() ?: return false
 

@@ -14,7 +14,10 @@ import com.moovar.android.core.domain.model.StopState
 import com.moovar.android.core.domain.repository.DepartureRepository
 import com.moovar.android.core.network.sofse.api.SofseApiService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.time.Clock
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -32,10 +35,19 @@ class DepartureRepositoryImpl @Inject constructor(
     private val journeyDetailsCache: JourneyDetailsCache
 ) : DepartureRepository {
 
+    var clock: Clock = Clock.system(ARGENTINA_ZONE)
+
     companion object {
         private const val TAG = "DepartureRepoImpl"
         private val ARGENTINA_ZONE = ZoneId.of("America/Argentina/Buenos_Aires")
         private val TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
+
+        private val WHITESPACE_REGEX = Regex("\\s+")
+        private val PARENTHESES_REGEX = Regex("\\s*\\([^)]*\\)")
+        private val QUERY_PREFIX_REGEX = Regex("""^(dr\.|doctor|gral\.|general|avenida|av\.)\s+""")
+        private val TERMINUS_PARENTHESES_REGEX = Regex("\\(.*?\\)")
+        private val SINGLE_LETTER_REGEX = Regex("\\b[a-z]\\b")
+        private val TERMINUS_KEYWORDS_REGEX = Regex("\\b(plaza|gral|general|dr|antonio|viad|prov|viaducto|avenida|av)\\b")
 
         // Pre-seeded popular station mappings for instantaneous zero-latency lookups
         private val PRESEEDED_SOFSE_IDS = mapOf(
@@ -215,65 +227,180 @@ class DepartureRepositoryImpl @Inject constructor(
             "marina nueva" to "258",
             "san fernando r" to "356",
             "canal san fernando" to "58",
-            "c. san fernando" to "58"
+            "c. san fernando" to "58",
+            "c san fernando" to "58"
+        )
+
+        private val KNOWN_STATION_ALIASES = mapOf(
+            "l de la torre" to "lisandro de la torre",
+            "c san fernando" to "canal san fernando",
+            "retiro (lgm)" to "retiro (mitre)",
+            "retiro lgm" to "retiro (mitre)",
+            "san fernando c" to "san fernando",
+            "san isidro c" to "san isidro",
+            "las barrancas" to "barrancas",
+            "maipu" to "avenida maipu",
+            "bme mitre" to "bartolome mitre",
+            "gral urquiza" to "general urquiza",
+            "dr cetrangolo" to "cetrangolo"
+        )
+
+        // Intermediate rail track waypoints along the curve between Retiro Mitre and Lisandro de la Torre
+        private val RETIRO_LISANDRO_TRACK_WAYPOINTS = listOf(
+            Coordinates(-34.5908, -58.3752), // Cabecera / Salida de Retiro
+            Coordinates(-34.5885, -58.3792), // Curva bajo Autopista Illia
+            Coordinates(-34.5860, -58.3826), // Empalme San Martín
+            Coordinates(-34.5804, -58.3922), // Playa Saldías Norte
+            Coordinates(-34.5736, -58.4021), // Estación Saldías
+            Coordinates(-34.5712, -58.4046), // Frente Costanera / Aeroparque
+            Coordinates(-34.5678, -58.4113), // Recta Costanera
+            Coordinates(-34.5675, -58.4150), // Empalme Maldonado
+            Coordinates(-34.5662, -58.4200), // Curva Palermo (Rosedal / Dorrego)
+            Coordinates(-34.5647, -58.4232), // Inicio Viaducto Mitre
+            Coordinates(-34.5636, -58.4285)  // Viaducto Olleros
         )
     }
+
+    private val coordsCacheMutex = Mutex()
+    @Volatile private var isCoordsCacheInitialized = false
 
     private val stationIdCache = ConcurrentHashMap<String, String>(PRESEEDED_SOFSE_IDS)
     private val lineStationCoordsCache = ConcurrentHashMap<String, MutableMap<String, Coordinates>>()
     private val globalStationCoordsCache = ConcurrentHashMap<String, Coordinates>()
+    private val lineSofseCoordsCache = ConcurrentHashMap<String, MutableMap<String, Coordinates>>()
+    private val globalSofseCoordsCache = ConcurrentHashMap<String, Coordinates>()
 
     private suspend fun ensureStationCoordsCache() {
-        if (lineStationCoordsCache.isEmpty()) {
+        if (isCoordsCacheInitialized) return
+        coordsCacheMutex.withLock {
+            if (isCoordsCacheInitialized) return
             try {
                 val allStations = stationDao.getAll()
+                if (allStations.isEmpty()) return@withLock
                 for (stn in allStations) {
                     val lat = stn.latitude
                     val lon = stn.longitude
                     if (lat != null && lon != null) {
                         val coords = Coordinates(lat, lon)
                         val lineMap = lineStationCoordsCache.getOrPut(stn.lineId) { ConcurrentHashMap() }
+                        val lineSofseMap = lineSofseCoordsCache.getOrPut(stn.lineId) { ConcurrentHashMap() }
                         val cleanName = normalizeStationKey(stn.name)
+
                         lineMap[cleanName] = coords
                         globalStationCoordsCache[cleanName] = coords
+
+                        // Index by GTFS stop ID if available and numeric
+                        stn.gtfsStopId?.let { gid ->
+                            if (gid.isNotBlank() && gid.all { it.isDigit() }) {
+                                lineSofseMap[gid] = coords
+                                globalSofseCoordsCache[gid] = coords
+                            }
+                        }
+
+                        // Index by known preseeded SOFSE ID
+                        PRESEEDED_SOFSE_IDS[cleanName]?.let { sid ->
+                            lineSofseMap[sid] = coords
+                            globalSofseCoordsCache[sid] = coords
+                        }
+                        KNOWN_STATION_ALIASES[cleanName]?.let { alias ->
+                            PRESEEDED_SOFSE_IDS[alias]?.let { sid ->
+                                lineSofseMap[sid] = coords
+                                globalSofseCoordsCache[sid] = coords
+                            }
+                        }
+
                         val stripped = stripStationSuffixes(cleanName)
                         if (stripped != cleanName) {
                             lineMap[stripped] = coords
                             globalStationCoordsCache[stripped] = coords
+                            PRESEEDED_SOFSE_IDS[stripped]?.let { sid ->
+                                lineSofseMap[sid] = coords
+                                globalSofseCoordsCache[sid] = coords
+                            }
                         }
                     }
                 }
+                isCoordsCacheInitialized = true
             } catch (e: Exception) {
                 Log.w(TAG, "Error caching station coordinates: ${e.message}")
             }
         }
     }
 
-    private fun findStationCoordinates(stationName: String, lineId: String?): Coordinates? {
+    private fun findStationCoordinates(
+        stationName: String,
+        lineId: String?,
+        sofseElementId: Int? = null
+    ): Coordinates? {
+        // 0. High precision: SOFSE Element ID lookup (scoped to line if possible)
+        if (sofseElementId != null) {
+            val sidStr = sofseElementId.toString()
+            if (lineId != null) {
+                lineSofseCoordsCache[lineId]?.get(sidStr)?.let { return it }
+            }
+            globalSofseCoordsCache[sidStr]?.let { return it }
+        }
+
         val clean = normalizeStationKey(stationName)
-        val stripped = stripStationSuffixes(clean)
+        val alias = KNOWN_STATION_ALIASES[clean]
+        val targetKey = alias ?: clean
+
+        // Check if preseeded SOFSE ID maps to known coordinates
+        val mappedSid = PRESEEDED_SOFSE_IDS[targetKey] ?: PRESEEDED_SOFSE_IDS[clean]
+        if (mappedSid != null) {
+            if (lineId != null) {
+                lineSofseCoordsCache[lineId]?.get(mappedSid)?.let { return it }
+            }
+            globalSofseCoordsCache[mappedSid]?.let { return it }
+        }
 
         // 1. Same line lookup
         if (lineId != null) {
             lineStationCoordsCache[lineId]?.let { lineMap ->
+                lineMap[targetKey]?.let { return it }
                 lineMap[clean]?.let { return it }
+                val stripped = stripStationSuffixes(targetKey)
                 lineMap[stripped]?.let { return it }
                 lineMap.entries.firstOrNull { (k, _) ->
-                    (clean.length >= 4 && (k.contains(clean) || clean.contains(k))) ||
-                    (stripped.length >= 4 && (k.contains(stripped) || stripped.contains(k)))
+                    isFuzzyStationMatch(targetKey, k) || isFuzzyStationMatch(clean, k)
                 }?.value?.let { return it }
             }
         }
 
-        // 2. Global exact lookup
+        // 2. Global exact / alias lookup
+        globalStationCoordsCache[targetKey]?.let { return it }
         globalStationCoordsCache[clean]?.let { return it }
+        val stripped = stripStationSuffixes(targetKey)
         globalStationCoordsCache[stripped]?.let { return it }
 
-        // 3. Global fuzzy lookup (min length 4)
+        // 3. Global fuzzy lookup
         return globalStationCoordsCache.entries.firstOrNull { (k, _) ->
-            (clean.length >= 4 && (k.contains(clean) || clean.contains(k))) ||
-            (stripped.length >= 4 && (k.contains(stripped) || stripped.contains(k)))
+            isFuzzyStationMatch(targetKey, k) || isFuzzyStationMatch(clean, k)
         }?.value
+    }
+
+    private fun isFuzzyStationMatch(input: String, candidate: String): Boolean {
+        if (input == candidate) return true
+        if (input.length < 5 || candidate.length < 5) return false
+
+        // Prevent collision between "canal san fernando" and "san fernando" / "san fernando r"
+        val inputIsCanal = input.startsWith("c ") || input.startsWith("canal ")
+        val candIsCanal = candidate.startsWith("c ") || candidate.startsWith("canal ")
+        if (inputIsCanal != candIsCanal) return false
+
+        // Prevent collision between terminal branch variants (e.g., "belgrano c" vs "belgrano r", "san isidro c" vs "san isidro r")
+        val inputEndsWithC = input.endsWith(" c")
+        val candEndsWithC = candidate.endsWith(" c")
+        val inputEndsWithR = input.endsWith(" r")
+        val candEndsWithR = candidate.endsWith(" r")
+        if ((inputEndsWithC && candEndsWithR) || (inputEndsWithR && candEndsWithC)) {
+            return false
+        }
+        if (inputEndsWithR != candEndsWithR) {
+            return false
+        }
+
+        return candidate.contains(input) || input.contains(candidate)
     }
 
     private fun stripStationSuffixes(s: String): String =
@@ -285,8 +412,7 @@ class DepartureRepositoryImpl @Inject constructor(
             .replace("(roca)", "")
             .replace("(sarmiento)", "")
             .replace("(urquiza)", "")
-            .replace(" c", "")
-            .replace(" r", "")
+            .replace("(lgm)", "")
             .replace("estacion ", "")
             .replace("estación ", "")
             .replace(".", "")
@@ -297,7 +423,7 @@ class DepartureRepositoryImpl @Inject constructor(
             .replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
             .replace("ñ", "n")
             .replace(".", "")
-            .replace(Regex("\\s+"), " ")
+            .replace(WHITESPACE_REGEX, " ")
 
     override suspend fun getDepartures(
         originId: String,
@@ -382,7 +508,7 @@ class DepartureRepositoryImpl @Inject constructor(
         if (originStation.lineId == "tren_costa" && cleanName.contains("delta")) return "104"
 
         // Strip parentheses: "retiro (mitre)" -> "retiro"
-        val strippedName = cleanName.replace(Regex("\\s*\\([^)]*\\)"), "").trim()
+        val strippedName = cleanName.replace(PARENTHESES_REGEX, "").trim()
         val strippedCached = stationIdCache[strippedName]
         if (strippedCached != null) {
             stationIdCache[cleanName] = strippedCached
@@ -398,7 +524,7 @@ class DepartureRepositoryImpl @Inject constructor(
         // Query SOFSE estaciones search endpoint
         return try {
             val queryClean = strippedName
-                .replace(Regex("""^(dr\.|doctor|gral\.|general|avenida|av\.)\s+"""), "")
+                .replace(QUERY_PREFIX_REGEX, "")
                 .trim()
             val queryName = queryClean.ifBlank { strippedName.ifBlank { originStation.name } }
             val candidates = sofseApiService.getEstaciones(nombre = queryName)
@@ -468,7 +594,7 @@ class DepartureRepositoryImpl @Inject constructor(
 
         if (estaciones.isNotEmpty()) {
             val firstFuture = if (isCancelled) -1 else estaciones.indexOfFirst { (it.segundos ?: 0) > 0 }
-            val now = Instant.now()
+            val now = try { clock.instant() } catch (_: Exception) { Instant.now() }
             var atStationIdx: Int? = null
 
             if (isCancelled) {
@@ -483,8 +609,8 @@ class DepartureRepositoryImpl @Inject constructor(
                 val prevEst = estaciones[firstFuture - 1]
                 val secsToNext = nextEst.segundos ?: 60
 
-                // 1. Train is braking into or arrived at nextEst (<= 35 seconds away)
-                if (secsToNext <= 35) {
+                // 1. Train is braking into or arrived at nextEst (<= 30 seconds away)
+                if (secsToNext <= 30) {
                     atStationIdx = firstFuture
                 } else {
                     // 2. Train is still stopped at prevEst (doors open / before departure)
@@ -494,10 +620,12 @@ class DepartureRepositoryImpl @Inject constructor(
                             val salidaInstant = Instant.parse(prevSalidaIso)
                             now.isBefore(salidaInstant.plusSeconds(30))
                         } catch (_: Exception) {
-                            secsToNext >= 140
+                            val totalSecs = calculateSegmentDurationSecs(prevEst, nextEst, secsToNext)
+                            (totalSecs - secsToNext) <= 25
                         }
                     } else {
-                        secsToNext >= 140
+                        val totalSecs = calculateSegmentDurationSecs(prevEst, nextEst, secsToNext)
+                        (totalSecs - secsToNext) <= 25
                     }
 
                     if (isStillAtPrevStation) {
@@ -527,7 +655,7 @@ class DepartureRepositoryImpl @Inject constructor(
                     }
                     else -> StopState.FUTURE
                 }
-                val stopCoords = est.nombre?.let { findStationCoordinates(it, originStation.lineId) }
+                val stopCoords = est.nombre?.let { findStationCoordinates(it, originStation.lineId, est.idElemento) }
                 JourneyStop(
                     stationName = est.nombre ?: "Estación",
                     scheduledTime = stopTime,
@@ -544,23 +672,23 @@ class DepartureRepositoryImpl @Inject constructor(
             if (!originStation.isTerminus && !isCancelled) {
                 trainCoords = when {
                     atStationIdx != null -> {
-                        estaciones.getOrNull(atStationIdx)?.nombre?.let {
-                            findStationCoordinates(it, originStation.lineId)
+                        val atEst = estaciones.getOrNull(atStationIdx)
+                        atEst?.nombre?.let {
+                            findStationCoordinates(it, originStation.lineId, atEst.idElemento)
                         } ?: originCoords
                     }
                     firstFuture > 0 -> {
-                        val prevName = estaciones[firstFuture - 1].nombre
-                        val nextName = estaciones[firstFuture].nombre
-                        val prevCoords = prevName?.let { findStationCoordinates(it, originStation.lineId) }
-                        val nextCoords = nextName?.let { findStationCoordinates(it, originStation.lineId) }
-                        val secs = (estaciones[firstFuture].segundos ?: 60).coerceAtLeast(0)
+                        val prevEst = estaciones[firstFuture - 1]
+                        val nextEst = estaciones[firstFuture]
+                        val prevCoords = prevEst.nombre?.let { findStationCoordinates(it, originStation.lineId, prevEst.idElemento) }
+                        val nextCoords = nextEst.nombre?.let { findStationCoordinates(it, originStation.lineId, nextEst.idElemento) }
+                        val secs = (nextEst.segundos ?: 60).coerceAtLeast(0)
 
                         if (prevCoords != null && nextCoords != null) {
-                            // Interpolate between prev and next station along the rail line
-                            val progress = (1.0 - (secs / 150.0)).coerceIn(0.1, 0.9)
-                            val lat = prevCoords.latitude + (nextCoords.latitude - prevCoords.latitude) * progress
-                            val lon = prevCoords.longitude + (nextCoords.longitude - prevCoords.longitude) * progress
-                            Coordinates(lat, lon)
+                            // Interpolate between prev and next station along the rail line based on segment duration
+                            val totalSegmentSecs = calculateSegmentDurationSecs(prevEst, nextEst, secs)
+                            val progress = (1.0 - (secs.toDouble() / totalSegmentSecs.toDouble())).coerceIn(0.08, 0.92)
+                            interpolateCoordinatesAlongSegment(prevEst, nextEst, prevCoords, nextCoords, progress)
                         } else {
                             nextCoords ?: prevCoords ?: originCoords
                         }
@@ -610,9 +738,105 @@ class DepartureRepositoryImpl @Inject constructor(
         )
     }
 
+    private fun calculateSegmentDurationSecs(
+        prevEst: com.moovar.android.core.network.sofse.dto.EstacionParadaDto,
+        nextEst: com.moovar.android.core.network.sofse.dto.EstacionParadaDto,
+        remainingSecs: Int
+    ): Long {
+        val prevIso = prevEst.salida?.estimada ?: prevEst.salida?.programada ?: prevEst.llegada?.programada
+        val nextIso = nextEst.llegada?.estimada ?: nextEst.llegada?.programada ?: nextEst.salida?.programada
+        if (!prevIso.isNullOrBlank() && !nextIso.isNullOrBlank()) {
+            try {
+                val prevInstant = Instant.parse(prevIso)
+                val nextInstant = Instant.parse(nextIso)
+                val diff = java.time.Duration.between(prevInstant, nextInstant).seconds
+                if (diff in 45..1800) {
+                    return maxOf(diff, remainingSecs.toLong())
+                }
+            } catch (_: Exception) {
+                // Ignore parsing errors and fallback
+            }
+        }
+        return maxOf(remainingSecs.toLong(), 180L)
+    }
+
+    private fun interpolateCoordinatesAlongSegment(
+        prevEst: com.moovar.android.core.network.sofse.dto.EstacionParadaDto,
+        nextEst: com.moovar.android.core.network.sofse.dto.EstacionParadaDto,
+        prevCoords: Coordinates,
+        nextCoords: Coordinates,
+        progress: Double
+    ): Coordinates {
+        val polyline = getSegmentPolyline(prevEst, nextEst, prevCoords, nextCoords)
+        if (polyline.size <= 2) {
+            val lat = prevCoords.latitude + (nextCoords.latitude - prevCoords.latitude) * progress
+            val lon = prevCoords.longitude + (nextCoords.longitude - prevCoords.longitude) * progress
+            return Coordinates(lat, lon)
+        }
+        return interpolatePolyline(polyline, progress)
+    }
+
+    private fun getSegmentPolyline(
+        prevEst: com.moovar.android.core.network.sofse.dto.EstacionParadaDto,
+        nextEst: com.moovar.android.core.network.sofse.dto.EstacionParadaDto,
+        prevCoords: Coordinates,
+        nextCoords: Coordinates
+    ): List<Coordinates> {
+        val prevId = prevEst.idElemento
+        val nextId = nextEst.idElemento
+        val prevKey = normalizeStationKey(prevEst.nombre.orEmpty())
+        val nextKey = normalizeStationKey(nextEst.nombre.orEmpty())
+
+        val isRetiroToLisandro = (prevId == 332 && nextId == 229) ||
+                (prevKey.contains("retiro") && nextKey.contains("lisandro"))
+        if (isRetiroToLisandro) {
+            return listOf(prevCoords) + RETIRO_LISANDRO_TRACK_WAYPOINTS + listOf(nextCoords)
+        }
+
+        val isLisandroToRetiro = (prevId == 229 && nextId == 332) ||
+                (prevKey.contains("lisandro") && nextKey.contains("retiro"))
+        if (isLisandroToRetiro) {
+            return listOf(prevCoords) + RETIRO_LISANDRO_TRACK_WAYPOINTS.reversed() + listOf(nextCoords)
+        }
+
+        return listOf(prevCoords, nextCoords)
+    }
+
+    private fun interpolatePolyline(points: List<Coordinates>, progress: Double): Coordinates {
+        val pClamped = progress.coerceIn(0.0, 1.0)
+        if (points.size <= 1) return points.firstOrNull() ?: Coordinates(0.0, 0.0)
+
+        var totalDist = 0.0
+        val segDists = DoubleArray(points.size - 1)
+        for (i in 0 until points.size - 1) {
+            val dLat = points[i + 1].latitude - points[i].latitude
+            val avgLatRad = Math.toRadians((points[i + 1].latitude + points[i].latitude) / 2.0)
+            val dLon = (points[i + 1].longitude - points[i].longitude) * Math.cos(avgLatRad)
+            val d = Math.hypot(dLat, dLon)
+            segDists[i] = d
+            totalDist += d
+        }
+
+        if (totalDist == 0.0) return points.first()
+
+        val targetDist = pClamped * totalDist
+        var accum = 0.0
+        for (i in segDists.indices) {
+            val d = segDists[i]
+            if (accum + d >= targetDist || i == segDists.lastIndex) {
+                val segProgress = if (d > 0.0) ((targetDist - accum) / d).coerceIn(0.0, 1.0) else 0.0
+                val lat = points[i].latitude + (points[i + 1].latitude - points[i].latitude) * segProgress
+                val lon = points[i].longitude + (points[i + 1].longitude - points[i].longitude) * segProgress
+                return Coordinates(lat, lon)
+            }
+            accum += d
+        }
+        return points.last()
+    }
+
     private fun normalizeTerminus(name: String): String {
         var s = name.lowercase()
-            .replace(Regex("\\(.*?\\)"), "")
+            .replace(TERMINUS_PARENTHESES_REGEX, "")
             .replace("á", "a")
             .replace("é", "e")
             .replace("í", "i")
@@ -620,11 +844,9 @@ class DepartureRepositoryImpl @Inject constructor(
             .replace("ú", "u")
             .replace(".", " ")
             .replace(",", " ")
-        for (w in listOf("plaza", "gral", "general", "dr", "antonio", "viad", "prov", "viaducto", "avenida", "av")) {
-            s = s.replace(Regex("\\b$w\\b"), " ")
-        }
-        s = s.replace(Regex("\\b[a-z]\\b"), " ")
-        return s.split(Regex("\\s+")).filter { it.isNotBlank() }.joinToString(" ")
+            .replace(TERMINUS_KEYWORDS_REGEX, " ")
+            .replace(SINGLE_LETTER_REGEX, " ")
+        return s.split(WHITESPACE_REGEX).filter { it.isNotBlank() }.joinToString(" ")
     }
 
     private fun formatIsoTimeToLocal(isoStr: String?): String? {
